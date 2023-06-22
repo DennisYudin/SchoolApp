@@ -32,7 +32,7 @@ CREATE TABLE students (
 
 DROP TABLE IF EXISTS courses CASCADE;
 CREATE TABLE courses (
-    id INTEGER,
+    id INTEGER auto_increment,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)

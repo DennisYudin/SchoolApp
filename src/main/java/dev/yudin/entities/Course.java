@@ -28,11 +28,14 @@ public class Course {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public String toString() {
-        return "Course [courseName=" + name + ", courseDescription=" + description + ", courseId="
-                + id + "]";
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
 

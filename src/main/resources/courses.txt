@@ -1,0 +1,10 @@
+Algebra-Difficult subject
+Biology-Delightful subject
+Drawing-Interesting subject
+Chemistry-Boring subject
+Geography-Depressed subject
+Geometry-Easy to understand subject
+History-Impossible to understand
+Literature-Hilarious subject
+Mathematics-Lovely subject
+Music-Odd subject
