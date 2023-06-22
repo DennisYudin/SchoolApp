@@ -21,7 +21,7 @@ public class FileReader implements Reader {
 
 	public static final String PROPERTIES_FILE = "src/main/resources/application.properties";
 
-	private Logger log = LogManager.getLogger(FileReader.class);
+	private final Logger log = LogManager.getLogger(FileReader.class);
 
 	@Override
 	public List<String> read(String pathToFile) {
@@ -35,6 +35,7 @@ public class FileReader implements Reader {
 		}
 	}
 
+	@Override
 	public String getValue(String valueName) {
 		log.info("Call method getValue for:" + valueName);
 

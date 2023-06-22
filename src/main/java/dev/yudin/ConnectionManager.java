@@ -1,7 +1,6 @@
 package dev.yudin;
 
 import dev.yudin.exceptions.ConnectionException;
-import dev.yudin.filereader.FileReader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

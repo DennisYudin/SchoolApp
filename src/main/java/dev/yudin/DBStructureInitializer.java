@@ -1,6 +1,6 @@
 package dev.yudin;
 
-public class DatabaseInitializer {
+public class DBStructureInitializer {
 
 	// run scripts
 
