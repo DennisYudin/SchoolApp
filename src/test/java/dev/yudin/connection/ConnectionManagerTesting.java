@@ -1,7 +1,6 @@
-package dev.yudin;
+package dev.yudin.connection;
 
 import dev.yudin.exceptions.ConnectionException;
-import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,15 +9,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionManager {
+public class ConnectionManagerTesting extends ConnectionManager {
 
-	private Logger log = LogManager.getLogger(ConnectionManager.class);
+	private Logger log = LogManager.getLogger(ConnectionManagerTesting.class);
 
-	private Reader reader = new FileReader();
+	private Reader reader;
+	public ConnectionManagerTesting(Reader reader) {
+		this.reader = reader;
+	}
 
+	@Override
 	public Connection getConnection() {
-		var driver = reader.getValue("db.driver");
-		var url = reader.getValue("db.url");
+		var driver = reader.getValue("test.db.driver");
+		var url = reader.getValue("test.db.url");
 
 		Connection conn;
 		try {

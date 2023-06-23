@@ -1,6 +1,7 @@
 package dev.yudin.script_runner;
 
-import dev.yudin.ConnectionManager;
+import dev.yudin.connection.ConnectionManager;
+import dev.yudin.connection.Manager;
 import dev.yudin.exceptions.AppConfigurationException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.log4j.LogManager;
@@ -18,9 +19,9 @@ public class ScriptExecutor implements Runnable {
 
 	public static final String ERROR_MESSAGE_CONNECTION = "Could not get connection";
 	public static final String FILE_NOT_FOUND_ERROR_MESSAGE = "file not found! ";
-	private ConnectionManager datasource;
+	private Manager datasource;
 
-	public ScriptExecutor(ConnectionManager datasource) {
+	public ScriptExecutor(Manager datasource) {
 		this.datasource = datasource;
 	}
 
