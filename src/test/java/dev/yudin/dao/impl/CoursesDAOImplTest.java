@@ -48,9 +48,9 @@ class CoursesDAOImplTest {
 	@Test
 	@Order(1)
 	void fillCourseTable_ShouldPopulateTable_WhenInputIsListOfObjects() {
-		List<Course> before = coursesDAO.findAll();
+		List<Course> coursesTableBefore = coursesDAO.findAll();
 
-		assumeTrue(before.isEmpty());
+		assumeTrue(coursesTableBefore.isEmpty());
 
 		Course course = new Course();
 		course.setName("Algebra");
@@ -59,8 +59,8 @@ class CoursesDAOImplTest {
 
 		coursesDAO.fillCourseTable(courses);
 
-		List<Course> after = coursesDAO.findAll();
+		List<Course> coursesTableAfter = coursesDAO.findAll();
 
-		assertFalse(after.isEmpty());
+		assertFalse(coursesTableAfter.isEmpty());
 	}
 }
