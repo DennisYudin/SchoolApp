@@ -37,8 +37,6 @@ public class FileReader implements Reader {
 
 	@Override
 	public String getValue(String valueName) {
-		log.info("Call method getValue for:" + valueName);
-
 		Properties prop = new Properties();
 		try (InputStream input = new FileInputStream(PROPERTIES_FILE)) {
 			prop.load(input);

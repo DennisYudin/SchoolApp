@@ -15,10 +15,10 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DBStructureInitializer {
+public class DBInitializer {
 	Reader reader = new FileReader();
 	ConnectionManager connectionManager = new ConnectionManager();
-	Runnable scriptRunner = new ScriptExecutor(connectionManager, reader);
+	Runnable scriptRunner = new ScriptExecutor(connectionManager);
 
 	public void init() {
 		scriptRunner.run("databaseStructure.sql");
@@ -47,7 +47,7 @@ public class DBStructureInitializer {
 				"INSERT INTO courses (name, description) " +
 				"VALUES(?,?)";
 
-		try (Connection connection = connectionManager.getConnection("org.h2.Driver", "jdbc:h2:mem:schooldb");
+		try (Connection connection = connectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
 			for (Course course : courses) {

@@ -20,7 +20,7 @@ public class CoursesDAOImpl {
 
 		List <Course> courseList = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection("org.h2.Driver", "jdbc:h2:mem:schooldb");
+		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(sqlQuery)) {
 			while (resultSet.next()) {

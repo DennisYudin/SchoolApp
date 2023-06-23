@@ -1,6 +1,8 @@
 package dev.yudin;
 
 import dev.yudin.exceptions.ConnectionException;
+import dev.yudin.filereader.FileReader;
+import dev.yudin.filereader.Reader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,11 +14,15 @@ public class ConnectionManager {
 
 	private Logger log = LogManager.getLogger(ConnectionManager.class);
 
-	public Connection getConnection(String jdbcDriver, String url) {
-		log.info("Call method getConnection() with: " + jdbcDriver + " " + url);
+	private Reader reader = new FileReader();
+
+	public Connection getConnection() {
+		var driver = reader.getValue("db.driver");
+		var url = reader.getValue("db.url");
+
 		Connection conn;
 		try {
-			Class.forName(jdbcDriver);
+			Class.forName(driver);
 			conn = DriverManager.getConnection(url);
 		} catch (ClassNotFoundException e) {
 			throw new ConnectionException("Problem with jdbcDriver", e);

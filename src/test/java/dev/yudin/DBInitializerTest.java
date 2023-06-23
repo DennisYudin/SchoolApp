@@ -1,15 +1,13 @@
 package dev.yudin;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
-class DBStructureInitializerTest {
+class DBInitializerTest {
 
 	@Test
 	void name() {
 
-		DBStructureInitializer initializer = new DBStructureInitializer();
+		DBInitializer initializer = new DBInitializer();
 
 		var actual = initializer.mapToObject("src/test/resources/courses.txt");
 
