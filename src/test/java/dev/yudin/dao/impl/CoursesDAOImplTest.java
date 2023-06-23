@@ -1,6 +1,9 @@
 package dev.yudin.dao.impl;
 
-import dev.yudin.DBInitializer;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
@@ -9,18 +12,20 @@ import dev.yudin.entities.Course;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CoursesDAOImplTest {
+	private CoursesDAO coursesDAO;
 
-	@Test
-	void name() {
-		//todo init test DB
-
-		DBInitializerTesting.init();
-
+	@BeforeEach
+	public void setUp() {
 		Reader reader = new FileReaderTesting();
 		ConnectionManager manager = new ConnectionManagerTesting(reader);
 
@@ -28,17 +33,34 @@ class CoursesDAOImplTest {
 
 		scriptRunner.run("test-databaseStructure.sql");
 
-		CoursesDAO coursesDAO = new CoursesDAOImpl(manager);
+		coursesDAO = new CoursesDAOImpl(manager);
+	}
+
+	@Test
+	@Order(0)
+	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
+
+		List<Course> actual = coursesDAO.findAll();
+
+		assertTrue(actual.isEmpty());
+	}
+
+	@Test
+	@Order(1)
+	void fillCourseTable_ShouldPopulateTable_WhenInputIsListOfObjects() {
+		List<Course> before = coursesDAO.findAll();
+
+		assumeTrue(before.isEmpty());
 
 		Course course = new Course();
 		course.setName("Algebra");
-		course.setDescription("bla bla");
-		List<Course> courseList = List.of(course);
+		course.setDescription("Something about numbers...");
+		List<Course> courses = List.of(course);
 
-		coursesDAO.fillCourseTable(courseList);
+		coursesDAO.fillCourseTable(courses);
 
-		var actual = coursesDAO.findAll();
+		List<Course> after = coursesDAO.findAll();
 
-		System.out.println(actual);
+		assertFalse(after.isEmpty());
 	}
 }
