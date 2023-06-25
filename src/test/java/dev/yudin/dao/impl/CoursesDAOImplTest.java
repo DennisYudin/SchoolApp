@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
-import dev.yudin.dao.CoursesDAO;
+import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CoursesDAOImplTest {
-	private CoursesDAO coursesDAO;
+	private CourseDAO coursesDAO;
 
 	@BeforeEach
 	public void setUp() {

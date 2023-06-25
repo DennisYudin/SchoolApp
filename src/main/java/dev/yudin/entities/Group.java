@@ -6,11 +6,10 @@ import java.util.List;
 public class Group {
     private long id;
     private String name;
-
-    private List<Student> studentsInGroup = new ArrayList<>();
+    private final List<Student> students = new ArrayList<>();
     
-    public List<Student> getStudentsInGroup() {
-        return studentsInGroup;
+    public List<Student> getStudents() {
+        return students;
     }
     
     public long getId() {
@@ -31,7 +30,7 @@ public class Group {
     
     @Override
     public String toString() {
-        return "Group [goupName=" + name + ", studentsInGroup=" + studentsInGroup + "]";
+        return "Group [goupName=" + name + ", studentsInGroup=" + students + "]";
     }
 }
 

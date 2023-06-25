@@ -17,7 +17,7 @@ CREATE TABLE groups (
 
 DROP TABLE IF EXISTS students CASCADE;
 CREATE TABLE students (
-    id INTEGER,
+    id INTEGER auto_increment,
     first_name VARCHAR(50) NOT NULL, 
     last_name VARCHAR(50) NOT NULL,
     group_id INTEGER DEFAULT NULL,

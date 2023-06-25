@@ -1,7 +1,7 @@
 package dev.yudin.dao.impl;
 
 import dev.yudin.connection.Manager;
-import dev.yudin.dao.CoursesDAO;
+import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoursesDAOImpl implements CoursesDAO {
+public class CoursesDAOImpl implements CourseDAO {
 	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
 	public static final String FIND_ALL_SQL = "SELECT * FROM courses";
 	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";

@@ -1,14 +1,12 @@
 package dev.yudin.dao.impl;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
-import dev.yudin.dao.GroupDAO;
-import dev.yudin.entities.Group;
+import dev.yudin.dao.StudentDAO;
+import dev.yudin.entities.Student;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -18,9 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class GroupsDAOImplTest {
+class StudentsDAOImplTest {
 
-	GroupDAO groupsDAO;
+	StudentDAO studentDAO;
 
 	@BeforeEach
 	public void setUp() {
@@ -31,34 +29,17 @@ class GroupsDAOImplTest {
 
 		scriptRunner.run("test-databaseStructure.sql");
 
-		groupsDAO = new GroupsDAOImpl(manager);
+		studentDAO = new StudentsDAOImpl(manager);
 	}
 
 	@Test
 	@Order(0)
 	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
 
-		List<Group> actual = groupsDAO.findAll();
+		List<Student> actual = studentDAO.findAll();
 
 		assertTrue(actual.isEmpty());
 	}
 
-	@Test
-	@Order(1)
-	void save_ShouldSaveDataIntoTable_WhenInputIsListOfObjects() {
-		List<Group> coursesTableBefore = groupsDAO.findAll();
-
-		assumeTrue(coursesTableBefore.isEmpty());
-
-		Group group = new Group();
-		group.setName("XX-XX");
-		List<Group> groups = List.of(group);
-
-		groupsDAO.save(groups);
-
-		List<Group> coursesTableAfter = groupsDAO.findAll();
-
-		assertFalse(coursesTableAfter.isEmpty());
-	}
 
 }

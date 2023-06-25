@@ -8,8 +8,8 @@ public class Student {
     private long id;
     private String firstName;
     private String lastName;
-
-    private List<Course> coursesList = new ArrayList<>();
+    private String groupId;
+    private final List<Course> courses = new ArrayList<>();
     
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
@@ -19,9 +19,17 @@ public class Student {
     public Student() {
         
     }
-    
-    public List<Course> getCoursesList() {
-        return coursesList;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
     }
     
     public long getId() {
@@ -47,27 +55,33 @@ public class Student {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
     @Override
-    public String toString() {
-        return "Student [firstName=" + firstName + ", lastName=" + lastName + "]";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return id == student.id
+                && firstName.equals(student.firstName)
+                && lastName.equals(student.lastName)
+                && Objects.equals(groupId, student.groupId)
+                && Objects.equals(courses, student.courses);
     }
-    
+
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(id, firstName, lastName, groupId, courses);
     }
-    
+
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Student)) {
-            return false;
-        }
-        Student other = (Student) obj;
-        return Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName);
-    }   
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", courses=" + courses +
+                '}';
+    }
 }
 

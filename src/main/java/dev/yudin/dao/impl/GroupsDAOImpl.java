@@ -1,7 +1,7 @@
 package dev.yudin.dao.impl;
 
 import dev.yudin.connection.Manager;
-import dev.yudin.dao.GroupsDAO;
+import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupsDAOImpl implements GroupsDAO {
+public class GroupsDAOImpl implements GroupDAO {
 
 	private final Logger log = LogManager.getLogger(GroupsDAOImpl.class);
 
