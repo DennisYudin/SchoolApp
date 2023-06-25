@@ -1,8 +1,8 @@
 package dev.yudin.dao.impl;
 
 import dev.yudin.connection.Manager;
-import dev.yudin.dao.CoursesDAO;
-import dev.yudin.entities.Course;
+import dev.yudin.dao.GroupsDAO;
+import dev.yudin.entities.Group;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -15,37 +15,39 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoursesDAOImpl implements CoursesDAO {
-	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
-	public static final String FIND_ALL_SQL = "SELECT * FROM courses";
-	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
+public class GroupsDAOImpl implements GroupsDAO {
+
+	private final Logger log = LogManager.getLogger(GroupsDAOImpl.class);
+
+	public static final String INSERT_INTO_GROUPS_TABLES_SQL = "INSERT INTO groups (name) VALUES(?)";
+	public static final String FIND_ALL_SQL = "SELECT * FROM groups";
+
 	private final Manager dataSource;
 
-	public CoursesDAOImpl(Manager dataSource) {
+	public GroupsDAOImpl(Manager dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public List<Course> findAll() {
-		List <Course> courses = new ArrayList<>();
+	public List<Group> findAll() {
+		List<Group> groups = new ArrayList<>();
 
 		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(FIND_ALL_SQL)) {
 			while (resultSet.next()) {
-				Course course = new Course();
+				Group group = new Group();
 
 				long id = resultSet.getLong("id");
 				String name = resultSet.getString("name");
-				String desc = resultSet.getString("description");
 
-				course.setId(id);
-				course.setName(name);
-				course.setDescription(desc);
+				group.setId(id);
+				group.setName(name);
 
-				courses.add(course);
+				groups.add(group);
 			}
-			return courses;
+			return groups;
+
 		} catch (SQLException e) {
 			log.error("Error during findAll() call");
 			throw new DAOException("Error during findAll() call", e);
@@ -53,29 +55,30 @@ public class CoursesDAOImpl implements CoursesDAO {
 	}
 
 	@Override
-	public void save(List<Course> courses) {
+	public void save(List<Group> groups) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
-					 INSERT_INTO_COURSES_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-
-			for (Course course : courses) {
-				String name = course.getName();
-				String description = course.getDescription();
+					 INSERT_INTO_GROUPS_TABLES_SQL, Statement.RETURN_GENERATED_KEYS)) {
+			for (Group group : groups) {
+				String name = group.getName();
 
 				statement.setString(1, name);
-				statement.setString(2, description);
 				statement.execute();
 
-				try (ResultSet resultSet = statement.getGeneratedKeys()) {
-					if (resultSet.next()) {
-						long courseId = resultSet.getLong("id");
-						course.setId(courseId);
-					}
-				}
+				setGroupId(statement, group);
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save() call");
 			throw new DAOException("Error during save() call", ex);
+		}
+	}
+
+	private void setGroupId(PreparedStatement statement, Group group) throws SQLException {
+		try (ResultSet resultSet = statement.getGeneratedKeys()) {
+			if (resultSet.next()) {
+				long groupId = resultSet.getLong("id");
+				group.setId(groupId);
+			}
 		}
 	}
 }

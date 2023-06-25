@@ -1,7 +1,7 @@
 
 DROP TABLE IF EXISTS groups CASCADE;
 CREATE TABLE groups (
-    id INTEGER,
+    id INTEGER auto_increment,
     name VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );

@@ -4,9 +4,9 @@ import dev.yudin.entities.Course;
 
 import java.util.List;
 
-public interface CoursesDAO {
+public interface CoursesDAO extends GenericDAO {
 
 	List<Course> findAll();
 
-	void fillCourseTable(List<Course> courses);
+	void save(List<Course> courses);
 }
