@@ -27,7 +27,6 @@ public class StudentsDAOImpl implements StudentDAO {
 		this.dataSource = dataSource;
 	}
 
-
 	@Override
 	public List<Student> findAll() {
 		List<Student> students = new ArrayList<>();
@@ -62,13 +61,13 @@ public class StudentsDAOImpl implements StudentDAO {
 			 PreparedStatement statement = connection.prepareStatement(
 					 INSERT_INTO_STUDENTS_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
 			int amountGroups = groups.size();
-			for (int currentGroup = 0; currentGroup < amountGroups; currentGroup++) {
-				int amountStudentsInGroup = groups.get(currentGroup).getStudents().size();
-
-				setStudentsInTable(amountStudentsInGroup, statement, groupsData, currentGroup);
-			}
-			int amountStudents = studentsData.size();
-			setStudentsWithoutGroup(amountStudents, statement, studentsData);
+//			for (int currentGroup = 0; currentGroup < amountGroups; currentGroup++) {
+//				int amountStudentsInGroup = groups.get(currentGroup).getStudents().size();
+//
+//				setStudentsInTable(amountStudentsInGroup, statement, groupsData, currentGroup);
+//			}
+//			int amountStudents = studentsData.size();
+//			setStudentsWithoutGroup(amountStudents, statement, studentsData);
 
 		} catch (SQLException ex) {
 			throw new DAOException("Could not insert student into student table", ex);
@@ -76,27 +75,28 @@ public class StudentsDAOImpl implements StudentDAO {
 	}
 
 	private void setStudentsInTable(int amountStudents, PreparedStatement preparedStatement,List<Group> dataInput, int actualGroup)
-			throws SQLException, WrongDataException {
-		for (int currentStudent = 0; currentStudent < amountStudents; currentStudent++) {
-			Group group = dataInput.get(actualGroup);
-			Student student = group.getStudentsInGroup().get(currentStudent);
-
-			String firstName = student.getFirstName();
-			String lastName = student.getLastName();
-			long groupId = group.getGroupId();
-
-			preparedStatement.setString(1, firstName);
-			preparedStatement.setString(2, lastName);
-			preparedStatement.setLong(3, groupId);
-
-			preparedStatement.execute();
-
-			getStudentId(preparedStatement, student);
+			throws SQLException {
+//		for (int currentStudent = 0; currentStudent < amountStudents; currentStudent++) {
+//			Group group = dataInput.get(actualGroup);
+//			Student student = group.getStudentsInGroup().get(currentStudent);
+//
+//			String firstName = student.getFirstName();
+//			String lastName = student.getLastName();
+//			long groupId = group.getGroupId();
+//
+//			preparedStatement.setString(1, firstName);
+//			preparedStatement.setString(2, lastName);
+//			preparedStatement.setLong(3, groupId);
+//
+//			preparedStatement.execute();
+//
+//			getStudentId(preparedStatement, student);
+//	}
 		}
-	}
+
 
 	private void setStudentsWithoutGroup(int quantityStudents, PreparedStatement preparedStatement,
-										 List<Student> dataInput) throws SQLException, WrongDataException {
+										 List<Student> dataInput) throws SQLException {
 		for (int currentStudentWithoutGroup = 0; currentStudentWithoutGroup < quantityStudents; currentStudentWithoutGroup++) {
 			Student student = dataInput.get(currentStudentWithoutGroup);
 			String firstName = student.getFirstName();
@@ -112,16 +112,16 @@ public class StudentsDAOImpl implements StudentDAO {
 		}
 	}
 
-	private void getStudentId(PreparedStatement preparedStatement, Student studentObject) throws WrongDataException {
-		try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-			if (resultSet.next()) {
-				long studentId = resultSet.getLong("student_id");
-				studentObject.setStudentId(studentId);
-			} else {
-				throw new WrongDataException("Failed, no ID obtained.");
-			}
-		} catch (SQLException ex) {
-			throw new WrongDataException("Could not get student ID", ex);
-		}
+	private void getStudentId(PreparedStatement preparedStatement, Student studentObject) {
+//		try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+//			if (resultSet.next()) {
+//				long studentId = resultSet.getLong("student_id");
+//				studentObject.setStudentId(studentId);
+//			} else {
+//				throw new WrongDataException("Failed, no ID obtained.");
+//			}
+//		} catch (SQLException ex) {
+//			throw new WrongDataException("Could not get student ID", ex);
+//		}
 	}
 }

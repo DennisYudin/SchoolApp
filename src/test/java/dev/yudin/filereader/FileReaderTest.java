@@ -14,7 +14,7 @@ class FileReaderTest {
 		var actual = reader.read("src/test/resources/students.txt");
 
 		assertEquals(20, actual.size());
-		assertEquals("Dick Van Dyke", actual.get(actual.size() - 1));
+		assertEquals("Dick VanDyke", actual.get(actual.size() - 1));
 	}
 
 	@Test
