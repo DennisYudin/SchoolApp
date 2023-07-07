@@ -18,11 +18,13 @@ class FileReaderTest {
 	}
 
 	@Test
-	void name() {
+	void getValue_ShouldReadValueFromApplicationFile_WhenInputIsValueName() {
+
 		Reader reader = new FileReader();
 
 		var actual = reader.getValue("db.driver");
+		String expected = "org.h2.Driver";
 
-		System.out.println(actual);
+		assertEquals(expected, actual);
 	}
 }

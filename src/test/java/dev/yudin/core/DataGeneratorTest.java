@@ -6,6 +6,9 @@ import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 class DataGeneratorTest {
 
 	public static final String REGEX = "[A-Za-z]+-[0-9]+";
@@ -26,8 +29,25 @@ class DataGeneratorTest {
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(reader);
 
-		var actual = dataGenerator.generateStudents();
+		var actual = dataGenerator.generateStudents(200);
 
-		System.out.println(actual);
+//		actual.stream()
+//				.forEach(System.out::println);
+
+		assertEquals(200, actual.size());
+	}
+
+	@Test
+	void name2() {
+		Reader reader = new FileReader();
+		var studentsList = reader.read("src/main/resources/students.txt");
+
+		var test = studentsList.stream()
+				.map(value -> value.split(" "))
+				.collect(Collectors.toList());
+
+
+
+
 	}
 }
