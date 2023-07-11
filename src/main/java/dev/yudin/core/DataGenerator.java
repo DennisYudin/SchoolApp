@@ -1,6 +1,7 @@
 package dev.yudin.core;
 
 
+import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
 import dev.yudin.filereader.Reader;
 
@@ -8,13 +9,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DataGenerator {
 	private static final String SYMBOLS_FOR_SELECTION = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String NUMBERS_FOR_SELECTION = "0123456789";
 	private static final int CHAR_LENGTH = 2;
-	public static final String STUDENTS_NAMES_FILE = "src/main/resources/students_names.txt";
-	public static final String STUDENTS_SURNAMES_FILE = "src/main/resources/students_surnames.txt";
+	public static final String STUDENTS_NAMES_FILE = "src/test/resources/students_names.txt";
+	public static final String STUDENTS_SURNAMES_FILE = "src/test/resources/students_surnames.txt";
+	public static final String COURSES_FILE = "src/test/resources/courses.txt";
 
 	private Random random;
 
@@ -74,5 +77,24 @@ public class DataGenerator {
 			result.add(student);
 		}
 		return result;
+	}
+
+	public List<Course> getCourses() {
+		List<String> courses = reader.read(COURSES_FILE);
+		return map(courses);
+	}
+
+	private List<Course> map(List<String> input) {
+		return input.stream()
+				.map(value ->  value.split("-"))
+				.map(this::mapToEntity)
+				.collect(Collectors.toList());
+	}
+
+	private Course mapToEntity(String[] array) {
+		Course course = new Course();
+		course.setName(array[0]);
+		course.setDescription(array[1]);
+		return course;
 	}
 }

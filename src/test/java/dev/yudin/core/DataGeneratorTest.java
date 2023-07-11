@@ -41,4 +41,18 @@ class DataGeneratorTest {
 
 		assertEquals(expected, actual1);
 	}
+
+	@Test
+	void getCourses_ShouldReturnListOfCoursesWithDescriptions_WhenCallMethod() {
+		Random random = new Random();
+		Reader reader = new FileReader();
+		DataGenerator dataGenerator = new DataGenerator(random, reader);
+
+		var actual = dataGenerator.getCourses();
+
+		int expectedSize = 10;
+		int actualSize = actual.size();
+
+		assertEquals(expectedSize, actualSize);
+	}
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class DataDistributor {
 	private static final int AMOUNT_GROUPS_WITH_STUDENTS = 7;
@@ -69,7 +70,8 @@ public class DataDistributor {
 		}
 	}
 
-	private void assignStudentsIntoCourses(List<Student> allStudents, List<Course> allCourses) {
+	public List<Student> assignStudentsIntoCourses(Set<Student> allStudents, List<Course> allCourses) {
+		List<Student> result = new ArrayList<>();
 		for (Student student : allStudents) {
 			int amountCourses = random.nextInt(SELECTION_BOUNDARY) + 1;
 			while (student.getCourses().size() < amountCourses) {
@@ -81,7 +83,8 @@ public class DataDistributor {
 					student.getCourses().add(courseName);
 				}
 			}
-			studentsWithCourses.add(student);
+			result.add(student);
 		}
+		return result;
 	}
 }
