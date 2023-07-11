@@ -11,10 +11,17 @@ class FileReaderTest {
 
 		Reader reader = new FileReader();
 
-		var actual = reader.read("src/test/resources/students.txt");
+		var surnames = reader.read("src/test/resources/students_surnames.txt");
 
-		assertEquals(20, actual.size());
-		assertEquals("Dick VanDyke", actual.get(actual.size() - 1));
+		int expected = 20;
+		int actual = surnames.size();
+
+		assertEquals(expected, actual);
+
+		String expectedSurname = "VanDyke";
+		String actualSurname = surnames.get(surnames.size() - 1);
+
+		assertEquals(expectedSurname, actualSurname);
 	}
 
 	@Test

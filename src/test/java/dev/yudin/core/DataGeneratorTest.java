@@ -2,12 +2,10 @@ package dev.yudin.core;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import dev.yudin.connection.FileReaderTesting;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 class DataGeneratorTest {
 
@@ -21,33 +19,23 @@ class DataGeneratorTest {
 
 		var groups = dataGenerator.generateGroups(10);
 
+		int expected = 10;
+		int actual = groups.size();
+
+		assertEquals(expected, actual);
 		assertTrue(groups.stream().allMatch(group -> group.matches(REGEX)));
 	}
 
 	@Test
-	void name() {
+	void generateStudents_ShouldGenerateStudents_WhenInputIsAmountStudents() {
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(reader);
 
 		var actual = dataGenerator.generateStudents(200);
 
-//		actual.stream()
-//				.forEach(System.out::println);
+		int expected = 200;
+		int actual1 = actual.size();
 
-		assertEquals(200, actual.size());
-	}
-
-	@Test
-	void name2() {
-		Reader reader = new FileReader();
-		var studentsList = reader.read("src/main/resources/students.txt");
-
-		var test = studentsList.stream()
-				.map(value -> value.split(" "))
-				.collect(Collectors.toList());
-
-
-
-
+		assertEquals(expected, actual1);
 	}
 }
