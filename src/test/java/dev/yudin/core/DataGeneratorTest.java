@@ -2,10 +2,11 @@ package dev.yudin.core;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import dev.yudin.connection.FileReaderTesting;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 class DataGeneratorTest {
 
@@ -14,8 +15,9 @@ class DataGeneratorTest {
 	@Test
 	void generateGroups_ShouldGenerateGroupsNames_WhenInputIsAmountGroups() {
 
+		Random random = new Random();
 		Reader reader = new FileReader();
-		DataGenerator dataGenerator = new DataGenerator(reader);
+		DataGenerator dataGenerator = new DataGenerator(random, reader);
 
 		var groups = dataGenerator.generateGroups(10);
 
@@ -28,8 +30,9 @@ class DataGeneratorTest {
 
 	@Test
 	void generateStudents_ShouldGenerateStudents_WhenInputIsAmountStudents() {
+		Random random = new Random();
 		Reader reader = new FileReader();
-		DataGenerator dataGenerator = new DataGenerator(reader);
+		DataGenerator dataGenerator = new DataGenerator(random, reader);
 
 		var actual = dataGenerator.generateStudents(200);
 
