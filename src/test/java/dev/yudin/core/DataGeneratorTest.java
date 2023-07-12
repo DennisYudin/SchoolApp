@@ -34,12 +34,14 @@ class DataGeneratorTest {
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(random, reader);
 
-		var actual = dataGenerator.generateStudents(200);
+		var students = dataGenerator.generateStudents(200);
+
+		students.stream().forEach(System.out::println);
 
 		int expected = 200;
-		int actual1 = actual.size();
+		int actual = students.size();
 
-		assertEquals(expected, actual1);
+		assertEquals(expected, actual);
 	}
 
 	@Test
