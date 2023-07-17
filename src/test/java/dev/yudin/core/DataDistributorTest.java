@@ -9,11 +9,14 @@ import dev.yudin.filereader.Reader;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 class DataDistributorTest {
+	public static final int MAX_AMOUNT_COURSES_PER_STUDENT = 3;
+	public static final int MIX_AMOUNT_OF_COURSES = 0;
 
 	@Test
 	void assignStudentsIntoCourses_ShouldAssignStudentsIntoCourses_WhenInputIsListOfStudentsAndListOfCourses() {
@@ -27,8 +30,7 @@ class DataDistributorTest {
 
 		for (var currentStudent : actualListStudentsWithCourses) {
 			int expectedAmountOfCourses = currentStudent.getCourses().size();
-
-			assertTrue(expectedAmountOfCourses > 0);
+			assertTrue(expectedAmountOfCourses > MIX_AMOUNT_OF_COURSES && expectedAmountOfCourses <= MAX_AMOUNT_COURSES_PER_STUDENT);
 		}
 	}
 
@@ -46,24 +48,22 @@ class DataDistributorTest {
 		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(
 				new ArrayList<>(groups), students);
 
-		groupsWithStudents.stream().forEach(System.out::println);
-
 		int expectedAmountGroups = 10;
 		int actualAmountGroups = groupsWithStudents.size();
 
 		assertEquals(expectedAmountGroups, actualAmountGroups);
 
 		for (int i = 0; i < 7; i++) {
-			var currentGroup = groupsWithStudents.get(i);
-			int ActualGroupSizeWithStudent = currentGroup.getStudents().size();
+			var currentGroupWithStudent = groupsWithStudents.get(i);
+			int actualGroupSizeWithStudent = currentGroupWithStudent.getStudents().size();
 
-			assertTrue(ActualGroupSizeWithStudent > 0);
+			assertTrue(actualGroupSizeWithStudent > 0);
 		}
 		for (int i = 7; i <= 9; i++) {
-			var currentGroup = groupsWithStudents.get(i);
+			var currentGroupWithoutStudents = groupsWithStudents.get(i);
 
 			int expectedSize = 0;
-			int actualSizeEmptyGroups = currentGroup.getStudents().size();
+			int actualSizeEmptyGroups = currentGroupWithoutStudents.getStudents().size();
 
 			assertEquals(expectedSize, actualSizeEmptyGroups);
 		}
@@ -84,7 +84,9 @@ class DataDistributorTest {
 				new ArrayList<>(groups), students);
 
 		var actual = distributor.getStudentsWithoutGroups(groupsWithStudents, students);
-		
-		assertEquals(199, actual.size());
+
+		int actualAmount = actual.size();
+
+		assertTrue(actualAmount > 0 && actualAmount < 50);
 	}
 }

@@ -36,7 +36,7 @@ class DataGeneratorTest {
 
 		var students = dataGenerator.generateStudents(200);
 
-		students.stream().forEach(System.out::println);
+//		students.stream().forEach(System.out::println);
 
 		int expected = 200;
 		int actual = students.size();

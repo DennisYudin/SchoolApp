@@ -23,38 +23,35 @@ public class DataDistributor {
 	}
 
 	public List<Group> assignStudentsIntoGroups(List<String> groups, Set<Student> students) {
-
-		List<Group> groupsWithStudents = new ArrayList<>();
-
-		for (int currentGroup = 0; currentGroup < AMOUNT_GROUPS_WITH_STUDENTS; currentGroup++) {
-			String groupName = groups.get(currentGroup);
-			int amountStudentsInGroup = random.nextInt((MAX_AMOUNT_STUDENTS - MIN_AMOUNT_STUDENTS) + 1)
-					+ MIN_AMOUNT_STUDENTS;
-
+		List<Group> result = new ArrayList<>();
+		Iterator<Student> studentsIterator = students.iterator();
+		for (int currentGroupWithStudents = 0;
+			 currentGroupWithStudents < AMOUNT_GROUPS_WITH_STUDENTS; currentGroupWithStudents++) {
+			String groupName = groups.get(currentGroupWithStudents);
+			int amountStudentsInGroup = random.nextInt(
+					(MAX_AMOUNT_STUDENTS - MIN_AMOUNT_STUDENTS) + 1) + MIN_AMOUNT_STUDENTS;
 			Group group = new Group();
 			group.setName(groupName);
-
 			for (int currentStudent = 0; currentStudent < amountStudentsInGroup; currentStudent++) {
-				Iterator<Student> iteratorStudents = students.iterator();
-				if (iteratorStudents.hasNext()) {
-					Student student = iteratorStudents.next();
+				if (studentsIterator.hasNext()) {
+					Student student = studentsIterator.next();
 					List<Student> studentsList = group.getStudents();
 					studentsList.add(student);
 				}
 			}
-			groupsWithStudents.add(group);
+			result.add(group);
 		}
 		int amountGroups = groups.size();
-		for (int currentGroupWithoutStudents = AMOUNT_GROUPS_WITHOUT_STUDENTS; currentGroupWithoutStudents < amountGroups;
-			 currentGroupWithoutStudents++) {
+		for (int currentGroupWithoutStudents = AMOUNT_GROUPS_WITHOUT_STUDENTS;
+			 currentGroupWithoutStudents < amountGroups; currentGroupWithoutStudents++) {
 			String name = groups.get(currentGroupWithoutStudents);
 
 			Group group = new Group();
 			group.setName(name);
 
-			groupsWithStudents.add(group);
+			result.add(group);
 		}
-		return groupsWithStudents;
+		return result;
 	}
 
 	public Set<Student> getStudentsWithoutGroups(List<Group> studentsWithGroups, Set<Student> allStudents) {
