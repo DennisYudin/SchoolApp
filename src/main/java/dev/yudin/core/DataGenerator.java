@@ -20,7 +20,6 @@ public class DataGenerator {
 	public static final String COURSES_FILE = "src/test/resources/courses.txt";
 
 	private Random random;
-
 	private Reader reader;
 
 	public DataGenerator(Random random, Reader reader) {

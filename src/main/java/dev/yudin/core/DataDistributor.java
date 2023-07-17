@@ -16,58 +16,52 @@ public class DataDistributor {
 	private static final int SELECTION_BOUNDARY = 3;
 	private static final int MIN_AMOUNT_STUDENTS = 15;
 	private static final int MAX_AMOUNT_STUDENTS = 30;
+	private Random random;
 
-	private Random random = new Random();
-	private List<Group> groupsWithStudents = new ArrayList<>();
-	private List<Student> studentsWithoutGroups = new ArrayList<>();
-	private List<Student> studentsWithCourses = new ArrayList<>();
-
-	public List<Group> getGroupsWithStudents() {
-		return groupsWithStudents;
+	public DataDistributor(Random random) {
+		this.random = random;
 	}
 
-	public List<Student> getStudentsWithoutGroups() {
-		return studentsWithoutGroups;
-	}
-
-	public List<Student> getStudentsWithCourses() {
-		return studentsWithCourses;
-	}
-
-	public void assignStudentsIntoGroups(List<String> groups, List<Student> students) {
-		Iterator<Student> iteratorStudents = students.iterator();
-		int amountGroups = groups.size();
-
-		for (int currentGroup = 0; currentGroup < AMOUNT_GROUPS_WITH_STUDENTS; currentGroup++) {
-			String groupName = groups.get(currentGroup);
-			int amountStudentsInGroup = random.nextInt((MAX_AMOUNT_STUDENTS - MIN_AMOUNT_STUDENTS) + 1)
-					+ MIN_AMOUNT_STUDENTS;
-
+	public List<Group> assignStudentsIntoGroups(List<String> groups, Set<Student> students) {
+		List<Group> result = new ArrayList<>();
+		Iterator<Student> studentsIterator = students.iterator();
+		for (int currentGroupWithStudents = 0;
+			 currentGroupWithStudents < AMOUNT_GROUPS_WITH_STUDENTS; currentGroupWithStudents++) {
+			String groupName = groups.get(currentGroupWithStudents);
+			int amountStudentsInGroup = random.nextInt(
+					(MAX_AMOUNT_STUDENTS - MIN_AMOUNT_STUDENTS) + 1) + MIN_AMOUNT_STUDENTS;
 			Group group = new Group();
 			group.setName(groupName);
-
 			for (int currentStudent = 0; currentStudent < amountStudentsInGroup; currentStudent++) {
-				if (iteratorStudents.hasNext()) {
-					Student student = iteratorStudents.next();
+				if (studentsIterator.hasNext()) {
+					Student student = studentsIterator.next();
 					List<Student> studentsList = group.getStudents();
 					studentsList.add(student);
 				}
 			}
-			groupsWithStudents.add(group);
+			result.add(group);
 		}
-		for (int currentGroupWithoutStudents = AMOUNT_GROUPS_WITHOUT_STUDENTS; currentGroupWithoutStudents < amountGroups;
-			 currentGroupWithoutStudents++) {
+		int amountGroups = groups.size();
+		for (int currentGroupWithoutStudents = AMOUNT_GROUPS_WITHOUT_STUDENTS;
+			 currentGroupWithoutStudents < amountGroups; currentGroupWithoutStudents++) {
 			String name = groups.get(currentGroupWithoutStudents);
 
 			Group group = new Group();
 			group.setName(name);
 
-			groupsWithStudents.add(group);
+			result.add(group);
 		}
-		while (iteratorStudents.hasNext()) {
-			Student student = iteratorStudents.next();
-			studentsWithoutGroups.add(student);
+		return result;
+	}
+
+	public Set<Student> getStudentsWithoutGroups(List<Group> studentsWithGroups, Set<Student> allStudents) {
+		for (var currentGroup : studentsWithGroups) {
+			List<Student> studentsInGroup = currentGroup.getStudents();
+			for (var student : studentsInGroup) {
+				allStudents.remove(student);
+			}
 		}
+		return allStudents;
 	}
 
 	public List<Student> assignStudentsIntoCourses(Set<Student> allStudents, List<Course> allCourses) {

@@ -63,9 +63,7 @@ public class Student {
         Student student = (Student) o;
         return id == student.id
                 && firstName.equals(student.firstName)
-                && lastName.equals(student.lastName)
-                && Objects.equals(groupId, student.groupId)
-                && Objects.equals(courses, student.courses);
+                && lastName.equals(student.lastName);
     }
 
     @Override
