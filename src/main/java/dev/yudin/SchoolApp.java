@@ -1,15 +1,10 @@
 package dev.yudin;
 
-import dev.yudin.dao.impl.CoursesDAOImpl;
+import dev.yudin.core.DBInitializer;
 
-/**
- * Hello world!
- */
 public class SchoolApp {
 	public static void main(String[] args) {
 
-		DBInitializer dbStructure = new DBInitializer();
 
-		dbStructure.init();
 	}
 }

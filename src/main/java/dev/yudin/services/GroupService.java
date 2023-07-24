@@ -1,12 +1,10 @@
-package dev.yudin.dao;
+package dev.yudin.services;
 
 import dev.yudin.entities.Group;
 
 import java.util.List;
 
-public interface GroupDAO {
-
-	List<Group> findAll();
+public interface GroupService {
 
 	void save(List<String> groups);
 }

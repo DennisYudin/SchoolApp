@@ -27,10 +27,14 @@ public class Group {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     @Override
     public String toString() {
-        return "Group [goupName=" + name + ", studentsInGroup=" + students + "]";
+        return "Group{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", students=" + students +
+                '}';
     }
 }
 

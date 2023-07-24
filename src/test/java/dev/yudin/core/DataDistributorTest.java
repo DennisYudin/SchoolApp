@@ -9,7 +9,6 @@ import dev.yudin.filereader.Reader;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -42,11 +41,10 @@ class DataDistributorTest {
 
 		DataDistributor distributor = new DataDistributor(random);
 
-		Set<String> groups = dataGenerator.generateGroups(10);
+		List<String> groups = dataGenerator.generateGroups(10);
 		Set<Student> students = dataGenerator.generateStudents(200);
 
-		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(
-				new ArrayList<>(groups), students);
+		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(groups, students);
 
 		int expectedAmountGroups = 10;
 		int actualAmountGroups = groupsWithStudents.size();
@@ -70,23 +68,22 @@ class DataDistributorTest {
 	}
 
 	@Test
-	void getStudentsWithoutGroups() {
+	void getStudentsWithoutGroups_ShouldReturnListOfStudentWithoutGroups_WhenInputIsGroupsWithStudentsAndAllStudents() {
 		Random random = new Random();
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(random, reader);
 
 		DataDistributor distributor = new DataDistributor(random);
 
-		Set<String> groups = dataGenerator.generateGroups(10);
+		List<String> groups = dataGenerator.generateGroups(10);
 		Set<Student> students = dataGenerator.generateStudents(200);
 
-		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(
-				new ArrayList<>(groups), students);
+		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(groups, students);
 
 		var actual = distributor.getStudentsWithoutGroups(groupsWithStudents, students);
 
-		int actualAmount = actual.size();
+		int actualAmountStudentsWithoutGroups = actual.size();
 
-		assertTrue(actualAmount > 0 && actualAmount < 50);
+		assertTrue(actualAmountStudentsWithoutGroups > 0 && actualAmountStudentsWithoutGroups < 50);
 	}
 }

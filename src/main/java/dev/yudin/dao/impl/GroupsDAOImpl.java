@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsDAOImpl implements GroupDAO {
-
 	private final Logger log = LogManager.getLogger(GroupsDAOImpl.class);
-
 	public static final String INSERT_INTO_GROUPS_TABLES_SQL = "INSERT INTO groups (name) VALUES(?)";
 	public static final String FIND_ALL_SQL = "SELECT * FROM groups";
 
@@ -55,21 +53,22 @@ public class GroupsDAOImpl implements GroupDAO {
 	}
 
 	@Override
-	public void save(List<Group> groups) {
+	public void save(List<String> groups) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
 					 INSERT_INTO_GROUPS_TABLES_SQL, Statement.RETURN_GENERATED_KEYS)) {
-			for (Group group : groups) {
-				String name = group.getName();
+			for (String name : groups) {
+//				Group groupObject = new Group();
+//				groupObject.setName(name);
 
 				statement.setString(1, name);
 				statement.execute();
 
-				setGroupId(statement, group);
+//				setGroupId(statement, groupObject);
 			}
 		} catch (SQLException ex) {
-			log.error("Error during save() call");
-			throw new DAOException("Error during save() call", ex);
+			log.error("Error during save()");
+			throw new DAOException("Error during save()", ex);
 		}
 	}
 

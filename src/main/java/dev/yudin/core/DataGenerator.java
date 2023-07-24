@@ -5,6 +5,7 @@ import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
 import dev.yudin.filereader.Reader;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +28,7 @@ public class DataGenerator {
 		this.reader = reader;
 	}
 
-	public Set<String> generateGroups(int amountGroups) {
+	public List<String> generateGroups(int amountGroups) {
 		Set<String> groups = new HashSet<>();
 
 		StringBuilder name = new StringBuilder();
@@ -41,7 +42,7 @@ public class DataGenerator {
 
 			name.delete(0, name.length());
 		}
-		return groups;
+		return new ArrayList<>(groups);
 	}
 
 	private StringBuilder getTwoRandomChar(StringBuilder result, String characterData, int amount) {

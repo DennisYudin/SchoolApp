@@ -45,20 +45,35 @@ class GroupsDAOImplTest {
 
 	@Test
 	@Order(1)
-	void save_ShouldSaveDataIntoTable_WhenInputIsListOfObjects() {
-		List<Group> coursesTableBefore = groupsDAO.findAll();
+	void save_ShouldSaveDataIntoGroupsTable_WhenInputIsListOfObjects() {
+		List<Group> groupsTableBefore = groupsDAO.findAll();
 
-		assumeTrue(coursesTableBefore.isEmpty());
+		assumeTrue(groupsTableBefore.isEmpty());
 
-		Group group = new Group();
-		group.setName("XX-XX");
-		List<Group> groups = List.of(group);
+		List<String> groups = List.of("XX-XX");
 
 		groupsDAO.save(groups);
 
-		List<Group> coursesTableAfter = groupsDAO.findAll();
+		List<Group> groupsTableAfter = groupsDAO.findAll();
 
-		assertFalse(coursesTableAfter.isEmpty());
+		assertFalse(groupsTableAfter.isEmpty());
 	}
 
+	@Test
+	@Order(2)
+	void save_ShouldSaveDataIntoGroupsTable_WhenInputIsListOfObjects2() {
+		List<Group> groupsTableBefore = groupsDAO.findAll();
+
+		assumeTrue(groupsTableBefore.isEmpty());
+
+		List<String> groups = List.of("XX-XX");
+
+		groupsDAO.save(groups);
+
+		List<Group> groupsTableAfter = groupsDAO.findAll();
+
+		System.out.println(groupsTableAfter);
+
+//		assertFalse(groupsTableAfter.isEmpty());
+	}
 }
