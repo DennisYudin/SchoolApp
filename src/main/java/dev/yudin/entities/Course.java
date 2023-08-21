@@ -30,6 +30,26 @@ public class Course {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        if (id != course.id) return false;
+        if (!name.equals(course.name)) return false;
+        return description.equals(course.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +

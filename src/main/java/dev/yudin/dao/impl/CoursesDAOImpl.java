@@ -65,21 +65,10 @@ public class CoursesDAOImpl implements CourseDAO {
 				statement.setString(1, name);
 				statement.setString(2, description);
 				statement.execute();
-
-				setIdForEach(course, statement);
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save() call");
 			throw new DAOException("Error during save() call", ex);
-		}
-	}
-
-	private void setIdForEach(Course course, PreparedStatement statement) throws SQLException {
-		try (ResultSet resultSet = statement.getGeneratedKeys()) {
-			if (resultSet.next()) {
-				long courseId = resultSet.getLong("id");
-				course.setId(courseId);
-			}
 		}
 	}
 }
