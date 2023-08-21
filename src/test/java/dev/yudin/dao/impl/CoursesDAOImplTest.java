@@ -28,7 +28,6 @@ class CoursesDAOImplTest {
 	public void setUp() {
 		Reader reader = new FileReaderTesting();
 		ConnectionManager manager = new ConnectionManagerTesting(reader);
-
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
 		scriptRunner.run("test-databaseStructure.sql");

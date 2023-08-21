@@ -12,16 +12,16 @@ public class DBInitializer {
 	private DataGenerator dataGenerator;
 	private DataDistributor dataDistributor;
 	private GroupService groupService;
-	private CoursesService coursesService;
+	private CoursesService courseService;
 
 	public DBInitializer(Runnable scriptRunner, DataGenerator dataGenerator,
 						 DataDistributor dataDistributor, GroupService groupService,
-						 CoursesService coursesService) {
+						 CoursesService courseService) {
 		this.scriptRunner = scriptRunner;
 		this.dataGenerator = dataGenerator;
 		this.dataDistributor = dataDistributor;
 		this.groupService = groupService;
-		this.coursesService = coursesService;
+		this.courseService = courseService;
 	}
 
 	public void init() {
@@ -34,14 +34,19 @@ public class DBInitializer {
 		var courses = dataGenerator.getCourses();
 
 		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(groups, students);
-		var studentsWihoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, students);
+		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, students);
 		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(students, courses);
 
 		//todo populate tables with data using Services
 		groupService.save(groups); // get Id
-		coursesService.save(courses); // get Id
+		courseService.save(courses); // get Id
+		//todo stop here 20/08/23
+		//populate students table
+		//using groupsWithStudents and studentsWithoutGroups from line 36, 37
+		//to fill fields name | surname | group_id
 
-
+		//populate student_courses table
+		//using studentsWithCourses many - to - many table from line 38
 	}
 
 }

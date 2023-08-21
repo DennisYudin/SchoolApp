@@ -40,6 +40,4 @@ class StudentsDAOImplTest {
 
 		assertTrue(actual.isEmpty());
 	}
-
-
 }

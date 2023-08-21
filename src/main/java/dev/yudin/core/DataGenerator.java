@@ -16,9 +16,9 @@ public class DataGenerator {
 	private static final String SYMBOLS_FOR_SELECTION = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String NUMBERS_FOR_SELECTION = "0123456789";
 	private static final int CHAR_LENGTH = 2;
-	public static final String STUDENTS_NAMES_FILE = "src/test/resources/students_names.txt";
-	public static final String STUDENTS_SURNAMES_FILE = "src/test/resources/students_surnames.txt";
-	public static final String COURSES_FILE = "src/test/resources/courses.txt";
+	public static final String STUDENTS_NAMES_FILE = "src/main/resources/students_names.txt";
+	public static final String STUDENTS_SURNAMES_FILE = "src/main/resources/students_surnames.txt";
+	public static final String COURSES_FILE = "src/main/resources/courses.txt";
 
 	private Random random;
 	private Reader reader;
