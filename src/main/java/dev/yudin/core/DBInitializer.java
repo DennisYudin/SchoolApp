@@ -35,11 +35,12 @@ public class DBInitializer {
 
 		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(groups, students);
 		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, students);
+
 		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(students, courses);
 
 		//todo populate tables with data using Services
-		groupService.save(groups); // get Id
-		courseService.save(courses); // get Id
+		groupService.save(groups); // get Id using findAll()
+		courseService.save(courses); // get Id using findAll()
 
 		//todo stop here 20/08/23
 		//populate students table

@@ -7,4 +7,6 @@ import java.util.List;
 public interface StudentDAO {
 
 	List<Student> findAll();
+
+	void save(List<Student> students);
 }

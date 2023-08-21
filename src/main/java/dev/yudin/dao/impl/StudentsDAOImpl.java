@@ -20,7 +20,6 @@ public class StudentsDAOImpl implements StudentDAO {
 	public static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
 	public static final String FIND_ALL_SQL = "SELECT * FROM students";
-	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
 	private final Manager dataSource;
 
 	public StudentsDAOImpl(Manager dataSource) {
@@ -40,7 +39,7 @@ public class StudentsDAOImpl implements StudentDAO {
 				long id = resultSet.getLong("id");
 				String firstName = resultSet.getString("first_name");
 				String lstName = resultSet.getString("last_name");
-				String groupId = resultSet.getString("group_id");
+				int groupId = resultSet.getInt("group_id");
 
 				student.setId(id);
 				student.setFirstName(firstName);
@@ -56,23 +55,47 @@ public class StudentsDAOImpl implements StudentDAO {
 		}
 	}
 
-	public void save(List<Group> groups) {
+	public void save(List<Student> students) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
 					 INSERT_INTO_STUDENTS_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-			int amountGroups = groups.size();
-//			for (int currentGroup = 0; currentGroup < amountGroups; currentGroup++) {
-//				int amountStudentsInGroup = groups.get(currentGroup).getStudents().size();
-//
-//				setStudentsInTable(amountStudentsInGroup, statement, groupsData, currentGroup);
-//			}
-//			int amountStudents = studentsData.size();
-//			setStudentsWithoutGroup(amountStudents, statement, studentsData);
+			for (var student : students) {
+				var name = student.getFirstName();
+				var lastName = student.getLastName();
+				var groupId = student.getGroupId();
 
+				statement.setString(1, name);
+				statement.setString(2, lastName);
+				if (groupId == 0) {
+					statement.setNull(3, java.sql.Types.INTEGER);
+				} else {
+					statement.setInt(3, groupId);
+				}
+				statement.execute();
+			}
 		} catch (SQLException ex) {
-			throw new DAOException("Could not insert student into student table", ex);
+			log.error("Error during save()");
+			throw new DAOException("Error during save()", ex);
 		}
 	}
+
+//	public void save(List<Group> groups) {
+//		try (Connection connection = dataSource.getConnection();
+//			 PreparedStatement statement = connection.prepareStatement(
+//					 INSERT_INTO_STUDENTS_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+//			int amountGroups = groups.size();
+////			for (int currentGroup = 0; currentGroup < amountGroups; currentGroup++) {
+////				int amountStudentsInGroup = groups.get(currentGroup).getStudents().size();
+////
+////				setStudentsInTable(amountStudentsInGroup, statement, groupsData, currentGroup);
+////			}
+////			int amountStudents = studentsData.size();
+////			setStudentsWithoutGroup(amountStudents, statement, studentsData);
+//
+//		} catch (SQLException ex) {
+//			throw new DAOException("Could not insert student into student table", ex);
+//		}
+//	}
 
 	private void setStudentsInTable(int amountStudents, PreparedStatement preparedStatement,List<Group> dataInput, int actualGroup)
 			throws SQLException {

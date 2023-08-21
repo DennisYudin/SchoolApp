@@ -1,6 +1,9 @@
 package dev.yudin.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
@@ -18,7 +21,7 @@ import java.util.List;
 
 class StudentsDAOImplTest {
 
-	StudentDAO studentDAO;
+	private StudentDAO studentDAO;
 
 	@BeforeEach
 	public void setUp() {
@@ -28,6 +31,7 @@ class StudentsDAOImplTest {
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
 		scriptRunner.run("test-databaseStructure.sql");
+		scriptRunner.run("fillGroupTable.sql");
 
 		studentDAO = new StudentsDAOImpl(manager);
 	}
@@ -39,5 +43,42 @@ class StudentsDAOImplTest {
 		List<Student> actual = studentDAO.findAll();
 
 		assertTrue(actual.isEmpty());
+	}
+	@Test
+	@Order(1)
+	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents() {
+		List<Student> studentsTableStateBefore = studentDAO.findAll();
+
+		assumeTrue(studentsTableStateBefore.isEmpty());
+
+		Student student = new Student();
+		student.setFirstName("dennis");
+		student.setLastName("yudin");
+		student.setGroupId(1);
+
+		studentDAO.save(List.of(student));
+
+		List<Student> studentsTableStateAfter = studentDAO.findAll();
+		assertFalse(studentsTableStateAfter.isEmpty());
+	}
+
+	@Test
+	@Order(2)
+	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents2() {
+		List<Student> studentsTableStateBefore = studentDAO.findAll();
+
+		assumeTrue(studentsTableStateBefore.isEmpty());
+
+		Student student = new Student();
+		student.setFirstName("dennis");
+		student.setLastName("yudin");
+//		student.setGroupId(0); //todo should return null??
+
+		studentDAO.save(List.of(student));
+
+		List<Student> studentsTableStateAfter = studentDAO.findAll();
+		assertFalse(studentsTableStateAfter.isEmpty());
+
+		System.out.println(studentsTableStateAfter);
 	}
 }
