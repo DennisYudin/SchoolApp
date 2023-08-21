@@ -40,6 +40,7 @@ public class DBInitializer {
 		//todo populate tables with data using Services
 		groupService.save(groups); // get Id
 		courseService.save(courses); // get Id
+
 		//todo stop here 20/08/23
 		//populate students table
 		//using groupsWithStudents and studentsWithoutGroups from line 36, 37

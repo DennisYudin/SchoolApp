@@ -1,5 +1,6 @@
 package dev.yudin.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -61,19 +62,17 @@ class GroupsDAOImplTest {
 
 	@Test
 	@Order(2)
-	void save_ShouldSaveDataIntoGroupsTable_WhenInputIsListOfObjects2() {
-		List<Group> groupsTableBefore = groupsDAO.findAll();
+	void findAll_ShouldReturnListOfGroups_WhenCallMethod() {
+		List<String> listExpectedGroups = List.of("XX-XX");
+		Group expectedGroup = new Group();
+		expectedGroup.setId(1);
+		expectedGroup.setName(listExpectedGroups.get(0));
 
-		assumeTrue(groupsTableBefore.isEmpty());
+		groupsDAO.save(listExpectedGroups);
 
-		List<String> groups = List.of("XX-XX");
+		List<Group> actual = groupsDAO.findAll();
+		var actualGroup = actual.get(0);
 
-		groupsDAO.save(groups);
-
-		List<Group> groupsTableAfter = groupsDAO.findAll();
-
-		System.out.println(groupsTableAfter);
-
-//		assertFalse(groupsTableAfter.isEmpty());
+		assertEquals(expectedGroup, actualGroup);
 	}
 }

@@ -58,26 +58,12 @@ public class GroupsDAOImpl implements GroupDAO {
 			 PreparedStatement statement = connection.prepareStatement(
 					 INSERT_INTO_GROUPS_TABLES_SQL, Statement.RETURN_GENERATED_KEYS)) {
 			for (String name : groups) {
-//				Group groupObject = new Group();
-//				groupObject.setName(name);
-
 				statement.setString(1, name);
 				statement.execute();
-
-//				setGroupId(statement, groupObject);
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save()");
 			throw new DAOException("Error during save()", ex);
-		}
-	}
-
-	private void setGroupId(PreparedStatement statement, Group group) throws SQLException {
-		try (ResultSet resultSet = statement.getGeneratedKeys()) {
-			if (resultSet.next()) {
-				long groupId = resultSet.getLong("id");
-				group.setId(groupId);
-			}
 		}
 	}
 }
