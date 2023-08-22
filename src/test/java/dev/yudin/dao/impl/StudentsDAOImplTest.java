@@ -1,7 +1,6 @@
 package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -44,6 +43,7 @@ class StudentsDAOImplTest {
 
 		assertTrue(actual.isEmpty());
 	}
+
 	@Test
 	@Order(1)
 	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents() {
@@ -51,34 +51,17 @@ class StudentsDAOImplTest {
 
 		assumeTrue(studentsTableStateBefore.isEmpty());
 
-		Student student = new Student();
-		student.setFirstName("dennis");
-		student.setLastName("yudin");
-		student.setGroupId(1);
+		Student expectedStudent = new Student();
+		expectedStudent.setId(1);
+		expectedStudent.setFirstName("dennis");
+		expectedStudent.setLastName("yudin");
+		expectedStudent.setGroupId(1);
 
-		studentDAO.save(List.of(student));
-
-		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		assertFalse(studentsTableStateAfter.isEmpty());
-	}
-
-	@Test
-	@Order(2)
-	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents2() {
-		List<Student> studentsTableStateBefore = studentDAO.findAll();
-
-		assumeTrue(studentsTableStateBefore.isEmpty());
-
-		Student student = new Student();
-		student.setFirstName("dennis");
-		student.setLastName("yudin");
-//		student.setGroupId(0); //todo should return null??
-
-		studentDAO.save(List.of(student));
+		studentDAO.save(List.of(expectedStudent));
 
 		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		assertFalse(studentsTableStateAfter.isEmpty());
+		var actualStudent = studentsTableStateAfter.get(0);
 
-		System.out.println(studentsTableStateAfter);
+		assertEquals(expectedStudent, actualStudent);
 	}
 }
