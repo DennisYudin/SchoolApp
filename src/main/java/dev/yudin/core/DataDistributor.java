@@ -5,8 +5,10 @@ import dev.yudin.entities.Group;
 import dev.yudin.entities.Student;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -20,6 +22,32 @@ public class DataDistributor {
 
 	public DataDistributor(Random random) {
 		this.random = random;
+	}
+
+	public List<Student> merge(List<Group> groupsWithStudents,
+							   Set<Student> studentsWithoutGroups,
+							   Map<String, Long> groups) {
+
+		Set<Student> result = new HashSet<>();
+
+		for (Group group : groupsWithStudents) {
+			for(var currentStudentInGroup : group.getStudents()) {
+				Student student = new Student();
+				student.setFirstName(currentStudentInGroup.getFirstName());
+				student.setLastName(currentStudentInGroup.getLastName());
+				student.setGroupId(Math.toIntExact(groups.get(group.getName())));
+
+				result.add(student);
+			}
+		}
+		for (var currentStudent : studentsWithoutGroups) {
+			Student student = new Student();
+			student.setFirstName(currentStudent.getFirstName());
+			student.setLastName(currentStudent.getLastName());
+
+			result.add(student);
+		}
+		return new ArrayList<>(result);
 	}
 
 	public List<Group> assignStudentsIntoGroups(List<String> groups, Set<Student> students) {

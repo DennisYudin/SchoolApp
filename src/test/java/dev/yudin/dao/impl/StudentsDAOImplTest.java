@@ -13,11 +13,13 @@ import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudentsDAOImplTest {
 
 	private StudentDAO studentDAO;
@@ -56,6 +58,26 @@ class StudentsDAOImplTest {
 		expectedStudent.setFirstName("dennis");
 		expectedStudent.setLastName("yudin");
 		expectedStudent.setGroupId(1);
+
+		studentDAO.save(List.of(expectedStudent));
+
+		List<Student> studentsTableStateAfter = studentDAO.findAll();
+		var actualStudent = studentsTableStateAfter.get(0);
+
+		assertEquals(expectedStudent, actualStudent);
+	}
+
+	@Test
+	@Order(2)
+	void save_ShouldSaveStudentWithoutGroupId_WhenInputListOfStudents() {
+		List<Student> studentsTableStateBefore = studentDAO.findAll();
+
+		assumeTrue(studentsTableStateBefore.isEmpty());
+
+		Student expectedStudent = new Student();
+		expectedStudent.setId(1);
+		expectedStudent.setFirstName("dennis");
+		expectedStudent.setLastName("yudin");
 
 		studentDAO.save(List.of(expectedStudent));
 

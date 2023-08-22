@@ -13,7 +13,6 @@ import java.util.List;
 public class CoursesServiceImpl implements CoursesService {
 	private final Logger log = LogManager.getLogger(CoursesServiceImpl.class);
 	private CourseDAO courseDAO;
-
 	public CoursesServiceImpl(CourseDAO courseDAO) {
 		this.courseDAO = courseDAO;
 	}
