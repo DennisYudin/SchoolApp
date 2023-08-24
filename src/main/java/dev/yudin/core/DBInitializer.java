@@ -50,15 +50,15 @@ public class DBInitializer {
 
 		var listOfStudents = dataDistributor.merge(groupsWithStudents, studentsWithoutGroups, groupNameID);
 		//populate students table
-		//using groupsWithStudents and studentsWithoutGroups from line 36, 37
-		//to fill fields name | surname | group_id
 		studentService.save(listOfStudents);
 
 		var coursesFromTable = courseService.findAll();
 		var coursesNameID = courseService.convert(coursesFromTable);
-//		var studentsCourses = ...
+		var StudentsFromTable = studentService.findAll();
+		var studentNameID = studentService.convert(studentsWithCourses);
+
+		//		var studentsCourses = merge();
 
 		//populate student_courses table
-		//using studentsWithCourses many - to - many table from line 38
 	}
 }

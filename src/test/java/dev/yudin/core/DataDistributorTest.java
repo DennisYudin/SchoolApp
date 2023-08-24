@@ -3,6 +3,7 @@ package dev.yudin.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dev.yudin.entities.Course;
 import dev.yudin.entities.Group;
 import dev.yudin.entities.Student;
 import dev.yudin.filereader.FileReader;
@@ -19,6 +20,41 @@ class DataDistributorTest {
 	public static final int MAX_AMOUNT_COURSES_PER_STUDENT = 3;
 	public static final int MIX_AMOUNT_OF_COURSES = 0;
 
+
+	@Test
+	void name() {
+		Random random = new Random();
+		Reader reader = new FileReader();
+		DataGenerator dataGenerator = new DataGenerator(random, reader);
+		DataDistributor distributor = new DataDistributor(random);
+
+		Set<Student> students = dataGenerator.generateStudents(200);
+		List<Course> courses = dataGenerator.getCourses();
+		var studentsWithCourses = distributor.assignStudentsIntoCourses(students, courses);
+
+		var map = Map.ofEntries(
+			Map.entry("Algebra", 1),
+			Map.entry("Biology", 2),
+			Map.entry("Drawing", 3),
+			Map.entry("Chemistry", 4),
+			Map.entry("Geography", 5),
+			Map.entry("Geometry", 6),
+			Map.entry("History", 7),
+			Map.entry("Literature", 8),
+			Map.entry("Mathematics", 9),
+			Map.entry("Music", 10)
+		);
+//		int id = 1;
+//		for (var student : students) {
+//			student.setId(id);
+//			id++;
+//		}
+		Map<Student, Integer> result = new HashMap<>();
+		students.forEach(student -> result.put(student, student.getId()));
+		var actual = distributor.merge(studentsWithCourses, map, result);
+
+		System.out.println(actual);
+	}
 
 	@Test
 	void merge_ShouldCombineStudentsIntoOneList_WhenInputIsListOfStudentsWithGroupsAndStudentsWithoutGroupsAndMap() {
@@ -58,7 +94,8 @@ class DataDistributorTest {
 
 		for (var currentStudent : actualListStudentsWithCourses) {
 			int expectedAmountOfCourses = currentStudent.getCourses().size();
-			assertTrue(expectedAmountOfCourses > MIX_AMOUNT_OF_COURSES && expectedAmountOfCourses <= MAX_AMOUNT_COURSES_PER_STUDENT);
+			assertTrue(expectedAmountOfCourses > MIX_AMOUNT_OF_COURSES
+					&& expectedAmountOfCourses <= MAX_AMOUNT_COURSES_PER_STUDENT);
 		}
 	}
 

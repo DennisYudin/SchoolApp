@@ -94,19 +94,20 @@ public class DataDistributor {
 	}
 
 	public List<StudentCourseDTO> merge(List<Student> studentsWithCourses,
-										List<Student> studentsFromTable,
-										Map<String, Integer> courseNameId) {
-
+										Map<String, Integer> courseNameId,
+										Map<Student, Integer> studentId) {
 		List<StudentCourseDTO> result = new ArrayList<>();
 
-		for (var student : studentsWithCourses) {
-			for (var course : student.getCourses()) {
+		for (Student student : studentsWithCourses) {
+			StudentCourseDTO dto = new StudentCourseDTO();
+			for (Course course : student.getCourses()) {
+				dto.setStudentId(studentId.get(student));
+				dto.setCourseId(courseNameId.get(course.getName()));
 
+				result.add(dto);
 			}
 		}
-
-		return null;
-
+		return result;
 	}
 
 	public List<Student> assignStudentsIntoCourses(Set<Student> allStudents, List<Course> allCourses) {

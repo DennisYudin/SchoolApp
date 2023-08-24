@@ -8,18 +8,24 @@ import dev.yudin.services.StudentService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentServiceImpl implements StudentService {
 	private final Logger log = LogManager.getLogger(StudentServiceImpl.class);
 	private StudentDAO studentDAO;
 
-//	@Override
-//	public Map<String, Integer> convert(List<Student> students) {
-//		Map<String, Integer> result = new HashMap<>();
-//		students.forEach(student -> result.put(student.getFirstName(), student.getId()));
-//		return result;
-//	}
+	public StudentServiceImpl(StudentDAO studentDAO) {
+		this.studentDAO = studentDAO;
+	}
+
+	@Override
+	public Map<Student, Integer> convert(List<Student> studentsFromTable) {
+		Map<Student, Integer> result = new HashMap<>();
+		studentsFromTable.forEach(student -> result.put(student, student.getId()));
+		return result;
+	}
 
 	@Override
 	public List<Student> findAll() {

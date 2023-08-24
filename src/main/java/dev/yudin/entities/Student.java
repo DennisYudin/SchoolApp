@@ -60,15 +60,18 @@ public class Student {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Student student = (Student) o;
-        return id == student.id
-                && firstName.equals(student.firstName)
-                && lastName.equals(student.lastName);
+
+        if (!firstName.equals(student.firstName)) return false;
+        return lastName.equals(student.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, groupId, courses);
+        int result = firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        return result;
     }
 
     @Override
