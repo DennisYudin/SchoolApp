@@ -30,27 +30,31 @@ public class DBInitializer {
 		scriptRunner.run(DATABASE_STRUCTURE_FILE);
 
 		//todo prepare data
-		var students = dataGenerator.generateStudents(200);
-		var groups = dataGenerator.generateGroups(10);
-		var courses = dataGenerator.getCourses();
+		var initStudents = dataGenerator.generateStudents(200);
+		var initGroups = dataGenerator.generateGroups(10);
+		var initCourses = dataGenerator.getCourses();
 
-		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(groups, students);
-		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, students);
+		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(initGroups, initStudents);
+		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, initStudents);
 
-		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(students, courses);
+		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(initStudents, initCourses);
 
 		//todo populate tables with data using Services
-		groupService.save(groups);
-		courseService.save(courses);
+		groupService.save(initGroups);
+		courseService.save(initCourses);
 
-		var listOfGroups = groupService.findAll();
-		var mapGroups = groupService.convert(listOfGroups);
+		var groupsFromTable = groupService.findAll();
+		var groupNameID = groupService.convert(groupsFromTable);
 
-		var listOfStudents = dataDistributor.merge(groupsWithStudents, studentsWithoutGroups, mapGroups);
+		var listOfStudents = dataDistributor.merge(groupsWithStudents, studentsWithoutGroups, groupNameID);
 		//populate students table
 		//using groupsWithStudents and studentsWithoutGroups from line 36, 37
 		//to fill fields name | surname | group_id
 		studentService.save(listOfStudents);
+
+		var coursesFromTable = courseService.findAll();
+		var coursesNameID = courseService.convert(coursesFromTable);
+//		var studentsCourses = ...
 
 		//populate student_courses table
 		//using studentsWithCourses many - to - many table from line 38

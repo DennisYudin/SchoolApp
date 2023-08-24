@@ -47,13 +47,6 @@ class DataDistributorTest {
 	}
 
 	@Test
-	void name2() {
-
-		var test = Math.toIntExact(10);
-		System.out.println(test);
-	}
-
-	@Test
 	void assignStudentsIntoCourses_ShouldAssignStudentsIntoCourses_WhenInputIsListOfStudentsAndListOfCourses() {
 		Random random = new Random();
 		Reader reader = new FileReader();
