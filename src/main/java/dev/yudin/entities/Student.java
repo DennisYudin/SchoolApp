@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Student {
-    private long id;
+    private int id;
     private String firstName;
     private String lastName;
     private int groupId;
@@ -31,15 +31,15 @@ public class Student {
     public List<Course> getCourses() {
         return courses;
     }
-    
-    public long getId() {
+
+    public int getId() {
         return id;
     }
-    
-    public void setId(long id) {
+
+    public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getFirstName() {
         return firstName;
     }

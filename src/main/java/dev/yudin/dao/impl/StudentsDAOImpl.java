@@ -36,7 +36,7 @@ public class StudentsDAOImpl implements StudentDAO {
 			while (resultSet.next()) {
 				Student student = new Student();
 
-				long id = resultSet.getLong("id");
+				int id = resultSet.getInt("id");
 				String firstName = resultSet.getString("first_name");
 				String lstName = resultSet.getString("last_name");
 				int groupId = resultSet.getInt("group_id");

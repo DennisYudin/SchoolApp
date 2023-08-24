@@ -1,4 +1,4 @@
-package dev.yudin.services.Impl;
+package dev.yudin.services.impl;
 
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;

@@ -1,7 +1,6 @@
-package dev.yudin.services.Impl;
+package dev.yudin.services.impl;
 
 import dev.yudin.dao.GroupDAO;
-import dev.yudin.dao.impl.GroupsDAOImpl;
 import dev.yudin.entities.Group;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;

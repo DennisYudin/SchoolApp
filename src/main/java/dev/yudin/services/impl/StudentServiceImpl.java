@@ -1,4 +1,4 @@
-package dev.yudin.services.Impl;
+package dev.yudin.services.impl;
 
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
@@ -13,6 +13,23 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 	private final Logger log = LogManager.getLogger(StudentServiceImpl.class);
 	private StudentDAO studentDAO;
+
+//	@Override
+//	public Map<String, Integer> convert(List<Student> students) {
+//		Map<String, Integer> result = new HashMap<>();
+//		students.forEach(student -> result.put(student.getFirstName(), student.getId()));
+//		return result;
+//	}
+
+	@Override
+	public List<Student> findAll() {
+		try{
+			return studentDAO.findAll();
+		} catch (DAOException ex) {
+			log.error("Error during findAll()");
+			throw new ServiceException("Error during findAll()");
+		}
+	}
 
 	@Override
 	public void save(List<Student> students) {

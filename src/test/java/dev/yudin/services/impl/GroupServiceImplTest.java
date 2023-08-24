@@ -1,4 +1,4 @@
-package dev.yudin.services.Impl;
+package dev.yudin.services.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
