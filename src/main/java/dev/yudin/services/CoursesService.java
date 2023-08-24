@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface CoursesService {
 
-	Map<String, Long> convert(List<Course> courses);
+	Map<String, Integer> convert(List<Course> courses);
 	List<Course> findAll();
 	void save(List<Course> courses);
 }

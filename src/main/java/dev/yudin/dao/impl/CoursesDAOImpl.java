@@ -35,7 +35,7 @@ public class CoursesDAOImpl implements CourseDAO {
 			while (resultSet.next()) {
 				Course course = new Course();
 
-				long id = resultSet.getLong("id");
+				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String desc = resultSet.getString("description");
 

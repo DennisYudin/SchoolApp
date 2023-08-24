@@ -20,8 +20,8 @@ public class CourseServiceImpl implements CoursesService {
 	}
 
 	@Override
-	public Map<String, Long> convert(List<Course> courses) {
-		Map<String, Long> result = new HashMap<>();
+	public Map<String, Integer> convert(List<Course> courses) {
+		Map<String, Integer> result = new HashMap<>();
 		courses.forEach(course -> result.put(course.getName(), course.getId()));
 		return result;
 	}

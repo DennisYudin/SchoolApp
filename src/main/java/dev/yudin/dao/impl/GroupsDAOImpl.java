@@ -36,7 +36,7 @@ public class GroupsDAOImpl implements GroupDAO {
 			while (resultSet.next()) {
 				Group group = new Group();
 
-				long id = resultSet.getLong("id");
+				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 
 				group.setId(id);

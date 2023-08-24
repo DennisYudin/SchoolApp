@@ -22,8 +22,8 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public Map<String, Long> convert(List<Group> groups) {
-		Map<String, Long> result = new HashMap<>();
+	public Map<String, Integer> convert(List<Group> groups) {
+		Map<String, Integer> result = new HashMap<>();
 
 		groups.forEach(group -> result.put(group.getName(), group.getId()));
 

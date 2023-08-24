@@ -3,6 +3,7 @@ package dev.yudin.core;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Group;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentCourseDTO;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class DataDistributor {
 
 	public List<Student> merge(List<Group> groupsWithStudents,
 							   Set<Student> studentsWithoutGroups,
-							   Map<String, Long> groups) {
+							   Map<String, Integer> groups) {
 
 		Set<Student> result = new HashSet<>();
 
@@ -90,6 +91,22 @@ public class DataDistributor {
 			}
 		}
 		return allStudents;
+	}
+
+	public List<StudentCourseDTO> merge(List<Student> studentsWithCourses,
+										List<Student> studentsFromTable,
+										Map<String, Integer> courseNameId) {
+
+		List<StudentCourseDTO> result = new ArrayList<>();
+
+		for (var student : studentsWithCourses) {
+			for (var course : student.getCourses()) {
+
+			}
+		}
+
+		return null;
+
 	}
 
 	public List<Student> assignStudentsIntoCourses(Set<Student> allStudents, List<Course> allCourses) {

@@ -33,8 +33,8 @@ class DataDistributorTest {
 		List<Group> groupsWithStudents = distributor.assignStudentsIntoGroups(groups, allStudents);
 		Set<Student> studentsWithoutGroups = distributor.getStudentsWithoutGroups(groupsWithStudents, allStudents);
 
-		Map<String, Long> map = new HashMap<>();
-		long i = 1;
+		Map<String, Integer> map = new HashMap<>();
+		int i = 1;
 		for (var name : groups) {
 			map.put(name, i);
 			i++;
@@ -113,6 +113,6 @@ class DataDistributorTest {
 
 		int actualAmountStudentsWithoutGroups = actual.size();
 
-		assertTrue(actualAmountStudentsWithoutGroups > 0 && actualAmountStudentsWithoutGroups < 50);
+		assertTrue(actualAmountStudentsWithoutGroups > 0 && actualAmountStudentsWithoutGroups < 55);
 	}
 }

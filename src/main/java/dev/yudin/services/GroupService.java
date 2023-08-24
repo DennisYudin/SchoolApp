@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface GroupService {
 
-	Map<String, Long> convert(List<Group> groups);
+	Map<String, Integer> convert(List<Group> groups);
 	List<Group> findAll();
 	void save(List<String> groups);
 }

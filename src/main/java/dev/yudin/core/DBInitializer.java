@@ -5,6 +5,8 @@ import dev.yudin.services.CoursesService;
 import dev.yudin.services.GroupService;
 import dev.yudin.services.StudentService;
 
+import java.util.Map;
+
 public class DBInitializer {
 	public static final String DATABASE_STRUCTURE_FILE = "databaseStructure.sql";
 	private Runnable scriptRunner;
@@ -44,7 +46,7 @@ public class DBInitializer {
 		courseService.save(initCourses);
 
 		var groupsFromTable = groupService.findAll();
-		var groupNameID = groupService.convert(groupsFromTable);
+		Map<String, Integer> groupNameID = groupService.convert(groupsFromTable);
 
 		var listOfStudents = dataDistributor.merge(groupsWithStudents, studentsWithoutGroups, groupNameID);
 		//populate students table
