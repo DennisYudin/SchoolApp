@@ -8,7 +8,7 @@ public class Student {
     private long id;
     private String firstName;
     private String lastName;
-    private String groupId;
+    private int groupId;
     private final List<Course> courses = new ArrayList<>();
     
     public Student(String firstName, String lastName) {
@@ -20,11 +20,11 @@ public class Student {
         
     }
 
-    public String getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 

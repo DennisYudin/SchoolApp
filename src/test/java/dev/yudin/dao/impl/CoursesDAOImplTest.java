@@ -1,5 +1,6 @@
 package dev.yudin.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -28,7 +29,6 @@ class CoursesDAOImplTest {
 	public void setUp() {
 		Reader reader = new FileReaderTesting();
 		ConnectionManager manager = new ConnectionManagerTesting(reader);
-
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
 		scriptRunner.run("test-databaseStructure.sql");
@@ -62,5 +62,22 @@ class CoursesDAOImplTest {
 		List<Course> coursesTableAfter = coursesDAO.findAll();
 
 		assertFalse(coursesTableAfter.isEmpty());
+	}
+
+	@Test
+	@Order(2)
+	void findAll_ShouldReturnListOfCourses_WhenCallMethod() {
+		Course expectedCourse = new Course();
+		expectedCourse.setId(1);
+		expectedCourse.setName("Algebra");
+		expectedCourse.setDescription("Something about numbers...");
+		List<Course> courses = List.of(expectedCourse);
+
+		coursesDAO.save(courses);
+
+		List<Course> actual = coursesDAO.findAll();
+		var actualCourse = actual.get(0);
+
+		assertEquals(expectedCourse, actualCourse);
 	}
 }

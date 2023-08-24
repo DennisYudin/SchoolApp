@@ -8,5 +8,5 @@ public interface GroupDAO {
 
 	List<Group> findAll();
 
-	void save(List<Group> courses);
+	void save(List<String> groups);
 }

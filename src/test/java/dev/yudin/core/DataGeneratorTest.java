@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 class DataGeneratorTest {
-
 	public static final String REGEX = "[A-Za-z]+-[0-9]+";
 
 	@Test
 	void generateGroups_ShouldGenerateGroupsNames_WhenInputIsAmountGroups() {
-
 		Random random = new Random();
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(random, reader);
@@ -35,8 +33,6 @@ class DataGeneratorTest {
 		DataGenerator dataGenerator = new DataGenerator(random, reader);
 
 		var students = dataGenerator.generateStudents(200);
-
-//		students.stream().forEach(System.out::println);
 
 		int expected = 200;
 		int actual = students.size();

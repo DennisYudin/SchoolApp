@@ -1,5 +1,6 @@
 package dev.yudin.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -13,11 +14,14 @@ import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GroupsDAOImplTest {
 
 	GroupDAO groupsDAO;
@@ -45,20 +49,33 @@ class GroupsDAOImplTest {
 
 	@Test
 	@Order(1)
-	void save_ShouldSaveDataIntoTable_WhenInputIsListOfObjects() {
-		List<Group> coursesTableBefore = groupsDAO.findAll();
+	void save_ShouldSaveDataIntoGroupsTable_WhenInputIsListOfObjects() {
+		List<Group> groupsTableBefore = groupsDAO.findAll();
 
-		assumeTrue(coursesTableBefore.isEmpty());
+		assumeTrue(groupsTableBefore.isEmpty());
 
-		Group group = new Group();
-		group.setName("XX-XX");
-		List<Group> groups = List.of(group);
+		List<String> groups = List.of("XX-XX");
 
 		groupsDAO.save(groups);
 
-		List<Group> coursesTableAfter = groupsDAO.findAll();
+		List<Group> groupsTableAfter = groupsDAO.findAll();
 
-		assertFalse(coursesTableAfter.isEmpty());
+		assertFalse(groupsTableAfter.isEmpty());
 	}
 
+	@Test
+	@Order(2)
+	void findAll_ShouldReturnListOfGroups_WhenCallMethod() {
+		List<String> listExpectedGroups = List.of("XX-XX");
+		Group expectedGroup = new Group();
+		expectedGroup.setId(1);
+		expectedGroup.setName(listExpectedGroups.get(0));
+
+		groupsDAO.save(listExpectedGroups);
+
+		List<Group> actual = groupsDAO.findAll();
+		var actualGroup = actual.get(0);
+
+		assertEquals(expectedGroup, actualGroup);
+	}
 }

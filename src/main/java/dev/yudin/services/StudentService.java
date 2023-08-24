@@ -1,12 +1,10 @@
-package dev.yudin.dao;
+package dev.yudin.services;
 
 import dev.yudin.entities.Student;
 
 import java.util.List;
 
-public interface StudentDAO {
-
-	List<Student> findAll();
+public interface StudentService {
 
 	void save(List<Student> students);
 }
