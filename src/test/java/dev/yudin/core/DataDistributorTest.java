@@ -88,8 +88,7 @@ class DataDistributorTest {
 
 		var actual = distributor.merge(groupsWithStudents, studentsWithoutGroups, map);
 
-		System.out.println(actual.size());
-		actual.forEach(System.out::println);
+		assertEquals(200, actual.size());
 	}
 
 	@Test
