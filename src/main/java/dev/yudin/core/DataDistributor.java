@@ -94,13 +94,13 @@ public class DataDistributor {
 	}
 
 	public List<StudentCourseDTO> merge(List<Student> studentsWithCourses,
-										Map<String, Integer> courseNameId,
-										Map<Student, Integer> studentId) {
+										Map<Student, Integer> studentId,
+										Map<String, Integer> courseNameId) {
 		List<StudentCourseDTO> result = new ArrayList<>();
 
 		for (Student student : studentsWithCourses) {
-			StudentCourseDTO dto = new StudentCourseDTO();
 			for (Course course : student.getCourses()) {
+				StudentCourseDTO dto = new StudentCourseDTO();
 				dto.setStudentId(studentId.get(student));
 				dto.setCourseId(courseNameId.get(course.getName()));
 

@@ -39,7 +39,6 @@ public class DBInitializer {
 		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(initGroups, initStudents);
 		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, initStudents);
 
-		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(initStudents, initCourses);
 
 		//todo populate tables with data using Services
 		groupService.save(initGroups);
@@ -54,10 +53,11 @@ public class DBInitializer {
 
 		var coursesFromTable = courseService.findAll();
 		var coursesNameID = courseService.convert(coursesFromTable);
-		var StudentsFromTable = studentService.findAll();
-		var studentNameID = studentService.convert(studentsWithCourses);
+		var studentsFromTable = studentService.findAll(); //with IDs
+		var studentID = studentService.convert(studentsFromTable);
+		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(initStudents, initCourses);
 
-		//		var studentsCourses = merge();
+		var studentsCourses = dataDistributor.merge(studentsWithCourses, studentID, coursesNameID);
 
 		//populate student_courses table
 	}

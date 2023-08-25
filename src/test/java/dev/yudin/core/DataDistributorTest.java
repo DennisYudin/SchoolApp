@@ -1,6 +1,7 @@
 package dev.yudin.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.yudin.entities.Course;
@@ -20,19 +21,18 @@ class DataDistributorTest {
 	public static final int MAX_AMOUNT_COURSES_PER_STUDENT = 3;
 	public static final int MIX_AMOUNT_OF_COURSES = 0;
 
-
 	@Test
-	void name() {
+	void merge_ShouldPrepareDataForSavingIntoStudentsCoursesTable_WhenInputIsStudentsWithCoursesAndStudentIdMapAndCoursesMap() {
 		Random random = new Random();
 		Reader reader = new FileReader();
 		DataGenerator dataGenerator = new DataGenerator(random, reader);
 		DataDistributor distributor = new DataDistributor(random);
 
-		Set<Student> students = dataGenerator.generateStudents(200);
+		Set<Student> students = dataGenerator.generateStudents(2);
 		List<Course> courses = dataGenerator.getCourses();
 		var studentsWithCourses = distributor.assignStudentsIntoCourses(students, courses);
 
-		var map = Map.ofEntries(
+		var courseNameID = Map.ofEntries(
 			Map.entry("Algebra", 1),
 			Map.entry("Biology", 2),
 			Map.entry("Drawing", 3),
@@ -44,16 +44,26 @@ class DataDistributorTest {
 			Map.entry("Mathematics", 9),
 			Map.entry("Music", 10)
 		);
-//		int id = 1;
-//		for (var student : students) {
-//			student.setId(id);
-//			id++;
-//		}
-		Map<Student, Integer> result = new HashMap<>();
-		students.forEach(student -> result.put(student, student.getId()));
-		var actual = distributor.merge(studentsWithCourses, map, result);
+		Map<Student, Integer> studentID = convert(students);
 
-		System.out.println(actual);
+		var actual = distributor.merge(studentsWithCourses, studentID, courseNameID);
+
+		assertFalse(actual.isEmpty());
+	}
+
+	private Map<Student, Integer> convert(Set<Student> students) {
+		generateIDs(students);
+		Map<Student, Integer> studentID = new HashMap<>();
+		students.forEach(student -> studentID.put(student, student.getId()));
+		return studentID;
+	}
+
+	private void generateIDs(Set<Student> students) {
+		int id = 1;
+		for (var student : students) {
+			student.setId(id);
+			id++;
+		}
 	}
 
 	@Test
