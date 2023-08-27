@@ -29,6 +29,11 @@ public class GroupServiceImpl implements GroupService {
 		return result;
 	}
 
+//	public List<String> getGroupsWithLessOrEquals(int amountStudents) {
+//
+//		return null;
+//	}
+
 	@Override
 	public List<Group> findAll() {
 		List<Group> groups;
