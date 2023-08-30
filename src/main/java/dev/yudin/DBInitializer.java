@@ -12,6 +12,7 @@ import dev.yudin.dao.impl.CoursesDAOImpl;
 import dev.yudin.dao.impl.GroupsDAOImpl;
 import dev.yudin.dao.impl.StudentsCoursesDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
+import dev.yudin.entities.Student;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -24,8 +25,10 @@ import dev.yudin.services.impl.GroupServiceImpl;
 import dev.yudin.services.impl.StudentCourseServiceImpl;
 import dev.yudin.services.impl.StudentServiceImpl;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class DBInitializer {
 	public static final String DATABASE_STRUCTURE_FILE = "databaseStructure.sql";
@@ -66,8 +69,8 @@ public class DBInitializer {
 		var coursesNameID = courseService.convert(coursesFromTable);
 		var studentsFromTable = studentService.findAll();
 		var studentID = studentService.convert(studentsFromTable);
-		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(initStudents, initCourses);
-
+		Set<Student> foo = new HashSet<>(studentsFromTable);
+		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(foo, initCourses);
 		var studentsCoursesData = dataDistributor.merge(studentsWithCourses, studentID, coursesNameID);
 
 		studentCourseService.save(studentsCoursesData);

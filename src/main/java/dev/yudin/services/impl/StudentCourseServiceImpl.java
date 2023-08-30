@@ -21,6 +21,16 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 	}
 
 	@Override
+	public List<StudentCourseDTO> findAll() {
+		try {
+			return studentsCoursesDAO.findAll();
+		} catch (DAOException ex) {
+			log.error("Error during findAll()");
+			throw new ServiceException("Error during findAll()");
+		}
+	}
+
+	@Override
 	public void save(List<StudentCourseDTO> list) {
 		try {
 			studentsCoursesDAO.save(list);

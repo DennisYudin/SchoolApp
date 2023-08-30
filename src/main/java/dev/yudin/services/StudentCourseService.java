@@ -1,12 +1,10 @@
 package dev.yudin.services;
 
-import dev.yudin.entities.Student;
 import dev.yudin.entities.StudentCourseDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface StudentCourseService {
-
+	List<StudentCourseDTO> findAll();
 	void save(List<StudentCourseDTO> list);
 }
