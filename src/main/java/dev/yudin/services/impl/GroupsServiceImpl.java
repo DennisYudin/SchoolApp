@@ -48,4 +48,14 @@ public class GroupsServiceImpl implements GroupsService {
 			throw new ServiceException("Error during save()");
 		}
 	}
+
+	@Override
+	public List<String> findAll(int amountStudents) {
+		try {
+			return groupDAO.findAll(amountStudents);
+		} catch (DAOException ex) {
+			log.error("Error during findAll() for amount of students: " + amountStudents);
+			throw new ServiceException("Error during findAll() for amount of students: " + amountStudents, ex);
+		}
+	}
 }

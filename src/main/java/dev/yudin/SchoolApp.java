@@ -6,6 +6,8 @@ import dev.yudin.dao.StudentDAO;
 import dev.yudin.dao.StudentsCoursesDAO;
 import dev.yudin.dao.impl.StudentsCoursesDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
+import dev.yudin.dialogues.Dialogue;
+import dev.yudin.dialogues.InitDialogue;
 import dev.yudin.entities.Student;
 import dev.yudin.services.StudentsCoursesService;
 import dev.yudin.services.StudentsService;
@@ -13,6 +15,7 @@ import dev.yudin.services.impl.StudentsCoursesServiceImpl;
 import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class SchoolApp {
 	public static void main(String[] args) {
@@ -24,15 +27,14 @@ public class SchoolApp {
 		StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
 		StudentsService studentsService = new StudentsServiceImpl(studentDAO);
 
+		Dialogue initDialogue = new InitDialogue();
 		DBInitializer dbInitializer = new DBInitializer();
-		try {
+		try (Scanner scanner = new Scanner(System.in)){
 			dbInitializer.init();
 
-			studentsCoursesService.findAll().forEach(System.out::println);
-
-			studentsService.save(List.of(new Student("Dennis", "Yduin")));
+			initDialogue.start(scanner);
 		} catch (Exception ex) {
-//			System.err.println(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
 	}
 }

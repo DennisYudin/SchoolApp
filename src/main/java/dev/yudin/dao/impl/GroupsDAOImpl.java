@@ -27,7 +27,6 @@ public class GroupsDAOImpl implements GroupDAO {
 					"GROUP BY name\n" +
 					"HAVING COUNT(*) <= ?\n" +
 					"ORDER BY name";
-
 	private final Manager dataSource;
 
 	public GroupsDAOImpl(Manager dataSource) {
@@ -91,6 +90,7 @@ public class GroupsDAOImpl implements GroupDAO {
 				result.add(name);
 			}
 		} catch (SQLException e) {
+			log.error("Error during findAll() for amount of students: " + amountStudents);
 			throw new DAOException("Error during findAll() for amount of students: " + amountStudents, e);
 		}
 		return result;

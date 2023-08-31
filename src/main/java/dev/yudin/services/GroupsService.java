@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface GroupsService {
-
 	Map<String, Integer> convert(List<Group> groups);
 	List<Group> findAll();
 	void save(List<String> groups);
+	List<String> findAll(int amountStudents);
 }
