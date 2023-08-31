@@ -1,7 +1,3 @@
---DROP SEQUENCE IF EXISTS groups_group_id_sequence CASCADE;
---CREATE SEQUENCE groups_group_id_sequence
---START 100
---INCREMENT 1;
 
 DROP TABLE IF EXISTS groups CASCADE;
 CREATE TABLE groups (
@@ -9,11 +5,6 @@ CREATE TABLE groups (
     name VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );
-
---DROP SEQUENCE IF EXISTS students_student_id_sequence CASCADE;
---CREATE SEQUENCE students_student_id_sequence
---START 200
---INCREMENT 1;
 
 DROP TABLE IF EXISTS students CASCADE;
 CREATE TABLE students (
@@ -24,11 +15,6 @@ CREATE TABLE students (
     PRIMARY KEY (id),
     FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE SET DEFAULT
 );
-
---DROP SEQUENCE IF EXISTS courses_course_id_sequence CASCADE;
---CREATE SEQUENCE courses_course_id_sequence
---START 600
---INCREMENT 1;
 
 DROP TABLE IF EXISTS courses CASCADE;
 CREATE TABLE courses (

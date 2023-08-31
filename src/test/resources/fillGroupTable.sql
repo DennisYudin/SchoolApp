@@ -1,1 +1,1 @@
-INSERT INTO groups (name) VALUES('XX-XX');
+INSERT INTO groups (name) VALUES('AA-01');

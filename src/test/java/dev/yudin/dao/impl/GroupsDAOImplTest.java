@@ -24,58 +24,68 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GroupsDAOImplTest {
 
-	GroupDAO groupsDAO;
+	private GroupDAO groupsDAO;
 
 	@BeforeEach
 	public void setUp() {
 		Reader reader = new FileReaderTesting();
 		ConnectionManager manager = new ConnectionManagerTesting(reader);
-
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
 		scriptRunner.run("test-databaseStructure.sql");
+		scriptRunner.run("fillGroupTable.sql");
+		scriptRunner.run("fillStudentTable.sql");
 
 		groupsDAO = new GroupsDAOImpl(manager);
 	}
 
 	@Test
 	@Order(0)
-	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
-
+	void findAll_ShouldReturnListOfStudentsFromTable_WhenCallMethod() {
 		List<Group> actual = groupsDAO.findAll();
+		var actualGroup = actual.get(0);
 
-		assertTrue(actual.isEmpty());
+		Group expectedGroup = new Group();
+		expectedGroup.setId(1);
+		expectedGroup.setName("AA-01");
+
+		assertEquals(expectedGroup, actualGroup);
 	}
 
 	@Test
 	@Order(1)
 	void save_ShouldSaveDataIntoGroupsTable_WhenInputIsListOfObjects() {
-		List<Group> groupsTableBefore = groupsDAO.findAll();
+		List<String> newGroups = List.of("XX-XX");
 
-		assumeTrue(groupsTableBefore.isEmpty());
+		groupsDAO.save(newGroups);
 
-		List<String> groups = List.of("XX-XX");
+		List<Group> actualGroups = groupsDAO.findAll();
 
-		groupsDAO.save(groups);
+		Group firstGroup = new Group();
+		firstGroup.setId(1);
+		firstGroup.setName("AA-01");
+		Group secondGroup = new Group();
+		secondGroup.setId(2);
+		secondGroup.setName("XX-XX");
 
-		List<Group> groupsTableAfter = groupsDAO.findAll();
-
-		assertFalse(groupsTableAfter.isEmpty());
+		var expectedGroups = List.of(
+				firstGroup,
+				secondGroup
+		);
+		assertEquals(expectedGroups, actualGroups);
 	}
 
 	@Test
-	@Order(2)
-	void findAll_ShouldReturnListOfGroups_WhenCallMethod() {
-		List<String> listExpectedGroups = List.of("XX-XX");
-		Group expectedGroup = new Group();
-		expectedGroup.setId(1);
-		expectedGroup.setName(listExpectedGroups.get(0));
+	void findAll_ShouldReturnListOfGroupsWithLessOrEqualsAmountOfStudents_WhenInputIsAmountOfStudents() {
+		var actual = groupsDAO.findAll(1);
+		var expected = List.of("AA-01");
 
-		groupsDAO.save(listExpectedGroups);
+		assertEquals(expected, actual);
+	}
+	@Test
+	void findAll_ShouldReturnEmptyListOfGroups_WhenInputIsZeroAmountOfStudents() {
+		var actual = groupsDAO.findAll(0);
 
-		List<Group> actual = groupsDAO.findAll();
-		var actualGroup = actual.get(0);
-
-		assertEquals(expectedGroup, actualGroup);
+		assertTrue(actual.isEmpty());
 	}
 }

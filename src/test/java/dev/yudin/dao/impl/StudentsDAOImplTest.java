@@ -86,4 +86,12 @@ class StudentsDAOImplTest {
 
 		assertEquals(expectedStudent, actualStudent);
 	}
+
+	@Test
+	void name() {
+
+		var actual = studentDAO.findAllBy("Algebra");
+
+		System.out.println(actual);
+	}
 }

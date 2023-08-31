@@ -11,9 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager implements Manager {
-
 	private Logger log = LogManager.getLogger(ConnectionManager.class);
-
 	private Reader reader = new FileReader();
 
 	@Override
