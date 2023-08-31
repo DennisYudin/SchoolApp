@@ -4,7 +4,7 @@ import dev.yudin.entities.StudentCourseDTO;
 
 import java.util.List;
 
-public interface StudentCourseService {
+public interface StudentsCoursesService {
 	List<StudentCourseDTO> findAll();
 	void save(List<StudentCourseDTO> list);
 }

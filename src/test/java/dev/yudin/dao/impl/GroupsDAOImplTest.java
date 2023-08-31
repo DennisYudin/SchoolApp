@@ -82,4 +82,10 @@ class GroupsDAOImplTest {
 
 		assertEquals(expected, actual);
 	}
+	@Test
+	void findAll_ShouldReturnEmptyListOfGroups_WhenInputIsZeroAmountOfStudents() {
+		var actual = groupsDAO.findAll(0);
+
+		assertTrue(actual.isEmpty());
+	}
 }

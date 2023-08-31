@@ -18,13 +18,13 @@ import dev.yudin.filereader.FileReader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
 import dev.yudin.services.CoursesService;
-import dev.yudin.services.GroupService;
-import dev.yudin.services.StudentCourseService;
-import dev.yudin.services.StudentService;
+import dev.yudin.services.GroupsService;
+import dev.yudin.services.StudentsCoursesService;
+import dev.yudin.services.StudentsService;
 import dev.yudin.services.impl.CourseServiceImpl;
-import dev.yudin.services.impl.GroupServiceImpl;
-import dev.yudin.services.impl.StudentCourseServiceImpl;
-import dev.yudin.services.impl.StudentServiceImpl;
+import dev.yudin.services.impl.GroupsServiceImpl;
+import dev.yudin.services.impl.StudentsCoursesServiceImpl;
+import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.HashSet;
 import java.util.List;
@@ -41,13 +41,13 @@ public class DBInitializer {
 	private DataGenerator dataGenerator = new DataGenerator(new Random(), new FileReader());
 	private DataDistributor dataDistributor = new DataDistributor(new Random());
 	private GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
-	private GroupService groupService = new GroupServiceImpl(groupDAO);
+	private GroupsService groupsService = new GroupsServiceImpl(groupDAO);
 	private CourseDAO courseDAO = new CoursesDAOImpl(dataSource);
 	private CoursesService courseService = new CourseServiceImpl(courseDAO);
 	private StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
-	private StudentService studentService = new StudentServiceImpl(studentDAO);
+	private StudentsService studentsService = new StudentsServiceImpl(studentDAO);
 	private StudentsCoursesDAO studentsCoursesDAO = new StudentsCoursesDAOImpl(dataSource);
-	private StudentCourseService studentCourseService = new StudentCourseServiceImpl(studentsCoursesDAO);
+	private StudentsCoursesService studentsCoursesService = new StudentsCoursesServiceImpl(studentsCoursesDAO);
 
 	public void init() {
 		createAllTables();
@@ -65,23 +65,23 @@ public class DBInitializer {
 	private void fillStudentCourseTable(List<Course> initCourses) {
 		var coursesFromTable = courseService.findAll();
 		var coursesNameID = courseService.convert(coursesFromTable);
-		var studentsFromTable = studentService.findAll();
-		var studentID = studentService.convert(studentsFromTable);
+		var studentsFromTable = studentsService.findAll();
+		var studentID = studentsService.convert(studentsFromTable);
 		Set<Student> studentSet = new HashSet<>(studentsFromTable);
 		var studentsWithCourses = dataDistributor.assignStudentsIntoCourses(studentSet, initCourses);
 		var studentsCoursesData = dataDistributor.merge(studentsWithCourses, studentID, coursesNameID);
 
-		studentCourseService.save(studentsCoursesData);
+		studentsCoursesService.save(studentsCoursesData);
 	}
 
 	private void fillStudentTable(Set<Student> initStudents, List<String> initGroups) {
 		var groupsWithStudents = dataDistributor.assignStudentsIntoGroups(initGroups, initStudents);
 		var studentsWithoutGroups = dataDistributor.getStudentsWithoutGroups(groupsWithStudents, initStudents);
-		var groupsFromTable = groupService.findAll();
-		Map<String, Integer> groupNameID = groupService.convert(groupsFromTable);
+		var groupsFromTable = groupsService.findAll();
+		Map<String, Integer> groupNameID = groupsService.convert(groupsFromTable);
 		var listOfStudents = dataDistributor.merge(groupsWithStudents, studentsWithoutGroups, groupNameID);
 
-		studentService.save(listOfStudents);
+		studentsService.save(listOfStudents);
 	}
 
 	private void fillCourseTable(List<Course> initCourses) {
@@ -89,7 +89,7 @@ public class DBInitializer {
 	}
 
 	private void fillGroupTable(List<String> initGroups) {
-		groupService.save(initGroups);
+		groupsService.save(initGroups);
 	}
 
 	private void createAllTables() {

@@ -20,6 +20,15 @@ public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
 	public static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
 	public static final String FIND_ALL_SQL = "SELECT * FROM students";
+	String FIND_ALL_BY_COURSE_NAME_SQL =
+			"SELECT students_table.id,\n" +
+					"    first_name,\n" +
+					"    last_name,\n" +
+					"    group_id\n" +
+					"FROM students AS students_table\n" +
+					"JOIN students_courses AS students_courses_table ON students_table.id = students_courses_table.student_id\n" +
+					"JOIN courses AS courses_table ON courses_table.id = students_courses_table.course_id\n" +
+					"WHERE courses_table.name = ?";
 	private final Manager dataSource;
 
 	public StudentsDAOImpl(Manager dataSource) {
@@ -77,5 +86,33 @@ public class StudentsDAOImpl implements StudentDAO {
 			log.error("Error during save()");
 			throw new DAOException("Error during save()", ex);
 		}
+	}
+
+	@Override
+	public List<Student> findAllBy(String courseName) {
+		List<Student> result = new ArrayList<>();
+
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_COURSE_NAME_SQL)) {
+			statement.setString(1, courseName);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Student student = new Student();
+
+				int studentId = resultSet.getInt("id");
+				String studentName = resultSet.getString("first_name");
+				String studentLastName = resultSet.getString("last_name");
+
+				student.setId(studentId);
+				student.setFirstName(studentName);
+				student.setLastName(studentLastName);
+
+				result.add(student);
+			}
+		} catch (SQLException e) {
+			log.error("Error during findAllBy() course name: " + courseName);
+			throw new DAOException("Error during findAllBy() course name: " + courseName);
+		}
+		return result;
 	}
 }

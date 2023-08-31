@@ -4,7 +4,7 @@ import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;
-import dev.yudin.services.StudentService;
+import dev.yudin.services.StudentsService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudentServiceImpl implements StudentService {
-	private final Logger log = LogManager.getLogger(StudentServiceImpl.class);
+public class StudentsServiceImpl implements StudentsService {
+	private final Logger log = LogManager.getLogger(StudentsServiceImpl.class);
 	private StudentDAO studentDAO;
 
-	public StudentServiceImpl(StudentDAO studentDAO) {
+	public StudentsServiceImpl(StudentDAO studentDAO) {
 		this.studentDAO = studentDAO;
 	}
 

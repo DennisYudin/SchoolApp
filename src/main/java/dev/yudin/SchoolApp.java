@@ -7,10 +7,10 @@ import dev.yudin.dao.StudentsCoursesDAO;
 import dev.yudin.dao.impl.StudentsCoursesDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.entities.Student;
-import dev.yudin.services.StudentCourseService;
-import dev.yudin.services.StudentService;
-import dev.yudin.services.impl.StudentCourseServiceImpl;
-import dev.yudin.services.impl.StudentServiceImpl;
+import dev.yudin.services.StudentsCoursesService;
+import dev.yudin.services.StudentsService;
+import dev.yudin.services.impl.StudentsCoursesServiceImpl;
+import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.List;
 
@@ -19,18 +19,18 @@ public class SchoolApp {
 
 		Manager dataSource = new ConnectionManager();
 		StudentsCoursesDAO studentsCoursesDAO = new StudentsCoursesDAOImpl(dataSource);
-		StudentCourseService studentCourseService = new StudentCourseServiceImpl(studentsCoursesDAO);
+		StudentsCoursesService studentsCoursesService = new StudentsCoursesServiceImpl(studentsCoursesDAO);
 
 		StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
-		StudentService studentService = new StudentServiceImpl(studentDAO);
+		StudentsService studentsService = new StudentsServiceImpl(studentDAO);
 
 		DBInitializer dbInitializer = new DBInitializer();
 		try {
 			dbInitializer.init();
 
-			studentCourseService.findAll().forEach(System.out::println);
+			studentsCoursesService.findAll().forEach(System.out::println);
 
-			studentService.save(List.of(new Student("Dennis", "Yduin")));
+			studentsService.save(List.of(new Student("Dennis", "Yduin")));
 		} catch (Exception ex) {
 //			System.err.println(ex.getMessage());
 		}
