@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class SchoolApp {
 	public static void main(String[] args) {
-		Dialogue initDialogue = new InitDialogue();
 		DBInitializer dbInitializer = new DBInitializer();
+		Dialogue initDialogue = new InitDialogue();
 
 		try (Scanner scanner = new Scanner(System.in)){
 			dbInitializer.init();
