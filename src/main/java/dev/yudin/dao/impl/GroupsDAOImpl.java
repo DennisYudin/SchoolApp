@@ -3,6 +3,7 @@ package dev.yudin.dao.impl;
 import dev.yudin.connection.Manager;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
+import dev.yudin.entities.GroupsCountDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -88,6 +89,35 @@ public class GroupsDAOImpl implements GroupDAO {
 			while (resultSet.next()) {
 				String name = resultSet.getString("name");
 				result.add(name);
+			}
+		} catch (SQLException e) {
+			log.error("Error during findAll() for amount of students: " + amountStudents);
+			throw new DAOException("Error during findAll() for amount of students: " + amountStudents, e);
+		}
+		return result;
+	}
+
+	@Override
+	public List<GroupsCountDTO> findAll2(long amountStudents) {
+		List<GroupsCountDTO> result = new ArrayList<>();
+
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(
+					 FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENTS_COUNT_SQL)) {
+
+			statement.setInt(1, (int) amountStudents);
+
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				GroupsCountDTO dto = new GroupsCountDTO();
+
+				String name = resultSet.getString("name");
+				int amount = resultSet.getInt("count");
+
+				dto.setName(name);
+				dto.setAmount(amount);
+
+				result.add(dto);
 			}
 		} catch (SQLException e) {
 			log.error("Error during findAll() for amount of students: " + amountStudents);

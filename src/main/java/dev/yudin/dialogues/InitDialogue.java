@@ -42,6 +42,7 @@ public class InitDialogue implements Dialogue {
     public void start(Scanner scanner) {
         String userAnswer;
         do {
+            System.out.println();
             System.out.print(START_DIALOGUE_MESSAGE);
 
             initDialogues();

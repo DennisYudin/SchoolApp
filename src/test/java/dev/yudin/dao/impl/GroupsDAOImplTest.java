@@ -88,4 +88,9 @@ class GroupsDAOImplTest {
 
 		assertTrue(actual.isEmpty());
 	}
+
+	@Test
+	void name() {
+		System.out.println(groupsDAO.findAll2(1));
+	}
 }

@@ -7,9 +7,6 @@ import java.util.Scanner;
 
 public class GroupsDialogue implements Dialogue {
 	private static final String STUDENTS_MESSAGE = "Enter amount of students: ";
-	private static final String REPEAT_MESSAGE = "Do you wanna to try again? [yes/no]";
-	private static final String USER_ANSWER = "Answer: ";
-	private static final String CONTINUE_ANSWER = "yes";
 	private Console console;
 	private GroupsService groupsService;
 
@@ -21,6 +18,10 @@ public class GroupsDialogue implements Dialogue {
 	@Override
 	public void start(Scanner scanner) {
 		int amountStudents = console.read(STUDENTS_MESSAGE, scanner);
+		scanner.nextLine();
+
+		System.out.println();
+		System.out.println("List of groups:");
 
 		var result = groupsService.findAll(amountStudents);
 		result.forEach(System.out::println);
