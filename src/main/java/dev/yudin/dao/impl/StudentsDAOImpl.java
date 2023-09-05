@@ -65,6 +65,7 @@ public class StudentsDAOImpl implements StudentDAO {
 		}
 	}
 
+	@Override
 	public void save(List<Student> students) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
@@ -84,8 +85,31 @@ public class StudentsDAOImpl implements StudentDAO {
 				statement.execute();
 			}
 		} catch (SQLException ex) {
-			log.error("Error during save()");
-			throw new DAOException("Error during save()", ex);
+			log.error("Error during save list of students");
+			throw new DAOException("Error during save list of students", ex);
+		}
+	}
+
+	@Override
+	public void save(Student student) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(
+					 INSERT_INTO_STUDENTS_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+			var name = student.getFirstName();
+			var lastName = student.getLastName();
+			var groupId = student.getGroupId();
+
+			statement.setString(1, name);
+			statement.setString(2, lastName);
+			if (groupId == 0) {
+				statement.setNull(3, Types.NULL);
+			} else {
+				statement.setInt(3, groupId);
+			}
+			statement.execute();
+		} catch (SQLException ex) {
+			log.error("Error during save single student");
+			throw new DAOException("Error during save single student", ex);
 		}
 	}
 
