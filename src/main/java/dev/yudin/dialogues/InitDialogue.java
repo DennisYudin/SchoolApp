@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class InitDialogue implements Dialogue {
     private static final String START_DIALOGUE_MESSAGE = "Please choose a letter what do you want to do: \n"
             + "'a' if you want to FIND ALL GROUPS with less or equals student count \n"
-            + "'b' if you want to find all students related to course with given name \n"
+            + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
             + "'c' if you want to add new student\n"
             + "'d' if you want to delete student by STUDENT_ID\n"
             + "'e' if you want to add a student to the course (from a list)\n"
@@ -43,8 +43,8 @@ public class InitDialogue implements Dialogue {
     StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
     StudentsService studentsService = new StudentsServiceImpl(studentDAO);
 
-    private Dialogue groupsDialogue = new GroupsDialogue(inputHandler, groupsService);
-    private Dialogue studentsDialogue = new StudentsDialogue(inputHandler, studentsService);
+    private Dialogue groupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
+    private Dialogue studentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override

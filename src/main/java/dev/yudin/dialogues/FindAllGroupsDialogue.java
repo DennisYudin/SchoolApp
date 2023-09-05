@@ -1,20 +1,19 @@
 package dev.yudin.dialogues;
 
 import dev.yudin.console.Console;
-import dev.yudin.console.InputHandler;
 import dev.yudin.entities.GroupsAmountStudentDTO;
 import dev.yudin.services.GroupsService;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class GroupsDialogue implements Dialogue {
+public class FindAllGroupsDialogue implements Dialogue {
 	private static final String STUDENTS_MESSAGE = "Enter amount of students: ";
 	public static final String TABLE_TITLE = "Groups table:";
 	private Console inputHandler;
 	private GroupsService groupsService;
 
-	public GroupsDialogue(Console inputHandler, GroupsService groupsService) {
+	public FindAllGroupsDialogue(Console inputHandler, GroupsService groupsService) {
 		this.inputHandler = inputHandler;
 		this.groupsService = groupsService;
 	}

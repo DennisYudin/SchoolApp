@@ -7,13 +7,12 @@ import dev.yudin.services.StudentsService;
 import java.util.List;
 import java.util.Scanner;
 
-public class StudentsDialogue implements Dialogue {
+public class FindAllStudentsDialogue implements Dialogue {
 	public static final String TABLE_TITLE = "Students table:";
-
 	private Console inputHandler;
 	private StudentsService studentsService;
 
-	public StudentsDialogue(Console inputHandler, StudentsService studentsService) {
+	public FindAllStudentsDialogue(Console inputHandler, StudentsService studentsService) {
 		this.inputHandler = inputHandler;
 		this.studentsService = studentsService;
 	}
@@ -26,11 +25,15 @@ public class StudentsDialogue implements Dialogue {
 		System.out.println(TABLE_TITLE);
 
 		var result = studentsService.findAllBy(input);
-
-		printAsTableFormatt(result);
+		if (result.isEmpty()) {
+			System.out.println("Empty result!");
+			System.out.println("there is no data with such course name: [" + input + "]");
+		} else {
+			printAsTableFormat(result);
+		}
 	}
 
-	private void printAsTableFormatt(List<StudentDTO> result) {
+	private void printAsTableFormat(List<StudentDTO> result) {
 		System.out.format("%-15s%-15s%-15s%n", "ID", "First name", "Last name");
 		for (var dto : result) {
 			System.out.format("%-15s%-15s%-15s%n", dto.getId(), dto.getFirstName(), dto.getLastName());
