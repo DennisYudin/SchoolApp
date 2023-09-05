@@ -3,6 +3,7 @@ package dev.yudin.dao.impl;
 import dev.yudin.connection.Manager;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
-	public static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
-	public static final String FIND_ALL_SQL = "SELECT * FROM students";
-	String FIND_ALL_BY_COURSE_NAME_SQL =
+	private static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
+	private static final String FIND_ALL_SQL = "SELECT * FROM students";
+	private static final String FIND_ALL_BY_COURSE_NAME_SQL =
 			"SELECT students_table.id,\n" +
 					"    first_name,\n" +
 					"    last_name,\n" +
@@ -89,15 +90,15 @@ public class StudentsDAOImpl implements StudentDAO {
 	}
 
 	@Override
-	public List<Student> findAllBy(String courseName) {
-		List<Student> result = new ArrayList<>();
+	public List<StudentDTO> findAllBy(String courseName) {
+		List<StudentDTO> result = new ArrayList<>();
 
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_COURSE_NAME_SQL)) {
 			statement.setString(1, courseName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Student student = new Student();
+				StudentDTO student = new StudentDTO();
 
 				int studentId = resultSet.getInt("id");
 				String studentName = resultSet.getString("first_name");

@@ -1,6 +1,7 @@
 package dev.yudin.dialogues;
 
 import dev.yudin.console.Console;
+import dev.yudin.console.InputHandler;
 import dev.yudin.entities.GroupsAmountStudentDTO;
 import dev.yudin.services.GroupsService;
 
@@ -9,18 +10,18 @@ import java.util.Scanner;
 
 public class GroupsDialogue implements Dialogue {
 	private static final String STUDENTS_MESSAGE = "Enter amount of students: ";
-	public static final String TABLE_TITLE = "Table groups:";
-	private Console console;
+	public static final String TABLE_TITLE = "Groups table:";
+	private Console inputHandler;
 	private GroupsService groupsService;
 
-	public GroupsDialogue(Console console, GroupsService groupsService) {
-		this.console = console;
+	public GroupsDialogue(Console inputHandler, GroupsService groupsService) {
+		this.inputHandler = inputHandler;
 		this.groupsService = groupsService;
 	}
 
 	@Override
 	public void start(Scanner scanner) {
-		int amountStudents = console.read(STUDENTS_MESSAGE, scanner);
+		int amountStudents = inputHandler.readInt(STUDENTS_MESSAGE, scanner);
 		scanner.nextLine();
 
 		System.out.println();
@@ -28,10 +29,10 @@ public class GroupsDialogue implements Dialogue {
 
 		var result = groupsService.findAll(amountStudents);
 
-		printAsTable(result);
+		printAsTableFormatt(result);
 	}
 
-	private void printAsTable(List<GroupsAmountStudentDTO> result) {
+	private void printAsTableFormatt(List<GroupsAmountStudentDTO> result) {
 		System.out.format("%-15s%-15s%n", "Group name", "Amount of students");
 		for (var dto : result) {
 			System.out.format("%-15s%-15s%n", dto.getGroupName(), dto.getAmountStudents());

@@ -3,10 +3,15 @@ package dev.yudin.dialogues;
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.Manager;
 import dev.yudin.console.Console;
+import dev.yudin.console.InputHandler;
 import dev.yudin.dao.GroupDAO;
+import dev.yudin.dao.StudentDAO;
 import dev.yudin.dao.impl.GroupsDAOImpl;
+import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.services.GroupsService;
+import dev.yudin.services.StudentsService;
 import dev.yudin.services.impl.GroupsServiceImpl;
+import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +39,12 @@ public class InitDialogue implements Dialogue {
     Manager dataSource = new ConnectionManager();
     GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
     GroupsService groupsService = new GroupsServiceImpl(groupDAO);
-    Console console = new Console();
-    private Dialogue groupsDialogue = new GroupsDialogue(console, groupsService);
+    Console inputHandler = new InputHandler();
+    StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
+    StudentsService studentsService = new StudentsServiceImpl(studentDAO);
+
+    private Dialogue groupsDialogue = new GroupsDialogue(inputHandler, groupsService);
+    private Dialogue studentsDialogue = new StudentsDialogue(inputHandler, studentsService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -60,6 +69,7 @@ public class InitDialogue implements Dialogue {
 
     private void initDialogues() {
         dialogs.put("a", groupsDialogue);
+        dialogs.put("b", studentsDialogue);
     }
 
     private void startDialogue(Scanner scanner) {

@@ -9,6 +9,7 @@ import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -33,6 +34,9 @@ class StudentsDAOImplTest {
 
 		scriptRunner.run("test-databaseStructure.sql");
 		scriptRunner.run("fillGroupTable.sql");
+		scriptRunner.run("fillStudentTable.sql");
+		scriptRunner.run("fillCourseTable.sql");
+		scriptRunner.run("fillStudentsCourseTable.sql");
 
 		studentDAO = new StudentsDAOImpl(manager);
 	}
@@ -88,10 +92,23 @@ class StudentsDAOImplTest {
 	}
 
 	@Test
-	void name() {
+	void findAllBy_ShouldFindAllStudentsAssignToTheCourse_WhenInputIsCourseName() {
 
 		var actual = studentDAO.findAllBy("Algebra");
+		var actualStudent = actual.get(0);
 
-		System.out.println(actual);
+		StudentDTO expectedStudent = new StudentDTO();
+		expectedStudent.setId(1);
+		expectedStudent.setFirstName("Dennis");
+		expectedStudent.setLastName("Yudin");
+
+		assertEquals(expectedStudent, actualStudent);
+	}
+
+	@Test
+	void findAllBy_ShouldReturnEmptyList_WhenInputIsCourseName() {
+		var actual = studentDAO.findAllBy("Biology");
+
+		assertTrue(actual.isEmpty());
 	}
 }

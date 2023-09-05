@@ -2,6 +2,7 @@ package dev.yudin.services.impl;
 
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;
 import dev.yudin.services.StudentsService;
@@ -25,6 +26,16 @@ public class StudentsServiceImpl implements StudentsService {
 		Map<Student, Integer> result = new HashMap<>();
 		studentsFromTable.forEach(student -> result.put(student, student.getId()));
 		return result;
+	}
+
+	@Override
+	public List<StudentDTO> findAllBy(String courseName) {
+		try{
+			return studentDAO.findAllBy(courseName);
+		} catch (DAOException ex) {
+			log.error("Error during findAllBy() course name: " + courseName);
+			throw new ServiceException("Error during findAllBy() course name: " + courseName);
+		}
 	}
 
 	@Override
