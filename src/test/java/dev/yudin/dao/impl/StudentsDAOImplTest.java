@@ -1,6 +1,7 @@
 package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -43,52 +44,40 @@ class StudentsDAOImplTest {
 
 	@Test
 	@Order(0)
-	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
+	void findAll_ShouldListOfStudents_WhenCallMethod() {
 
 		List<Student> actual = studentDAO.findAll();
 
-		assertTrue(actual.isEmpty());
+		assertFalse(actual.isEmpty());
 	}
 
 	@Test
 	@Order(1)
 	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents() {
-		List<Student> studentsTableStateBefore = studentDAO.findAll();
+		Student newStudent = new Student();
+		newStudent.setFirstName("Ivanov");
+		newStudent.setLastName("Ivan");
+		newStudent.setGroupId(1);
 
-		assumeTrue(studentsTableStateBefore.isEmpty());
+		studentDAO.save(List.of(newStudent));
 
-		Student expectedStudent = new Student();
-		expectedStudent.setId(1);
-		expectedStudent.setFirstName("dennis");
-		expectedStudent.setLastName("yudin");
-		expectedStudent.setGroupId(1);
+		List<Student> studentsInTable = studentDAO.findAll();
 
-		studentDAO.save(List.of(expectedStudent));
-
-		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		var actualStudent = studentsTableStateAfter.get(0);
-
-		assertEquals(expectedStudent, actualStudent);
+		assertTrue(studentsInTable.contains(newStudent));
 	}
 
 	@Test
 	@Order(2)
 	void save_ShouldSaveStudentWithoutGroupId_WhenInputListOfStudents() {
-		List<Student> studentsTableStateBefore = studentDAO.findAll();
-
-		assumeTrue(studentsTableStateBefore.isEmpty());
-
 		Student expectedStudent = new Student();
-		expectedStudent.setId(1);
-		expectedStudent.setFirstName("dennis");
-		expectedStudent.setLastName("yudin");
+		expectedStudent.setFirstName("Ivanov");
+		expectedStudent.setLastName("Ivan");
 
 		studentDAO.save(List.of(expectedStudent));
 
-		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		var actualStudent = studentsTableStateAfter.get(0);
+		List<Student> studentsInTable = studentDAO.findAll();
 
-		assertEquals(expectedStudent, actualStudent);
+		assertTrue(studentsInTable.contains(expectedStudent));
 	}
 
 	@Test
