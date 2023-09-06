@@ -10,6 +10,7 @@ import java.util.Map;
 public interface StudentsService {
 	List<Student> findAll();
 	void save(List<Student> students);
+	void save(Student student);
 	Map<Student, Integer> convert(List<Student> studentsFromTable);
 	List<StudentDTO> findAllBy(String courseName);
 }

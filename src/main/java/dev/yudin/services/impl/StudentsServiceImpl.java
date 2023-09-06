@@ -57,4 +57,14 @@ public class StudentsServiceImpl implements StudentsService {
 			throw new ServiceException("Error during save()");
 		}
 	}
+
+	@Override
+	public void save(Student student) {
+		try {
+			studentDAO.save(student);
+		} catch (DAOException ex) {
+			log.error("Error during save() a single student");
+			throw new ServiceException("Error during save() a single student");
+		}
+	}
 }

@@ -24,7 +24,7 @@ public class InitDialogue implements Dialogue {
     private static final String START_DIALOGUE_MESSAGE = "Please choose a letter what do you want to do: \n"
             + "'a' if you want to FIND ALL GROUPS with less or equals student count \n"
             + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
-            + "'c' if you want to add new student\n"
+            + "'c' if you want to ADD NEW STUDENT\n"
             + "'d' if you want to delete student by STUDENT_ID\n"
             + "'e' if you want to add a student to the course (from a list)\n"
             + "'f' if you want to remove the student from one of his or her courses\n "
@@ -43,8 +43,9 @@ public class InitDialogue implements Dialogue {
     StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
     StudentsService studentsService = new StudentsServiceImpl(studentDAO);
 
-    private Dialogue groupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
-    private Dialogue studentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
+    private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
+    private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
+    private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -68,8 +69,9 @@ public class InitDialogue implements Dialogue {
     }
 
     private void initDialogues() {
-        dialogs.put("a", groupsDialogue);
-        dialogs.put("b", studentsDialogue);
+        dialogs.put("a", findAllGroupsDialogue);
+        dialogs.put("b", findAllStudentsDialogue);
+        dialogs.put("c", addNewStudentDialogue);
     }
 
     private void startDialogue(Scanner scanner) {

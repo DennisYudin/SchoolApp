@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class FindAllStudentsDialogue implements Dialogue {
 	public static final String TABLE_TITLE = "Students table:";
+	public static final String COURSE_MESSEAGE = "Enter course name: ";
 	private Console inputHandler;
 	private StudentsService studentsService;
 
@@ -19,7 +20,7 @@ public class FindAllStudentsDialogue implements Dialogue {
 
 	@Override
 	public void start(Scanner scanner) {
-		var input = inputHandler.readString("Enter course name: ", scanner);
+		var input = inputHandler.readString(COURSE_MESSEAGE, scanner);
 
 		System.out.println();
 		System.out.println(TABLE_TITLE);

@@ -81,6 +81,20 @@ class StudentsDAOImplTest {
 	}
 
 	@Test
+	@Order(3)
+	void save_ShouldNewSaveStudent_WhenInputIsSingleStudent() {
+		Student expectedStudent = new Student();
+		expectedStudent.setFirstName("Ivanov");
+		expectedStudent.setLastName("Ivan");
+
+		studentDAO.save(expectedStudent);
+
+		List<Student> studentsInTable = studentDAO.findAll();
+
+		assertTrue(studentsInTable.contains(expectedStudent));
+	}
+
+	@Test
 	void findAllBy_ShouldFindAllStudentsAssignToTheCourse_WhenInputIsCourseName() {
 
 		var actual = studentDAO.findAllBy("Algebra");
