@@ -25,7 +25,7 @@ public class InitDialogue implements Dialogue {
             + "'a' if you want to FIND ALL GROUPS with less or equals student count \n"
             + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
             + "'c' if you want to ADD NEW STUDENT\n"
-            + "'d' if you want to delete student by STUDENT_ID\n"
+            + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
             + "'e' if you want to add a student to the course (from a list)\n"
             + "'f' if you want to remove the student from one of his or her courses\n "
             + "----------------------------------------------------------------------\n"
@@ -46,6 +46,7 @@ public class InitDialogue implements Dialogue {
     private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
     private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
     private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
+    private Dialogue deleteStudentByIdDialogue = new DeleteByIdStudentDialogue(inputHandler, studentsService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -72,6 +73,7 @@ public class InitDialogue implements Dialogue {
         dialogs.put("a", findAllGroupsDialogue);
         dialogs.put("b", findAllStudentsDialogue);
         dialogs.put("c", addNewStudentDialogue);
+        dialogs.put("d", deleteStudentByIdDialogue);
     }
 
     private void startDialogue(Scanner scanner) {

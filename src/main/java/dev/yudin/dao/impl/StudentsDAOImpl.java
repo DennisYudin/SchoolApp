@@ -21,6 +21,7 @@ public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
 	private static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
 	private static final String FIND_ALL_SQL = "SELECT * FROM students";
+	private static final String DELETE_STUDENT_BY_ID_SQL = "DELETE FROM students WHERE id = ?";
 	private static final String FIND_ALL_BY_COURSE_NAME_SQL =
 			"SELECT students_table.id,\n" +
 					"    first_name,\n" +
@@ -139,5 +140,19 @@ public class StudentsDAOImpl implements StudentDAO {
 			throw new DAOException("Error during findAllBy() course name: " + courseName);
 		}
 		return result;
+	}
+
+	@Override
+	public void deleteById(int id) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_BY_ID_SQL)) {
+
+			statement.setInt(1, id);
+			statement.execute();
+
+		} catch (SQLException e) {
+			log.error("Error during delete by id: " + id);
+			throw new DAOException("Error during delete by id: " + id, e);
+		}
 	}
 }

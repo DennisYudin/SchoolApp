@@ -8,7 +8,6 @@ import dev.yudin.services.StudentsService;
 import java.util.Scanner;
 
 public class AddNewStudentDialogue implements Dialogue {
-
 	public static final String TABLE_TITLE = "Students table:";
 	public static final String STUDENT_MESSAGE = "Enter student's name and last name [Example: Dennis Yudin]: ";
 	public static final String ERROR_MESSAGE = "Already exist in table: [";

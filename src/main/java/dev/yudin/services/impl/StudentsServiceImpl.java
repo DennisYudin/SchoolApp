@@ -39,6 +39,16 @@ public class StudentsServiceImpl implements StudentsService {
 	}
 
 	@Override
+	public void deleteById(int id) {
+		try {
+			studentDAO.deleteById(id);
+		} catch (DAOException ex) {
+			log.error("Error during delete by id: " + id);
+			throw new ServiceException("Error during delete by id: " + id, ex);
+		}
+	}
+
+	@Override
 	public List<Student> findAll() {
 		try{
 			return studentDAO.findAll();

@@ -114,4 +114,13 @@ class StudentsDAOImplTest {
 
 		assertTrue(actual.isEmpty());
 	}
+
+	@Test
+	void deleteById_ShouldDeleteStudentById_WhenInputIsID() {
+		studentDAO.deleteById(1);
+
+		var actualStudentsTable = studentDAO.findAll();
+
+		assertTrue(actualStudentsTable.isEmpty());
+	}
 }

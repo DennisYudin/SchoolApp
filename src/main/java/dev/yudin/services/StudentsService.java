@@ -13,4 +13,5 @@ public interface StudentsService {
 	void save(Student student);
 	Map<Student, Integer> convert(List<Student> studentsFromTable);
 	List<StudentDTO> findAllBy(String courseName);
+	void deleteById(int id);
 }

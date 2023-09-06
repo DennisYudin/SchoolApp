@@ -11,4 +11,5 @@ public interface StudentDAO {
 	void save(List<Student> students);
 	void save(Student student);
 	List<StudentDTO> findAllBy(String courseName);
+	void deleteById(int id);
 }
