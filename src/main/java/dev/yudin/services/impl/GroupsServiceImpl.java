@@ -2,6 +2,7 @@ package dev.yudin.services.impl;
 
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
+import dev.yudin.entities.GroupsAmountStudentDTO;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;
 import dev.yudin.services.GroupsService;
@@ -50,7 +51,7 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	@Override
-	public List<String> findAll(int amountStudents) {
+	public List<GroupsAmountStudentDTO> findAll(int amountStudents) {
 		try {
 			return groupDAO.findAll(amountStudents);
 		} catch (DAOException ex) {

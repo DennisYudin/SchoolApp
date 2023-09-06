@@ -3,10 +3,15 @@ package dev.yudin.dialogues;
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.Manager;
 import dev.yudin.console.Console;
+import dev.yudin.console.InputHandler;
 import dev.yudin.dao.GroupDAO;
+import dev.yudin.dao.StudentDAO;
 import dev.yudin.dao.impl.GroupsDAOImpl;
+import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.services.GroupsService;
+import dev.yudin.services.StudentsService;
 import dev.yudin.services.impl.GroupsServiceImpl;
+import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,9 +23,9 @@ import java.util.Scanner;
 public class InitDialogue implements Dialogue {
     private static final String START_DIALOGUE_MESSAGE = "Please choose a letter what do you want to do: \n"
             + "'a' if you want to FIND ALL GROUPS with less or equals student count \n"
-            + "'b' if you want to find all students related to course with given name \n"
-            + "'c' if you want to add new student\n"
-            + "'d' if you want to delete student by STUDENT_ID\n"
+            + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
+            + "'c' if you want to ADD NEW STUDENT\n"
+            + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
             + "'e' if you want to add a student to the course (from a list)\n"
             + "'f' if you want to remove the student from one of his or her courses\n "
             + "----------------------------------------------------------------------\n"
@@ -34,14 +39,21 @@ public class InitDialogue implements Dialogue {
     Manager dataSource = new ConnectionManager();
     GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
     GroupsService groupsService = new GroupsServiceImpl(groupDAO);
-    Console console = new Console();
-    private Dialogue groupsDialogue = new GroupsDialogue(console, groupsService);
+    Console inputHandler = new InputHandler();
+    StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
+    StudentsService studentsService = new StudentsServiceImpl(studentDAO);
+
+    private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
+    private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
+    private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
+    private Dialogue deleteStudentByIdDialogue = new DeleteByIdStudentDialogue(inputHandler, studentsService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
     public void start(Scanner scanner) {
         String userAnswer;
         do {
+            System.out.println();
             System.out.print(START_DIALOGUE_MESSAGE);
 
             initDialogues();
@@ -58,7 +70,10 @@ public class InitDialogue implements Dialogue {
     }
 
     private void initDialogues() {
-        dialogs.put("a", groupsDialogue);
+        dialogs.put("a", findAllGroupsDialogue);
+        dialogs.put("b", findAllStudentsDialogue);
+        dialogs.put("c", addNewStudentDialogue);
+        dialogs.put("d", deleteStudentByIdDialogue);
     }
 
     private void startDialogue(Scanner scanner) {

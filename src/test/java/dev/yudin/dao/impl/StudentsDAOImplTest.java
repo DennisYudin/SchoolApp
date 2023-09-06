@@ -1,6 +1,7 @@
 package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -9,6 +10,7 @@ import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -33,65 +35,92 @@ class StudentsDAOImplTest {
 
 		scriptRunner.run("test-databaseStructure.sql");
 		scriptRunner.run("fillGroupTable.sql");
+		scriptRunner.run("fillStudentTable.sql");
+		scriptRunner.run("fillCourseTable.sql");
+		scriptRunner.run("fillStudentsCourseTable.sql");
 
 		studentDAO = new StudentsDAOImpl(manager);
 	}
 
 	@Test
 	@Order(0)
-	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
+	void findAll_ShouldListOfStudents_WhenCallMethod() {
 
 		List<Student> actual = studentDAO.findAll();
 
-		assertTrue(actual.isEmpty());
+		assertFalse(actual.isEmpty());
 	}
 
 	@Test
 	@Order(1)
 	void save_ShouldSaveListOfStudentIntoTable_WhenInputListOfStudents() {
-		List<Student> studentsTableStateBefore = studentDAO.findAll();
+		Student newStudent = new Student();
+		newStudent.setFirstName("Ivanov");
+		newStudent.setLastName("Ivan");
+		newStudent.setGroupId(1);
 
-		assumeTrue(studentsTableStateBefore.isEmpty());
+		studentDAO.save(List.of(newStudent));
 
-		Student expectedStudent = new Student();
-		expectedStudent.setId(1);
-		expectedStudent.setFirstName("dennis");
-		expectedStudent.setLastName("yudin");
-		expectedStudent.setGroupId(1);
+		List<Student> studentsInTable = studentDAO.findAll();
 
-		studentDAO.save(List.of(expectedStudent));
-
-		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		var actualStudent = studentsTableStateAfter.get(0);
-
-		assertEquals(expectedStudent, actualStudent);
+		assertTrue(studentsInTable.contains(newStudent));
 	}
 
 	@Test
 	@Order(2)
 	void save_ShouldSaveStudentWithoutGroupId_WhenInputListOfStudents() {
-		List<Student> studentsTableStateBefore = studentDAO.findAll();
-
-		assumeTrue(studentsTableStateBefore.isEmpty());
-
 		Student expectedStudent = new Student();
-		expectedStudent.setId(1);
-		expectedStudent.setFirstName("dennis");
-		expectedStudent.setLastName("yudin");
+		expectedStudent.setFirstName("Ivanov");
+		expectedStudent.setLastName("Ivan");
 
 		studentDAO.save(List.of(expectedStudent));
 
-		List<Student> studentsTableStateAfter = studentDAO.findAll();
-		var actualStudent = studentsTableStateAfter.get(0);
+		List<Student> studentsInTable = studentDAO.findAll();
+
+		assertTrue(studentsInTable.contains(expectedStudent));
+	}
+
+	@Test
+	@Order(3)
+	void save_ShouldNewSaveStudent_WhenInputIsSingleStudent() {
+		Student expectedStudent = new Student();
+		expectedStudent.setFirstName("Ivanov");
+		expectedStudent.setLastName("Ivan");
+
+		studentDAO.save(expectedStudent);
+
+		List<Student> studentsInTable = studentDAO.findAll();
+
+		assertTrue(studentsInTable.contains(expectedStudent));
+	}
+
+	@Test
+	void findAllBy_ShouldFindAllStudentsAssignToTheCourse_WhenInputIsCourseName() {
+
+		var actual = studentDAO.findAllBy("Algebra");
+		var actualStudent = actual.get(0);
+
+		StudentDTO expectedStudent = new StudentDTO();
+		expectedStudent.setId(1);
+		expectedStudent.setFirstName("Dennis");
+		expectedStudent.setLastName("Yudin");
 
 		assertEquals(expectedStudent, actualStudent);
 	}
 
 	@Test
-	void name() {
+	void findAllBy_ShouldReturnEmptyList_WhenInputIsCourseName() {
+		var actual = studentDAO.findAllBy("Biology");
 
-		var actual = studentDAO.findAllBy("Algebra");
+		assertTrue(actual.isEmpty());
+	}
 
-		System.out.println(actual);
+	@Test
+	void deleteById_ShouldDeleteStudentById_WhenInputIsID() {
+		studentDAO.deleteById(1);
+
+		var actualStudentsTable = studentDAO.findAll();
+
+		assertTrue(actualStudentsTable.isEmpty());
 	}
 }

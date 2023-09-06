@@ -2,6 +2,7 @@ package dev.yudin.services.impl;
 
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;
 import dev.yudin.services.StudentsService;
@@ -28,6 +29,26 @@ public class StudentsServiceImpl implements StudentsService {
 	}
 
 	@Override
+	public List<StudentDTO> findAllBy(String courseName) {
+		try{
+			return studentDAO.findAllBy(courseName);
+		} catch (DAOException ex) {
+			log.error("Error during findAllBy() course name: " + courseName);
+			throw new ServiceException("Error during findAllBy() course name: " + courseName);
+		}
+	}
+
+	@Override
+	public void deleteById(int id) {
+		try {
+			studentDAO.deleteById(id);
+		} catch (DAOException ex) {
+			log.error("Error during delete by id: " + id);
+			throw new ServiceException("Error during delete by id: " + id, ex);
+		}
+	}
+
+	@Override
 	public List<Student> findAll() {
 		try{
 			return studentDAO.findAll();
@@ -44,6 +65,16 @@ public class StudentsServiceImpl implements StudentsService {
 		} catch (DAOException ex) {
 			log.error("Error during save()");
 			throw new ServiceException("Error during save()");
+		}
+	}
+
+	@Override
+	public void save(Student student) {
+		try {
+			studentDAO.save(student);
+		} catch (DAOException ex) {
+			log.error("Error during save() a single student");
+			throw new ServiceException("Error during save() a single student");
 		}
 	}
 }

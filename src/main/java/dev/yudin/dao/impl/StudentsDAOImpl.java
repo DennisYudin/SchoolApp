@@ -3,6 +3,7 @@ package dev.yudin.dao.impl;
 import dev.yudin.connection.Manager;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -18,9 +19,10 @@ import java.util.List;
 
 public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
-	public static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
-	public static final String FIND_ALL_SQL = "SELECT * FROM students";
-	String FIND_ALL_BY_COURSE_NAME_SQL =
+	private static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
+	private static final String FIND_ALL_SQL = "SELECT * FROM students";
+	private static final String DELETE_STUDENT_BY_ID_SQL = "DELETE FROM students WHERE id = ?";
+	private static final String FIND_ALL_BY_COURSE_NAME_SQL =
 			"SELECT students_table.id,\n" +
 					"    first_name,\n" +
 					"    last_name,\n" +
@@ -64,6 +66,7 @@ public class StudentsDAOImpl implements StudentDAO {
 		}
 	}
 
+	@Override
 	public void save(List<Student> students) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
@@ -83,21 +86,44 @@ public class StudentsDAOImpl implements StudentDAO {
 				statement.execute();
 			}
 		} catch (SQLException ex) {
-			log.error("Error during save()");
-			throw new DAOException("Error during save()", ex);
+			log.error("Error during save list of students");
+			throw new DAOException("Error during save list of students", ex);
 		}
 	}
 
 	@Override
-	public List<Student> findAllBy(String courseName) {
-		List<Student> result = new ArrayList<>();
+	public void save(Student student) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(
+					 INSERT_INTO_STUDENTS_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+			var name = student.getFirstName();
+			var lastName = student.getLastName();
+			var groupId = student.getGroupId();
+
+			statement.setString(1, name);
+			statement.setString(2, lastName);
+			if (groupId == 0) {
+				statement.setNull(3, Types.NULL);
+			} else {
+				statement.setInt(3, groupId);
+			}
+			statement.execute();
+		} catch (SQLException ex) {
+			log.error("Error during save single student");
+			throw new DAOException("Error during save single student", ex);
+		}
+	}
+
+	@Override
+	public List<StudentDTO> findAllBy(String courseName) {
+		List<StudentDTO> result = new ArrayList<>();
 
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_COURSE_NAME_SQL)) {
 			statement.setString(1, courseName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Student student = new Student();
+				StudentDTO student = new StudentDTO();
 
 				int studentId = resultSet.getInt("id");
 				String studentName = resultSet.getString("first_name");
@@ -114,5 +140,19 @@ public class StudentsDAOImpl implements StudentDAO {
 			throw new DAOException("Error during findAllBy() course name: " + courseName);
 		}
 		return result;
+	}
+
+	@Override
+	public void deleteById(int id) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_BY_ID_SQL)) {
+
+			statement.setInt(1, id);
+			statement.execute();
+
+		} catch (SQLException e) {
+			log.error("Error during delete by id: " + id);
+			throw new DAOException("Error during delete by id: " + id, e);
+		}
 	}
 }

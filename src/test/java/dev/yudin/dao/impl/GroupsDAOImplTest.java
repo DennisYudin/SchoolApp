@@ -1,15 +1,14 @@
 package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.FileReaderTesting;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
+import dev.yudin.entities.GroupsAmountStudentDTO;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -78,9 +77,13 @@ class GroupsDAOImplTest {
 	@Test
 	void findAll_ShouldReturnListOfGroupsWithLessOrEqualsAmountOfStudents_WhenInputIsAmountOfStudents() {
 		var actual = groupsDAO.findAll(1);
-		var expected = List.of("AA-01");
+		var actualDTO = actual.get(0);
 
-		assertEquals(expected, actual);
+		GroupsAmountStudentDTO expectedDTO = new GroupsAmountStudentDTO();
+		expectedDTO.setGroupName("AA-01");
+		expectedDTO.setAmountStudents(1);
+
+		assertEquals(expectedDTO, actualDTO);
 	}
 	@Test
 	void findAll_ShouldReturnEmptyListOfGroups_WhenInputIsZeroAmountOfStudents() {
