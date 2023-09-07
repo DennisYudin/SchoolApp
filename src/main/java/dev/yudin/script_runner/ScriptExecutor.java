@@ -16,7 +16,6 @@ import java.sql.SQLException;
 
 public class ScriptExecutor implements Runnable {
 	private final Logger log = LogManager.getLogger(ScriptExecutor.class);
-
 	public static final String ERROR_MESSAGE_CONNECTION = "Could not get connection";
 	public static final String FILE_NOT_FOUND_ERROR_MESSAGE = "file not found! ";
 	private Manager datasource;
