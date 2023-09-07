@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class StudentsServiceImpl implements StudentsService {
 	private final Logger log = LogManager.getLogger(StudentsServiceImpl.class);
@@ -45,6 +46,16 @@ public class StudentsServiceImpl implements StudentsService {
 		} catch (DAOException ex) {
 			log.error("Error during delete by id: " + id);
 			throw new ServiceException("Error during delete by id: " + id, ex);
+		}
+	}
+
+	@Override
+	public Optional<Student> getBy(int id) {
+		try {
+			return studentDAO.getBy(id);
+		} catch (DAOException ex) {
+			log.error("Error during getBy()");
+			throw new ServiceException("Error during getBy()");
 		}
 	}
 

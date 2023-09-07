@@ -123,4 +123,35 @@ class StudentsDAOImplTest {
 
 		assertTrue(actualStudentsTable.isEmpty());
 	}
+	@Test
+	void deleteById_ShouldDoNothing_WhenInputIsDoesNotExistStudentId() {
+		studentDAO.deleteById(100);
+
+		var actualStudentsTable = studentDAO.findAll();
+
+		assertFalse(actualStudentsTable.isEmpty());
+	}
+
+	@Test
+	void getBy_ShouldReturnStudent_WhenInputIsId() {
+
+		int id = 1;
+		var actual = studentDAO.getBy(id);
+
+		var expected = new Student();
+		expected.setId(1);
+		expected.setFirstName("Dennis");
+		expected.setLastName("Yudin");
+		expected.setGroupId(1);
+
+		assertEquals(expected, actual.get());
+	}
+
+	@Test
+	void getBy_ShouldReturnEmptyOptional_WhenInputIsDoesNotExistId() {
+		int doesNotExistID = 10;
+		var actual = studentDAO.getBy(doesNotExistID);
+
+		assertTrue(actual.isEmpty());
+	}
 }

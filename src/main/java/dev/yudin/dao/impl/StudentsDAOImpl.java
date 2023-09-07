@@ -16,11 +16,13 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
 	private static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
 	private static final String FIND_ALL_SQL = "SELECT * FROM students";
+	private static final String GET_STUDENT_BY_ID_SQL = "SELECT * FROM students WHERE id = ?";
 	private static final String DELETE_STUDENT_BY_ID_SQL = "DELETE FROM students WHERE id = ?";
 	private static final String FIND_ALL_BY_COURSE_NAME_SQL =
 			"SELECT students_table.id,\n" +
@@ -35,6 +37,38 @@ public class StudentsDAOImpl implements StudentDAO {
 
 	public StudentsDAOImpl(Manager dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	@Override
+	public Optional<Student> getBy(int id) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
+
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery();
+
+			Student student = new Student();
+			while (resultSet.next()) {
+				int idFromTable = resultSet.getInt("id");
+				String firstName = resultSet.getString("first_name");
+				String lstName = resultSet.getString("last_name");
+				int groupId = resultSet.getInt("group_id");
+
+				student.setId(idFromTable);
+				student.setFirstName(firstName);
+				student.setLastName(lstName);
+				student.setGroupId(groupId);
+			}
+			if (student.getLastName() == null
+					|| student.getFirstName() == null) {
+				return Optional.empty();
+			} else {
+				return Optional.of(student);
+			}
+		} catch (SQLException e) {
+			log.error("Error during getBy()");
+			throw new DAOException("Error during getBy()", e);
+		}
 	}
 
 	@Override
