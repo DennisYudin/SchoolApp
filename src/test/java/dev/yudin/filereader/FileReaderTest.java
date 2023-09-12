@@ -29,7 +29,7 @@ class FileReaderTest {
 
 		Reader reader = new FileReader();
 
-		var actual = reader.getValue("db.driver");
+		var actual = reader.getPropValue("db.driver");
 		String expected = "org.h2.Driver";
 
 		assertEquals(expected, actual);

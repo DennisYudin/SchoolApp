@@ -6,5 +6,5 @@ public interface Reader {
 
 	List<String> read(String input);
 
-	String getValue(String valueName);
+	String getPropValue(String valueName);
 }

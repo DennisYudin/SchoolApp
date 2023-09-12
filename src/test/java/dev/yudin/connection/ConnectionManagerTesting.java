@@ -12,7 +12,6 @@ import java.sql.SQLException;
 public class ConnectionManagerTesting extends ConnectionManager {
 
 	private Logger log = LogManager.getLogger(ConnectionManagerTesting.class);
-
 	private Reader reader;
 	public ConnectionManagerTesting(Reader reader) {
 		super(reader);
@@ -21,8 +20,8 @@ public class ConnectionManagerTesting extends ConnectionManager {
 
 	@Override
 	public Connection getConnection() {
-		var driver = reader.getValue("test.db.driver");
-		var url = reader.getValue("test.db.url");
+		var driver = reader.getPropValue("test.db.driver");
+		var url = reader.getPropValue("test.db.url");
 
 		Connection conn;
 		try {

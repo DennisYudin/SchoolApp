@@ -64,9 +64,8 @@ public class FileReader implements Reader {
 		}
 	}
 
-
 	@Override
-	public String getValue(String valueName) {
+	public String getPropValue(String valueName) {
 		Properties prop = new Properties();
 		try (InputStream input = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			prop.load(input);

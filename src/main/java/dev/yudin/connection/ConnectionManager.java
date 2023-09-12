@@ -19,8 +19,8 @@ public class ConnectionManager implements Manager {
 
 	@Override
 	public Connection getConnection() {
-		var driver = reader.getValue("db.driver");
-		var url = reader.getValue("db.url");
+		var driver = reader.getPropValue("db.driver");
+		var url = reader.getPropValue("db.url");
 
 		Connection conn;
 		try {

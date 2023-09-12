@@ -13,7 +13,7 @@ public class FileReaderTesting extends FileReader {
 	public static final String PROPERTIES_TEST_FILE = "src/test/resources/test-application.properties";
 
 	@Override
-	public String getValue(String valueName) {
+	public String getPropValue(String valueName) {
 		Properties prop = new Properties();
 		try (InputStream input = new FileInputStream(PROPERTIES_TEST_FILE)) {
 			prop.load(input);
