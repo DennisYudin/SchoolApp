@@ -15,6 +15,7 @@ import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
 import dev.yudin.filereader.FileReader;
+import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
 import dev.yudin.services.CoursesService;
@@ -36,7 +37,8 @@ public class DBInitializer {
 	private static final String DATABASE_STRUCTURE_FILE = "databaseStructure.sql";
 	private static final int AMOUNT_STUDENTS = 200;
 	private static final int AMOUNT_GROUPS = 10;
-	private Manager dataSource = new ConnectionManager();
+	private Reader reader = new FileReader();
+	private Manager dataSource = new ConnectionManager(reader);
 	private Runnable scriptRunner = new ScriptExecutor(dataSource);
 	private DataGenerator dataGenerator = new DataGenerator(new Random(), new FileReader());
 	private DataDistributor dataDistributor = new DataDistributor(new Random());

@@ -15,6 +15,7 @@ public class ConnectionManagerTesting extends ConnectionManager {
 
 	private Reader reader;
 	public ConnectionManagerTesting(Reader reader) {
+		super(reader);
 		this.reader = reader;
 	}
 

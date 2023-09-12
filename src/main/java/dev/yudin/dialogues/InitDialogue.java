@@ -8,6 +8,8 @@ import dev.yudin.dao.GroupDAO;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.dao.impl.GroupsDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
+import dev.yudin.filereader.FileReader;
+import dev.yudin.filereader.Reader;
 import dev.yudin.services.GroupsService;
 import dev.yudin.services.StudentsService;
 import dev.yudin.services.impl.GroupsServiceImpl;
@@ -36,7 +38,8 @@ public class InitDialogue implements Dialogue {
     private static final String INCORRECT_INPUT_MESSAGE = "Incorrect input. ";
     private static final String ERROR_MESSAGE = "Unfortunately the number of attempts exceeded";
     public static final String CONTINUE_ANSWER = "yes";
-    Manager dataSource = new ConnectionManager();
+    private Reader reader = new FileReader();
+    Manager dataSource = new ConnectionManager(reader);
     GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
     GroupsService groupsService = new GroupsServiceImpl(groupDAO);
     Console inputHandler = new InputHandler();

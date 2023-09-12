@@ -1,7 +1,6 @@
 package dev.yudin.connection;
 
 import dev.yudin.exceptions.ConnectionException;
-import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -12,7 +11,11 @@ import java.sql.SQLException;
 
 public class ConnectionManager implements Manager {
 	private Logger log = LogManager.getLogger(ConnectionManager.class);
-	private Reader reader = new FileReader();
+	private Reader reader;
+
+	public ConnectionManager(Reader reader) {
+		this.reader = reader;
+	}
 
 	@Override
 	public Connection getConnection() {

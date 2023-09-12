@@ -11,7 +11,7 @@ class FileReaderTest {
 
 		Reader reader = new FileReader();
 
-		var surnames = reader.read("src/test/resources/students_surnames.txt");
+		var surnames = reader.read("students_surnames.txt");
 
 		int expected = 20;
 		int actual = surnames.size();
