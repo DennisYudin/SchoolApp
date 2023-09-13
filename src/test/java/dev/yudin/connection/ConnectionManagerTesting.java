@@ -9,17 +9,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionManagerTesting extends ConnectionManager {
+public class ConnectionManagerTesting implements Manager {
+	private static final String PROPERTIES_TEST_FILE = "test-application.properties";
 	private Reader reader;
 	public ConnectionManagerTesting(Reader reader) {
-		super(reader);
 		this.reader = reader;
 	}
 
 	@Override
 	public Connection getConnection() {
-		var driver = reader.getPropValue("test.db.driver");
-		var url = reader.getPropValue("test.db.url");
+		String driver = reader.getPropValue("test.db.driver", PROPERTIES_TEST_FILE);
+		String url = reader.getPropValue("test.db.url", PROPERTIES_TEST_FILE);
 
 		Connection conn;
 		try {

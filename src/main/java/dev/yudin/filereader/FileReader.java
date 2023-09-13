@@ -45,14 +45,14 @@ public class FileReader implements Reader {
 	}
 
 	@Override
-	public String getPropValue(String valueName) {
+	public String getPropValue(String valueName, String propertyFile) {
 		Properties prop = new Properties();
-		try (InputStream input = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+		try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertyFile)) {
 			prop.load(input);
 			return prop.getProperty(valueName);
 		} catch (IOException e) {
-			log.error(ERROR_MESSAGE + PROPERTIES_FILE, e);
-			throw new FileProcessingException(ERROR_MESSAGE + PROPERTIES_FILE, e);
+			log.error(ERROR_MESSAGE + propertyFile, e);
+			throw new FileProcessingException(ERROR_MESSAGE + propertyFile, e);
 		}
 	}
 }
