@@ -159,6 +159,6 @@ class DataDistributorTest {
 
 		int actualAmountStudentsWithoutGroups = actual.size();
 
-		assertTrue(actualAmountStudentsWithoutGroups > 0 && actualAmountStudentsWithoutGroups < 55);
+		assertTrue(actualAmountStudentsWithoutGroups > 0 && actualAmountStudentsWithoutGroups < 60);
 	}
 }

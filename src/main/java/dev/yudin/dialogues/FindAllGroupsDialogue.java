@@ -28,10 +28,10 @@ public class FindAllGroupsDialogue implements Dialogue {
 
 		var result = groupsService.findAll(amountStudents);
 
-		printAsTableFormatt(result);
+		printAsTableFormat(result);
 	}
 
-	private void printAsTableFormatt(List<GroupsAmountStudentDTO> result) {
+	private void printAsTableFormat(List<GroupsAmountStudentDTO> result) {
 		System.out.format("%-15s%-15s%n", "Group name", "Amount of students");
 		for (var dto : result) {
 			System.out.format("%-15s%-15s%n", dto.getGroupName(), dto.getAmountStudents());

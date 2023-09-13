@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class FileReaderTest {
+	public static final String PROPERTIES_TEST_FILE = "test-application.properties";
+	private final Reader reader = new FileReader();
 
 	@Test
 	void read_ShouldReadFile_WhenInputIsPathToTheFile() {
 
-		Reader reader = new FileReader();
-
-		var surnames = reader.read("src/test/resources/students_surnames.txt");
+		var surnames = reader.read("students_surnames.txt");
 
 		int expected = 20;
 		int actual = surnames.size();
@@ -27,9 +27,7 @@ class FileReaderTest {
 	@Test
 	void getValue_ShouldReadValueFromApplicationFile_WhenInputIsValueName() {
 
-		Reader reader = new FileReader();
-
-		var actual = reader.getValue("db.driver");
+		var actual = reader.getPropValue("test.db.driver", PROPERTIES_TEST_FILE);
 		String expected = "org.h2.Driver";
 
 		assertEquals(expected, actual);

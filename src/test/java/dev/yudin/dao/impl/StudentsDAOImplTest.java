@@ -3,14 +3,13 @@ package dev.yudin.dao.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.ConnectionManagerTesting;
-import dev.yudin.connection.FileReaderTesting;
+import dev.yudin.connection.Manager;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
 import dev.yudin.entities.StudentDTO;
+import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
@@ -28,8 +27,8 @@ class StudentsDAOImplTest {
 
 	@BeforeEach
 	public void setUp() {
-		Reader reader = new FileReaderTesting();
-		ConnectionManager manager = new ConnectionManagerTesting(reader);
+		Reader reader = new FileReader();
+		Manager manager = new ConnectionManagerTesting(reader);
 
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
@@ -122,5 +121,36 @@ class StudentsDAOImplTest {
 		var actualStudentsTable = studentDAO.findAll();
 
 		assertTrue(actualStudentsTable.isEmpty());
+	}
+	@Test
+	void deleteById_ShouldDoNothing_WhenInputIsDoesNotExistStudentId() {
+		studentDAO.deleteById(100);
+
+		var actualStudentsTable = studentDAO.findAll();
+
+		assertFalse(actualStudentsTable.isEmpty());
+	}
+
+	@Test
+	void getBy_ShouldReturnStudent_WhenInputIsId() {
+
+		int id = 1;
+		var actual = studentDAO.getBy(id);
+
+		var expected = new Student();
+		expected.setId(1);
+		expected.setFirstName("Dennis");
+		expected.setLastName("Yudin");
+		expected.setGroupId(1);
+
+		assertEquals(expected, actual.get());
+	}
+
+	@Test
+	void getBy_ShouldReturnEmptyOptional_WhenInputIsDoesNotExistId() {
+		int doesNotExistID = 10;
+		var actual = studentDAO.getBy(doesNotExistID);
+
+		assertTrue(actual.isEmpty());
 	}
 }
