@@ -10,8 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManagerTesting extends ConnectionManager {
-
-	private Logger log = LogManager.getLogger(ConnectionManagerTesting.class);
 	private Reader reader;
 	public ConnectionManagerTesting(Reader reader) {
 		super(reader);

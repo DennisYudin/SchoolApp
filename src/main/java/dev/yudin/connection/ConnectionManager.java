@@ -26,11 +26,13 @@ public class ConnectionManager implements Manager {
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url);
+			return conn;
 		} catch (ClassNotFoundException e) {
+			log.error("Problem with jdbcDriver");
 			throw new ConnectionException("Problem with jdbcDriver", e);
 		} catch (SQLException e) {
+			log.error("Could not establish connection with database");
 			throw new ConnectionException("Could not establish connection with database", e);
 		}
-		return conn;
 	}
 }

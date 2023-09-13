@@ -5,11 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class FileReaderTest {
+	private final Reader reader = new FileReader();
 
 	@Test
 	void read_ShouldReadFile_WhenInputIsPathToTheFile() {
-
-		Reader reader = new FileReader();
 
 		var surnames = reader.read("students_surnames.txt");
 
@@ -26,8 +25,6 @@ class FileReaderTest {
 
 	@Test
 	void getValue_ShouldReadValueFromApplicationFile_WhenInputIsValueName() {
-
-		Reader reader = new FileReader();
 
 		var actual = reader.getPropValue("db.driver");
 		String expected = "org.h2.Driver";

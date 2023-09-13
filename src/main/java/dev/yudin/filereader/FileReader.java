@@ -9,16 +9,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FileReader implements Reader {
 	public static final String PROPERTIES_FILE = "application.properties";
@@ -26,36 +21,21 @@ public class FileReader implements Reader {
 	private final Logger log = LogManager.getLogger(FileReader.class);
 
 	@Override
-	public List<String> read(String pathToFile) {
-		log.info("Call method read for file:" + pathToFile);
+	public List<String> read(String fileName) {
+		List<String> result = new ArrayList<>();
 
-		try (Stream<String> lines = Files.lines(Paths.get(pathToFile), Charset.defaultCharset())) {
-			return lines.collect(Collectors.toList());
-		} catch (IOException e) {
-			log.error(ERROR_MESSAGE + pathToFile, e);
-			throw new FileProcessingException(ERROR_MESSAGE + pathToFile, e);
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+			 BufferedReader reader =
+					 new BufferedReader(
+							 new InputStreamReader(
+									 Objects.requireNonNull(inputStream), StandardCharsets.UTF_8))) {
+			readAndSaveLines(result, reader);
+		} catch (IOException ex) {
+			log.error("Error during reading file " + fileName);
+			throw new FileProcessingException("Error during reading file " + fileName, ex);
 		}
+		return result;
 	}
-
-//	@Override
-//	public List<String> read(String fileName) {
-//		log.info("Call method read() file name: " + fileName);
-//
-////		StringBuilder result = new StringBuilder();
-//		List<String> result = new ArrayList<>();
-//
-//		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
-//			 BufferedReader reader =
-//					 new BufferedReader(
-//							 new InputStreamReader(
-//									 Objects.requireNonNull(inputStream), StandardCharsets.UTF_8))) {
-//			readAndSaveLines(result, reader);
-//		} catch (IOException ex) {
-//			log.error("Error during reading file " + fileName);
-//			throw new FileProcessingException("Error during reading file " + fileName, ex);
-//		}
-//		return result;
-//	}
 
 	private void readAndSaveLines(List<String> result, BufferedReader reader) throws IOException {
 		String line;
