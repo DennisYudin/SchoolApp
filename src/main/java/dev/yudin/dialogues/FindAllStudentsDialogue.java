@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class FindAllStudentsDialogue implements Dialogue {
 	public static final String TABLE_TITLE = "Students table:";
-	public static final String COURSE_MESSEAGE = "Enter course name: ";
+	public static final String COURSE_MESSAGE = "Enter course name: ";
 	private Console inputHandler;
 	private StudentsService studentsService;
 
@@ -20,14 +20,13 @@ public class FindAllStudentsDialogue implements Dialogue {
 
 	@Override
 	public void start(Scanner scanner) {
-		var input = inputHandler.readString(COURSE_MESSEAGE, scanner);
+		var input = inputHandler.readString(COURSE_MESSAGE, scanner);
 
 		System.out.println();
 		System.out.println(TABLE_TITLE);
 
 		var result = studentsService.findAllBy(input);
 		if (result.isEmpty()) {
-			System.out.println("Empty result!");
 			System.out.println("there is no data with such course name: [" + input + "]");
 		} else {
 			printAsTableFormat(result);

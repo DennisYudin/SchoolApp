@@ -24,12 +24,12 @@ public class DeleteByIdStudentDialogue implements Dialogue {
 		int id = inputHandler.readInt("Enter student's id from range[1-" + maxLimit + "]: ", scanner);
 		scanner.nextLine();
 
-		var deleteStudent = studentsService.getBy(id);
+		var deletedStudent = studentsService.getBy(id);
 
-		if (deleteStudent.isPresent()) {
+		if (deletedStudent.isPresent()) {
 			studentsService.deleteById(id);
 
-			printAsTableFormat(deleteStudent.get());
+			printAsTableFormat(deletedStudent.get());
 		} else {
 			throw new DialogueException("Did not find student with id = " + id);
 		}
