@@ -7,11 +7,11 @@ import dev.yudin.services.StudentsService;
 
 import java.util.Scanner;
 
-public class DeleteByIdStudentDialogue implements Dialogue {
+public class DeleteStudentByIdDialogue implements Dialogue {
 	private Console inputHandler;
 	private StudentsService studentsService;
 
-	public DeleteByIdStudentDialogue(Console inputHandler, StudentsService studentsService) {
+	public DeleteStudentByIdDialogue(Console inputHandler, StudentsService studentsService) {
 		this.inputHandler = inputHandler;
 		this.studentsService = studentsService;
 	}
