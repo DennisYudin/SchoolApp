@@ -75,7 +75,7 @@ class StudentsDAOImplTest {
 		studentDAO.save(List.of(expectedStudent));
 
 		List<Student> studentsInTable = studentDAO.findAll();
-
+		System.out.println(studentsInTable);
 		assertTrue(studentsInTable.contains(expectedStudent));
 	}
 

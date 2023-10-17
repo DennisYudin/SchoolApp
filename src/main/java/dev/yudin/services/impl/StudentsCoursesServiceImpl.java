@@ -12,9 +12,7 @@ import java.util.List;
 
 public class StudentsCoursesServiceImpl implements StudentsCoursesService {
 	private final Logger log = LogManager.getLogger(StudentsCoursesServiceImpl.class);
-
 	private StudentsCoursesDAO studentsCoursesDAO;
-
 
 	public StudentsCoursesServiceImpl(StudentsCoursesDAO studentsCoursesDAO) {
 		this.studentsCoursesDAO = studentsCoursesDAO;
@@ -34,6 +32,16 @@ public class StudentsCoursesServiceImpl implements StudentsCoursesService {
 	public void save(List<StudentCourseDTO> list) {
 		try {
 			studentsCoursesDAO.save(list);
+		} catch (DAOException ex) {
+			log.error("Error during save()");
+			throw new ServiceException("Error during save()");
+		}
+	}
+
+	@Override
+	public void save(StudentCourseDTO studentCourseDTO) {
+		try {
+			studentsCoursesDAO.save(studentCourseDTO);
 		} catch (DAOException ex) {
 			log.error("Error during save()");
 			throw new ServiceException("Error during save()");

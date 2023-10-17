@@ -65,4 +65,20 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 			throw new DAOException("Error during save()", ex);
 		}
 	}
+
+	@Override
+	public void save(StudentCourseDTO studentCourseDTO) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(
+					 INSERT_INTO_TABLES_SQL, Statement.RETURN_GENERATED_KEYS)) {
+
+			statement.setInt(1, studentCourseDTO.getStudentId());
+			statement.setInt(2, studentCourseDTO.getCourseId());
+			statement.execute();
+
+		} catch (SQLException ex) {
+			log.error("Error during save()");
+			throw new DAOException("Error during save()", ex);
+		}
+	}
 }
