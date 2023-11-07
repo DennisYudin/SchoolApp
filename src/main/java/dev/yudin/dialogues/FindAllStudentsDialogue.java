@@ -30,7 +30,9 @@ public class FindAllStudentsDialogue implements Dialogue {
 		System.out.println();
 		System.out.println("Pick the course name");
 		var courses = coursesService.findAll();
-		var coursesName = courses.stream().map(Course::getName).collect(Collectors.joining(", "));
+		var coursesName = courses.stream()
+				.map(Course::getName)
+				.collect(Collectors.joining(", "));
 		System.out.println(coursesName);
 
 		String input = inputHandler.readString(COURSE_MESSAGE, scanner);

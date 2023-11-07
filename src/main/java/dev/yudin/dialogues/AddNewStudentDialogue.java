@@ -22,11 +22,11 @@ public class AddNewStudentDialogue implements Dialogue {
 
 	@Override
 	public void start(Scanner scanner) {
-		var input = inputHandler.readString(STUDENT_MESSAGE, scanner);
+		String input = inputHandler.readString(STUDENT_MESSAGE, scanner);
 
 		String[] preparedInput = input.trim().split("\\s+");
 
-		if (preparedInput.length <= 1) {
+		if (preparedInput.length != 2) {
 			throw new DialogueException(INCORRECT_NAME_OR_LAST_NAME_MESSAGE);
 		}
 		Student newStudent = new Student();

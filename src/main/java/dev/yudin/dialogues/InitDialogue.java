@@ -56,6 +56,7 @@ public class InitDialogue implements Dialogue {
     private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService, coursesService);
     private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
     private Dialogue deleteStudentByIdDialogue = new DeleteStudentByIdDialogue(inputHandler, studentsService);
+    private Dialogue addStudentToNewCourseDialogue = new AddExistStudentToNewCourseDialogue(inputHandler, studentsService, coursesService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -83,6 +84,7 @@ public class InitDialogue implements Dialogue {
         dialogs.put("b", findAllStudentsDialogue);
         dialogs.put("c", addNewStudentDialogue);
         dialogs.put("d", deleteStudentByIdDialogue);
+        dialogs.put("e", addStudentToNewCourseDialogue);
     }
 
     private void startDialogue(Scanner scanner) {

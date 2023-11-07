@@ -3,6 +3,8 @@ package dev.yudin.dao.impl;
 import dev.yudin.connection.Manager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
+import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -19,6 +21,11 @@ public class CoursesDAOImpl implements CourseDAO {
 	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
 	public static final String FIND_ALL_SQL = "SELECT * FROM courses";
 	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
+	private static final String FIND_ALL_BY_STUDENT_SQL =
+			"SELECT courses_table.name FROM courses AS courses_table\n" +
+					"JOIN students_courses AS students_courses_table ON courses_table.id = students_courses_table.course_id\n" +
+					"JOIN students AS students_table ON students_table.id = students_courses_table.student_id\n" +
+					"WHERE students_table.first_name = ? AND students_table.last_name = ?";
 	private final Manager dataSource;
 
 	public CoursesDAOImpl(Manager dataSource) {
@@ -50,6 +57,25 @@ public class CoursesDAOImpl implements CourseDAO {
 			log.error("Error during findAll() call");
 			throw new DAOException("Error during findAll() call", e);
 		}
+	}
+
+	@Override
+	public List<String> findAllBy(Student student) {
+		List<String> result = new ArrayList<>();
+
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_STUDENT_SQL)) {
+			statement.setString(1, student.getFirstName());
+			statement.setString(2, student.getLastName());
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result.add(resultSet.getString("name"));
+			}
+		} catch (SQLException e) {
+			log.error("Error during findAllBy() by student: " + student.getFirstName());
+			throw new DAOException("Error during findAllBy() by student: " + student.getFirstName());
+		}
+		return result;
 	}
 
 	@Override
