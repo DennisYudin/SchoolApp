@@ -2,10 +2,11 @@ package dev.yudin.dialogues;
 
 import dev.yudin.console.Console;
 import dev.yudin.entities.Course;
-import dev.yudin.entities.GroupsAmountStudentDTO;
 import dev.yudin.entities.Student;
+import dev.yudin.entities.StudentCourseDTO;
 import dev.yudin.exceptions.DialogueException;
 import dev.yudin.services.CoursesService;
+import dev.yudin.services.StudentsCoursesService;
 import dev.yudin.services.StudentsService;
 
 import java.util.List;
@@ -19,20 +20,23 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 	private Console inputHandler;
 	private StudentsService studentsService;
 	private CoursesService coursesService;
+	private StudentsCoursesService studentsCoursesService;
 	public AddExistStudentToNewCourseDialogue(Console inputHandler,
-											  StudentsService studentsService, CoursesService coursesService) {
+											  StudentsService studentsService,
+											  CoursesService coursesService,
+											  StudentsCoursesService studentsCoursesService) {
 		this.inputHandler = inputHandler;
 		this.studentsService = studentsService;
 		this.coursesService = coursesService;
+		this.studentsCoursesService = studentsCoursesService;
 	}
 
 	@Override
 	public void start(Scanner scanner) {
-		Student existStudent = studentsService.getBy(1)
-				.orElseThrow(DialogueException::new);
-		String input = inputHandler.readString(STUDENT_MESSAGE + existStudent.getFirstName() + " " + existStudent.getLastName() + "]: ", scanner);
+		Student existedStudentInTable = studentsService.getBy(1).orElseThrow(DialogueException::new);
+		String studentNameInput = inputHandler.readString(STUDENT_MESSAGE + existedStudentInTable.getFirstName() + " " + existedStudentInTable.getLastName() + "]: ", scanner);
 
-		String[] preparedInput = input.trim().split("\\s+");
+		String[] preparedInput = studentNameInput.trim().split("\\s+");
 
 		if (preparedInput.length != 2) {
 			throw new DialogueException(INCORRECT_NAME_OR_LAST_NAME_MESSAGE);
@@ -41,28 +45,47 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 		enteredStudent.setFirstName(preparedInput[0]);
 		enteredStudent.setLastName(preparedInput[1]);
 
-		//todo show list of courses for this student
-		System.out.println(enteredStudent.getFirstName() + "'s current courses");
-		var visitedCourses = coursesService.findAllBy(enteredStudent);
-		visitedCourses.forEach(System.out::println);
-
+		System.out.println(enteredStudent.getFirstName() + "'s current courses:");
+		List<String> visitedCourses = coursesService.findAllBy(enteredStudent);
+		if (visitedCourses.isEmpty()) {
+			throw new DialogueException("This student does not visit any courses");
+		} else {
+			visitedCourses.forEach(System.out::println);
+		}
 		System.out.println();
 
 		List<Student> actualStudentsInTable = studentsService.findAll();
+		int studentId = 0;
 		if (!actualStudentsInTable.contains(enteredStudent)) {
 			System.out.println(ERROR_MESSAGE + enteredStudent.getFirstName() + " " + enteredStudent.getLastName() + "]");
 		} else {
-			int studentId = studentsService.findAll().stream()
-					.filter(student -> enteredStudent.equals(student))
+			studentId = studentsService.findAll().stream()
+					.filter(enteredStudent::equals)
 					.mapToInt(Student::getId)
 					.findAny()
-					.orElseThrow();
+					.orElseThrow(DialogueException::new);
 		}
 		System.out.println("Please pick the course");
 		List<Course> courses = coursesService.findAll();
 		printAsTableFormat(courses);
 
-//		String input = inputHandler.readString(STUDENT_MESSAGE + existStudent.getFirstName() + " " + existStudent.getLastName() + "]: ", scanner);
+		String courseInput = inputHandler.readString("Enter course name from the list above: ", scanner);
+
+		int courseId = courses.stream()
+				.filter(course -> courseInput.equals(course.getName()))
+				.mapToInt(Course::getId)
+				.findAny()
+				.orElseThrow(DialogueException::new);
+
+		StudentCourseDTO studentCourseDTO = new StudentCourseDTO();
+		studentCourseDTO.setStudentId(studentId);
+		studentCourseDTO.setCourseId(courseId);
+
+		studentsCoursesService.save(studentCourseDTO);
+
+		System.out.println("Updated " + enteredStudent.getFirstName() + "'s courses");
+		List<String> updatedCourses = coursesService.findAllBy(enteredStudent);
+		updatedCourses.forEach(System.out::println);
 	}
 
 	private void printAsTableFormat(List<Course> courses) {

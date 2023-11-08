@@ -2,6 +2,7 @@ package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManagerTesting;
@@ -45,7 +46,7 @@ class CoursesDAOImplTest {
 	void findAll_ShouldReturnListCourses_WhenCallMethod() {
 
 		List<Course> actual = coursesDAO.findAll();
-
+		System.out.println(actual);
 		assertFalse(actual.isEmpty());
 	}
 
@@ -83,11 +84,22 @@ class CoursesDAOImplTest {
 
 		int expectedSize = 1;
 		int actualSize = courses.size();
-		System.out.println(courses);
+
 		assertEquals(expectedSize, actualSize);
 
 		String expectedCourse = "Algebra";
 		String actualCourse = courses.get(0);
 		assertEquals(expectedCourse, actualCourse);
+	}
+	@Test
+	@Order(4)
+	void findAll_ShouldReturnEmptyList_WhenInputIsStudentHasNoCourses() {
+		Student student = new Student();
+		student.setFirstName("FakeName");
+		student.setLastName("FakeSurname");
+
+		List<String> courses = coursesDAO.findAllBy(student);
+
+		assertTrue(courses.isEmpty());
 	}
 }
