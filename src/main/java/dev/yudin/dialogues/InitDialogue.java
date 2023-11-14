@@ -7,16 +7,20 @@ import dev.yudin.console.InputHandler;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.dao.StudentDAO;
+import dev.yudin.dao.StudentsCoursesDAO;
 import dev.yudin.dao.impl.CoursesDAOImpl;
 import dev.yudin.dao.impl.GroupsDAOImpl;
+import dev.yudin.dao.impl.StudentsCoursesDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import dev.yudin.services.CoursesService;
 import dev.yudin.services.GroupsService;
+import dev.yudin.services.StudentsCoursesService;
 import dev.yudin.services.StudentsService;
 import dev.yudin.services.impl.CourseServiceImpl;
 import dev.yudin.services.impl.GroupsServiceImpl;
+import dev.yudin.services.impl.StudentsCoursesServiceImpl;
 import dev.yudin.services.impl.StudentsServiceImpl;
 
 import java.util.ArrayList;
@@ -32,8 +36,8 @@ public class InitDialogue implements Dialogue {
             + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
             + "'c' if you want to ADD NEW STUDENT\n"
             + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
-            + "'e' if you want to add a student to the course (from a list)\n"
-            + "'f' if you want to remove the student from one of his or her courses\n "
+            + "'e' if you want to ADD NEW COURSE TO THE STUDENT (from a list)\n"
+            + "'f' if you want to REMOVE COURSE FROM StUDENT\n "
             + "----------------------------------------------------------------------\n"
             + "Your choice: ";
     private static final String USER_INPUT_MESSAGE = "Enter letter from a to f: ";
@@ -51,12 +55,15 @@ public class InitDialogue implements Dialogue {
     StudentsService studentsService = new StudentsServiceImpl(studentDAO);
     CourseDAO courseDAO = new CoursesDAOImpl(dataSource);
     CoursesService coursesService = new CourseServiceImpl(courseDAO);
+    StudentsCoursesDAO studentsCoursesDAO = new StudentsCoursesDAOImpl(dataSource);
+    StudentsCoursesService studentsCoursesService = new StudentsCoursesServiceImpl(studentsCoursesDAO);
 
     private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
     private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService, coursesService);
     private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
     private Dialogue deleteStudentByIdDialogue = new DeleteStudentByIdDialogue(inputHandler, studentsService);
-    private Dialogue addStudentToNewCourseDialogue = new AddExistStudentToNewCourseDialogue(inputHandler, studentsService, coursesService);
+    private Dialogue addNewCourseToStudentDialogue = new AddNewCourseToStudentDialogue(inputHandler, studentsService, coursesService, studentsCoursesService);
+    private Dialogue removeCourseFromStudentDialogue = new RemoveCourseFromStudentDialogue(inputHandler, studentsService, coursesService, studentsCoursesService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -84,13 +91,12 @@ public class InitDialogue implements Dialogue {
         dialogs.put("b", findAllStudentsDialogue);
         dialogs.put("c", addNewStudentDialogue);
         dialogs.put("d", deleteStudentByIdDialogue);
-        dialogs.put("e", addStudentToNewCourseDialogue);
+        dialogs.put("e", addNewCourseToStudentDialogue);
+        dialogs.put("f", removeCourseFromStudentDialogue);
     }
 
     private void startDialogue(Scanner scanner) {
-
         String userInput = getAndValidateUserAnswer(scanner);
-
         Dialogue dialogue = dialogs.get(userInput);
         dialogue.start(scanner);
     }

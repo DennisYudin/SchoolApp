@@ -19,6 +19,7 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 	private final Logger log = LogManager.getLogger(StudentsCoursesDAOImpl.class);
 	public static final String FIND_ALL_SQL = "SELECT * FROM students_courses";
 	public static final String INSERT_INTO_TABLES_SQL = "INSERT INTO students_courses (student_id, course_id) VALUES(?,?)";
+	public static final String DELETE_RECORD_FROM_TABLE_SQL = "DELETE FROM students_courses WHERE student_id = ? AND course_id = ?";
 	private final Manager dataSource;
 
 	public StudentsCoursesDAOImpl(Manager dataSource) {
@@ -79,6 +80,20 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 		} catch (SQLException ex) {
 			log.error("Error during save()");
 			throw new DAOException("Error during save()", ex);
+		}
+	}
+
+	@Override
+	public void deleteRecord(int studentId, int courseId) {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(DELETE_RECORD_FROM_TABLE_SQL)) {
+
+			statement.setInt(1, studentId);
+			statement.setInt(2, courseId);
+			statement.execute();
+		} catch (SQLException e) {
+			log.error("Error during delete()");
+			throw new DAOException("Error during delete()", e);
 		}
 	}
 }
