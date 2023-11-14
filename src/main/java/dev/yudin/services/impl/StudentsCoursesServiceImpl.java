@@ -47,4 +47,14 @@ public class StudentsCoursesServiceImpl implements StudentsCoursesService {
 			throw new ServiceException("Error during save()");
 		}
 	}
+
+	@Override
+	public void delete(int studentId, int courseId) {
+		try {
+			studentsCoursesDAO.deleteRecord(studentId, courseId);
+		} catch (DAOException ex) {
+			log.error("Error during delete()");
+			throw new ServiceException("Error during delete()");
+		}
+	}
 }

@@ -86,4 +86,19 @@ class StudentsCoursesDAOImplTest {
 
 		assertEquals(expectedDTO, actualDTO);
 	}
+
+	@Test
+	@Order(3)
+	void deleteRecord_ShouldDeleteRowInTheTable_WhenInputIsStudentIdAndCourseId() {
+		StudentCourseDTO expectedDTO = new StudentCourseDTO();
+		expectedDTO.setStudentId(1);
+		expectedDTO.setCourseId(1);
+
+		studentsCoursesDAO.save(expectedDTO);
+
+		studentsCoursesDAO.deleteRecord(1, 1);
+
+		List<StudentCourseDTO> studentsCoursesTableAfterDelete = studentsCoursesDAO.findAll();
+		assertTrue(studentsCoursesTableAfterDelete.isEmpty());
+	}
 }

@@ -3,7 +3,6 @@ package dev.yudin.dialogues;
 import dev.yudin.console.Console;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
-import dev.yudin.entities.StudentCourseDTO;
 import dev.yudin.exceptions.DialogueException;
 import dev.yudin.services.CoursesService;
 import dev.yudin.services.StudentsCoursesService;
@@ -12,7 +11,7 @@ import dev.yudin.services.StudentsService;
 import java.util.List;
 import java.util.Scanner;
 
-public class AddExistStudentToNewCourseDialogue implements Dialogue {
+public class RemoveCourseFromStudentDialogue implements Dialogue {
 	public static final String STUDENT_MESSAGE = "Enter exists student's name and last name [Example: ";
 	public static final String ERROR_MESSAGE = "There is no such student in DB: [";
 	public static final String INCORRECT_NAME_OR_LAST_NAME_MESSAGE = "Incorrect name or last name";
@@ -20,10 +19,10 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 	private StudentsService studentsService;
 	private CoursesService coursesService;
 	private StudentsCoursesService studentsCoursesService;
-	public AddExistStudentToNewCourseDialogue(Console inputHandler,
-											  StudentsService studentsService,
-											  CoursesService coursesService,
-											  StudentsCoursesService studentsCoursesService) {
+	public RemoveCourseFromStudentDialogue(Console inputHandler,
+										   StudentsService studentsService,
+										   CoursesService coursesService,
+										   StudentsCoursesService studentsCoursesService) {
 		this.inputHandler = inputHandler;
 		this.studentsService = studentsService;
 		this.coursesService = coursesService;
@@ -65,36 +64,19 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 					.findAny()
 					.orElseThrow(DialogueException::new);
 		}
-		System.out.println("Available courses for this student: ");
-		List<Course> courses = coursesService.findAll();
-		courses.removeIf(course -> visitedCourses.contains(course.getName()));
-		printAsTableFormat(courses);
+		String courseInput = inputHandler.readString("Enter course name from the list above which you wanna remove from student: ", scanner);
 
-		System.out.println();
-		String courseInput = inputHandler.readString("Enter course name from the list above: ", scanner);
-
-		int courseId = courses.stream()
-				.filter(course -> courseInput.equals(course.getName()) && !visitedCourses.contains(courseInput))
+		int courseId = coursesService.findAll().stream()
+				.filter(course -> courseInput.equals(course.getName()))
 				.mapToInt(Course::getId)
 				.findAny()
-				.orElseThrow(() -> new DialogueException("Student already assign for this course"));
+				.orElseThrow(() -> new DialogueException("There is no course with such name!"));
 
-		StudentCourseDTO studentCourseDTO = new StudentCourseDTO();
-		studentCourseDTO.setStudentId(studentId);
-		studentCourseDTO.setCourseId(courseId);
-
-		studentsCoursesService.save(studentCourseDTO);
+		studentsCoursesService.delete(studentId, courseId);
 
 		System.out.println();
 		System.out.println("Updated " + enteredStudent.getFirstName() + "'s courses");
 		List<String> updatedCourses = coursesService.findAllBy(enteredStudent);
 		updatedCourses.forEach(System.out::println);
-	}
-
-	private void printAsTableFormat(List<Course> courses) {
-		System.out.format("%-15s%-15s%n", "Course name", "Course description");
-		for (Course course : courses) {
-			System.out.format("%-15s%-15s%n", course.getName(), course.getDescription());
-		}
 	}
 }

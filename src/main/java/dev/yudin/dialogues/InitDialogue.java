@@ -12,7 +12,6 @@ import dev.yudin.dao.impl.CoursesDAOImpl;
 import dev.yudin.dao.impl.GroupsDAOImpl;
 import dev.yudin.dao.impl.StudentsCoursesDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
-import dev.yudin.entities.StudentCourseDTO;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import dev.yudin.services.CoursesService;
@@ -38,7 +37,7 @@ public class InitDialogue implements Dialogue {
             + "'c' if you want to ADD NEW STUDENT\n"
             + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
             + "'e' if you want to ADD NEW COURSE TO THE STUDENT (from a list)\n"
-            + "'f' if you want to remove the student from one of his or her courses\n "
+            + "'f' if you want to REMOVE COURSE FROM StUDENT\n "
             + "----------------------------------------------------------------------\n"
             + "Your choice: ";
     private static final String USER_INPUT_MESSAGE = "Enter letter from a to f: ";
@@ -63,7 +62,8 @@ public class InitDialogue implements Dialogue {
     private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService, coursesService);
     private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
     private Dialogue deleteStudentByIdDialogue = new DeleteStudentByIdDialogue(inputHandler, studentsService);
-    private Dialogue addStudentToNewCourseDialogue = new AddExistStudentToNewCourseDialogue(inputHandler, studentsService, coursesService, studentsCoursesService);
+    private Dialogue addNewCourseToStudentDialogue = new AddNewCourseToStudentDialogue(inputHandler, studentsService, coursesService, studentsCoursesService);
+    private Dialogue removeCourseFromStudentDialogue = new RemoveCourseFromStudentDialogue(inputHandler, studentsService, coursesService, studentsCoursesService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -91,13 +91,12 @@ public class InitDialogue implements Dialogue {
         dialogs.put("b", findAllStudentsDialogue);
         dialogs.put("c", addNewStudentDialogue);
         dialogs.put("d", deleteStudentByIdDialogue);
-        dialogs.put("e", addStudentToNewCourseDialogue);
+        dialogs.put("e", addNewCourseToStudentDialogue);
+        dialogs.put("f", removeCourseFromStudentDialogue);
     }
 
     private void startDialogue(Scanner scanner) {
-
         String userInput = getAndValidateUserAnswer(scanner);
-
         Dialogue dialogue = dialogs.get(userInput);
         dialogue.start(scanner);
     }
