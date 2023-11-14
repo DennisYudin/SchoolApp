@@ -4,14 +4,18 @@ import dev.yudin.connection.ConnectionManager;
 import dev.yudin.connection.Manager;
 import dev.yudin.console.Console;
 import dev.yudin.console.InputHandler;
+import dev.yudin.dao.CourseDAO;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.dao.StudentDAO;
+import dev.yudin.dao.impl.CoursesDAOImpl;
 import dev.yudin.dao.impl.GroupsDAOImpl;
 import dev.yudin.dao.impl.StudentsDAOImpl;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
+import dev.yudin.services.CoursesService;
 import dev.yudin.services.GroupsService;
 import dev.yudin.services.StudentsService;
+import dev.yudin.services.impl.CourseServiceImpl;
 import dev.yudin.services.impl.GroupsServiceImpl;
 import dev.yudin.services.impl.StudentsServiceImpl;
 
@@ -45,11 +49,14 @@ public class InitDialogue implements Dialogue {
     Console inputHandler = new InputHandler();
     StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
     StudentsService studentsService = new StudentsServiceImpl(studentDAO);
+    CourseDAO courseDAO = new CoursesDAOImpl(dataSource);
+    CoursesService coursesService = new CourseServiceImpl(courseDAO);
 
     private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
-    private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService);
+    private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService, coursesService);
     private Dialogue addNewStudentDialogue = new AddNewStudentDialogue(inputHandler, studentsService);
-    private Dialogue deleteStudentByIdDialogue = new DeleteByIdStudentDialogue(inputHandler, studentsService);
+    private Dialogue deleteStudentByIdDialogue = new DeleteStudentByIdDialogue(inputHandler, studentsService);
+    private Dialogue addStudentToNewCourseDialogue = new AddExistStudentToNewCourseDialogue(inputHandler, studentsService, coursesService);
     private Map<String, Dialogue> dialogs = new HashMap<>();
 
     @Override
@@ -59,7 +66,7 @@ public class InitDialogue implements Dialogue {
             System.out.println();
             System.out.print(START_DIALOGUE_MESSAGE);
 
-            initDialogues();
+            initAllDialogues();
 
             startDialogue(scanner);
 
@@ -72,11 +79,12 @@ public class InitDialogue implements Dialogue {
         } while (CONTINUE_ANSWER.equals(userAnswer));
     }
 
-    private void initDialogues() {
+    private void initAllDialogues() {
         dialogs.put("a", findAllGroupsDialogue);
         dialogs.put("b", findAllStudentsDialogue);
         dialogs.put("c", addNewStudentDialogue);
         dialogs.put("d", deleteStudentByIdDialogue);
+        dialogs.put("e", addStudentToNewCourseDialogue);
     }
 
     private void startDialogue(Scanner scanner) {
@@ -105,7 +113,6 @@ public class InitDialogue implements Dialogue {
                 throw new IllegalArgumentException(ERROR_MESSAGE);
             }
         } while (!options.contains(userInput));
-
         return userInput;
     }
 }

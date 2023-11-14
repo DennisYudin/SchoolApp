@@ -2,6 +2,7 @@ package dev.yudin.services.impl;
 
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
+import dev.yudin.entities.Student;
 import dev.yudin.exceptions.DAOException;
 import dev.yudin.exceptions.ServiceException;
 import dev.yudin.services.CoursesService;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class CourseServiceImpl implements CoursesService {
 	private final Logger log = LogManager.getLogger(CourseServiceImpl.class);
 	private final CourseDAO courseDAO;
+
 	public CourseServiceImpl(CourseDAO courseDAO) {
 		this.courseDAO = courseDAO;
 	}
@@ -33,6 +35,16 @@ public class CourseServiceImpl implements CoursesService {
 		} catch (DAOException ex) {
 			log.error("Error during findAll()");
 			throw new ServiceException("Error during findAll()");
+		}
+	}
+
+	@Override
+	public List<String> findAllBy(Student student) {
+		try {
+			return courseDAO.findAllBy(student);
+		} catch (DAOException ex) {
+			log.error("Error during findAllBy() by student: " + student.getFirstName());
+			throw new DAOException("Error during findAllBy() by student: " + student.getFirstName());
 		}
 	}
 

@@ -8,7 +8,7 @@ import dev.yudin.services.StudentsService;
 import java.util.Scanner;
 
 public class AddNewStudentDialogue implements Dialogue {
-	public static final String TABLE_TITLE = "Students table:";
+	public static final String TABLE_TITLE = "Updated Student's table:";
 	public static final String STUDENT_MESSAGE = "Enter student's name and last name [Example: Dennis Yudin]: ";
 	public static final String ERROR_MESSAGE = "Already exist in table: [";
 	public static final String INCORRECT_NAME_OR_LAST_NAME_MESSAGE = "Incorrect name or last name";
@@ -22,11 +22,11 @@ public class AddNewStudentDialogue implements Dialogue {
 
 	@Override
 	public void start(Scanner scanner) {
-		var input = inputHandler.readString(STUDENT_MESSAGE, scanner);
+		String input = inputHandler.readString(STUDENT_MESSAGE, scanner);
 
 		String[] preparedInput = input.trim().split("\\s+");
 
-		if (preparedInput.length <= 1) {
+		if (preparedInput.length != 2) {
 			throw new DialogueException(INCORRECT_NAME_OR_LAST_NAME_MESSAGE);
 		}
 		Student newStudent = new Student();

@@ -67,4 +67,23 @@ class StudentsCoursesDAOImplTest {
 
 		assertEquals(expectedDTO, actualDTO);
 	}
+
+	@Test
+	@Order(2)
+	void save_ShouldSaveDataIntoStudentsCoursesTable_WhenInputIsSingleObject() {
+		List<StudentCourseDTO> studentsCoursesTableBefore = studentsCoursesDAO.findAll();
+
+		assumeTrue(studentsCoursesTableBefore.isEmpty());
+
+		StudentCourseDTO expectedDTO = new StudentCourseDTO();
+		expectedDTO.setStudentId(1);
+		expectedDTO.setCourseId(1);
+
+		studentsCoursesDAO.save(expectedDTO);
+
+		List<StudentCourseDTO> studentsCoursesTableAfter = studentsCoursesDAO.findAll();
+		var actualDTO = studentsCoursesTableAfter.get(0);
+
+		assertEquals(expectedDTO, actualDTO);
+	}
 }

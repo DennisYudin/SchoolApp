@@ -8,6 +8,5 @@ public interface StudentsCoursesDAO {
 
 	List<StudentCourseDTO> findAll();
 	void save(List<StudentCourseDTO> studentCourseDTOS);
-
-
+	void save(StudentCourseDTO studentCourseDTO);
 }

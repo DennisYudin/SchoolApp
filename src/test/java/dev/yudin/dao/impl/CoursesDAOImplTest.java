@@ -2,13 +2,13 @@ package dev.yudin.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManagerTesting;
 import dev.yudin.connection.Manager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
+import dev.yudin.entities.Student;
 import dev.yudin.filereader.FileReader;
 import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
@@ -32,52 +32,62 @@ class CoursesDAOImplTest {
 		Runnable scriptRunner = new ScriptExecutor(manager);
 
 		scriptRunner.run("test-databaseStructure.sql");
+		scriptRunner.run("fillGroupTable.sql");
+		scriptRunner.run("fillStudentTable.sql");
+		scriptRunner.run("fillCourseTable.sql");
+		scriptRunner.run("fillStudentsCourseTable.sql");
 
 		coursesDAO = new CoursesDAOImpl(manager);
 	}
 
 	@Test
 	@Order(0)
-	void findAll_ShouldReturnEmptyList_WhenCallMethod() {
+	void findAll_ShouldReturnListCourses_WhenCallMethod() {
 
 		List<Course> actual = coursesDAO.findAll();
 
-		assertTrue(actual.isEmpty());
+		assertFalse(actual.isEmpty());
 	}
 
 	@Test
 	@Order(1)
-	void save_ShouldSaveDataIntoTable_WhenInputIsListOfObjects() {
+	void save_ShouldSaveNewCourseIntoTable_WhenInputIsListOfObjects() {
 		List<Course> coursesTableBefore = coursesDAO.findAll();
 
-		assumeTrue(coursesTableBefore.isEmpty());
+		int actualSizeBeforeChange = coursesTableBefore.size();
+		int expectedTableSize = 2;
+		assumeTrue(actualSizeBeforeChange == expectedTableSize);
 
-		Course course = new Course();
-		course.setName("Algebra");
-		course.setDescription("Something about numbers...");
-		List<Course> courses = List.of(course);
-
-		coursesDAO.save(courses);
-
-		List<Course> coursesTableAfter = coursesDAO.findAll();
-
-		assertFalse(coursesTableAfter.isEmpty());
-	}
-
-	@Test
-	@Order(2)
-	void findAll_ShouldReturnListOfCourses_WhenCallMethod() {
 		Course expectedCourse = new Course();
-		expectedCourse.setId(1);
-		expectedCourse.setName("Algebra");
+		expectedCourse.setName("Biology");
 		expectedCourse.setDescription("Something about numbers...");
 		List<Course> courses = List.of(expectedCourse);
 
 		coursesDAO.save(courses);
 
-		List<Course> actual = coursesDAO.findAll();
-		var actualCourse = actual.get(0);
+		List<Course> coursesTableAfter = coursesDAO.findAll();
+		int actualSizeAfterChange = coursesTableAfter.size();
+		int expectedSize = 3;
 
+		assertEquals(expectedSize, actualSizeAfterChange);
+	}
+
+	@Test
+	@Order(3)
+	void findAll_ShouldReturnListOfCourses_WhenInputIsStudent() {
+		Student student = new Student();
+		student.setFirstName("Dennis");
+		student.setLastName("Yudin");
+
+		List<String> courses = coursesDAO.findAllBy(student);
+
+		int expectedSize = 1;
+		int actualSize = courses.size();
+		System.out.println(courses);
+		assertEquals(expectedSize, actualSize);
+
+		String expectedCourse = "Algebra";
+		String actualCourse = courses.get(0);
 		assertEquals(expectedCourse, actualCourse);
 	}
 }

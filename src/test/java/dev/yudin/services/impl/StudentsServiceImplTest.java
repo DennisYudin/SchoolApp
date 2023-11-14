@@ -46,4 +46,22 @@ class StudentsServiceImplTest {
 		assertTrue(actual.containsKey(new Student("Dennis", "Yudin")));
 		assertEquals(1, actual.get(new Student("Dennis", "Yudin")));
 	}
+
+	@Test
+	void name() {
+		Student expectedStudent = new Student();
+		expectedStudent.setFirstName("Dennis");
+		expectedStudent.setLastName("Yudin");
+
+		studentsService.save(expectedStudent);
+
+		var test = studentsService.findAll().stream()
+				.filter(student -> expectedStudent.equals(student))
+				.mapToInt(Student::getId)
+				.findAny()
+				.orElseThrow();
+
+		System.out.println(test);
+		//todo stop here
+	}
 }

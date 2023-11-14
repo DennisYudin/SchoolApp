@@ -7,11 +7,11 @@ import dev.yudin.services.StudentsService;
 
 import java.util.Scanner;
 
-public class DeleteByIdStudentDialogue implements Dialogue {
+public class DeleteStudentByIdDialogue implements Dialogue {
 	private Console inputHandler;
 	private StudentsService studentsService;
 
-	public DeleteByIdStudentDialogue(Console inputHandler, StudentsService studentsService) {
+	public DeleteStudentByIdDialogue(Console inputHandler, StudentsService studentsService) {
 		this.inputHandler = inputHandler;
 		this.studentsService = studentsService;
 	}
@@ -24,12 +24,12 @@ public class DeleteByIdStudentDialogue implements Dialogue {
 		int id = inputHandler.readInt("Enter student's id from range[1-" + maxLimit + "]: ", scanner);
 		scanner.nextLine();
 
-		var deleteStudent = studentsService.getBy(id);
+		var deletedStudent = studentsService.getBy(id);
 
-		if (deleteStudent.isPresent()) {
+		if (deletedStudent.isPresent()) {
 			studentsService.deleteById(id);
 
-			printAsTableFormat(deleteStudent.get());
+			printAsTableFormat(deletedStudent.get());
 		} else {
 			throw new DialogueException("Did not find student with id = " + id);
 		}
