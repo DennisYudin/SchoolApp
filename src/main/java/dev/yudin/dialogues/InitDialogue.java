@@ -37,7 +37,7 @@ public class InitDialogue implements Dialogue {
             + "'b' if you want to FIND ALL STUDENTS related to course with given name \n"
             + "'c' if you want to ADD NEW STUDENT\n"
             + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
-            + "'e' if you want to add a student to the course (from a list)\n"
+            + "'e' if you want to ADD NEW COURSE TO THE STUDENT (from a list)\n"
             + "'f' if you want to remove the student from one of his or her courses\n "
             + "----------------------------------------------------------------------\n"
             + "Your choice: ";

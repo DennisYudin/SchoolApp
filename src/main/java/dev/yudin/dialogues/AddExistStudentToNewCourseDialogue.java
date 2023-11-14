@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddExistStudentToNewCourseDialogue implements Dialogue {
-	public static final String TABLE_TITLE = "Updated Student's table:";
-	public static final String STUDENT_MESSAGE = "Enter student's name and last name [Example: ";
+	public static final String STUDENT_MESSAGE = "Enter exists student's name and last name [Example: ";
 	public static final String ERROR_MESSAGE = "There is no such student in DB: [";
 	public static final String INCORRECT_NAME_OR_LAST_NAME_MESSAGE = "Incorrect name or last name";
 	private Console inputHandler;
@@ -33,8 +32,8 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 
 	@Override
 	public void start(Scanner scanner) {
-		Student existedStudentInTable = studentsService.getBy(1).orElseThrow(DialogueException::new);
-		String studentNameInput = inputHandler.readString(STUDENT_MESSAGE + existedStudentInTable.getFirstName() + " " + existedStudentInTable.getLastName() + "]: ", scanner);
+		Student exampleStudent = studentsService.getBy(1).orElseThrow(DialogueException::new);
+		String studentNameInput = inputHandler.readString(STUDENT_MESSAGE + exampleStudent.getFirstName() + " " + exampleStudent.getLastName() + "]: ", scanner);
 
 		String[] preparedInput = studentNameInput.trim().split("\\s+");
 
@@ -45,6 +44,7 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 		enteredStudent.setFirstName(preparedInput[0]);
 		enteredStudent.setLastName(preparedInput[1]);
 
+		System.out.println();
 		System.out.println(enteredStudent.getFirstName() + "'s current courses:");
 		List<String> visitedCourses = coursesService.findAllBy(enteredStudent);
 		if (visitedCourses.isEmpty()) {
@@ -65,17 +65,19 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 					.findAny()
 					.orElseThrow(DialogueException::new);
 		}
-		System.out.println("Please pick the course");
+		System.out.println("Available courses for this student: ");
 		List<Course> courses = coursesService.findAll();
+		courses.removeIf(course -> visitedCourses.contains(course.getName()));
 		printAsTableFormat(courses);
 
+		System.out.println();
 		String courseInput = inputHandler.readString("Enter course name from the list above: ", scanner);
 
 		int courseId = courses.stream()
-				.filter(course -> courseInput.equals(course.getName()))
+				.filter(course -> courseInput.equals(course.getName()) && !visitedCourses.contains(courseInput))
 				.mapToInt(Course::getId)
 				.findAny()
-				.orElseThrow(DialogueException::new);
+				.orElseThrow(() -> new DialogueException("Student already assign for this course"));
 
 		StudentCourseDTO studentCourseDTO = new StudentCourseDTO();
 		studentCourseDTO.setStudentId(studentId);
@@ -83,6 +85,7 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 
 		studentsCoursesService.save(studentCourseDTO);
 
+		System.out.println();
 		System.out.println("Updated " + enteredStudent.getFirstName() + "'s courses");
 		List<String> updatedCourses = coursesService.findAllBy(enteredStudent);
 		updatedCourses.forEach(System.out::println);
@@ -90,7 +93,7 @@ public class AddExistStudentToNewCourseDialogue implements Dialogue {
 
 	private void printAsTableFormat(List<Course> courses) {
 		System.out.format("%-15s%-15s%n", "Course name", "Course description");
-		for (var course : courses) {
+		for (Course course : courses) {
 			System.out.format("%-15s%-15s%n", course.getName(), course.getDescription());
 		}
 	}
