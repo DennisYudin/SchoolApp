@@ -53,7 +53,6 @@ public class GroupsDAOImpl implements GroupDAO {
 				groups.add(group);
 			}
 			return groups;
-
 		} catch (SQLException e) {
 			log.error("Error during findAll() call");
 			throw new DAOException("Error during findAll() call", e);
@@ -97,10 +96,10 @@ public class GroupsDAOImpl implements GroupDAO {
 
 				result.add(dto);
 			}
+			return result;
 		} catch (SQLException e) {
 			log.error("Error during findAll() for amount of students: " + amountStudents);
 			throw new DAOException("Error during findAll() for amount of students: " + amountStudents, e);
 		}
-		return result;
 	}
 }

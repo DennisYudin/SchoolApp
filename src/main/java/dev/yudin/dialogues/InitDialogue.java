@@ -47,16 +47,16 @@ public class InitDialogue implements Dialogue {
     private static final String ERROR_MESSAGE = "Unfortunately the number of attempts exceeded";
     public static final String CONTINUE_ANSWER = "yes";
     private Reader reader = new FileReader();
-    Manager dataSource = new ConnectionManager(reader);
-    GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
-    GroupsService groupsService = new GroupsServiceImpl(groupDAO);
-    Console inputHandler = new InputHandler();
-    StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
-    StudentsService studentsService = new StudentsServiceImpl(studentDAO);
-    CourseDAO courseDAO = new CoursesDAOImpl(dataSource);
-    CoursesService coursesService = new CourseServiceImpl(courseDAO);
-    StudentsCoursesDAO studentsCoursesDAO = new StudentsCoursesDAOImpl(dataSource);
-    StudentsCoursesService studentsCoursesService = new StudentsCoursesServiceImpl(studentsCoursesDAO);
+    private Manager dataSource = new ConnectionManager(reader);
+    private GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
+    private GroupsService groupsService = new GroupsServiceImpl(groupDAO);
+    private Console inputHandler = new InputHandler();
+    private StudentDAO studentDAO = new StudentsDAOImpl(dataSource);
+    private StudentsService studentsService = new StudentsServiceImpl(studentDAO);
+    private CourseDAO courseDAO = new CoursesDAOImpl(dataSource);
+    private CoursesService coursesService = new CourseServiceImpl(courseDAO);
+    private StudentsCoursesDAO studentsCoursesDAO = new StudentsCoursesDAOImpl(dataSource);
+    private StudentsCoursesService studentsCoursesService = new StudentsCoursesServiceImpl(studentsCoursesDAO);
 
     private Dialogue findAllGroupsDialogue = new FindAllGroupsDialogue(inputHandler, groupsService);
     private Dialogue findAllStudentsDialogue = new FindAllStudentsDialogue(inputHandler, studentsService, coursesService);

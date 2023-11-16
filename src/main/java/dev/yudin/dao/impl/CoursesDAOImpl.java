@@ -71,11 +71,11 @@ public class CoursesDAOImpl implements CourseDAO {
 			while (resultSet.next()) {
 				result.add(resultSet.getString("name"));
 			}
+			return result;
 		} catch (SQLException e) {
 			log.error("Error during findAllBy() by student: " + student.getFirstName());
 			throw new DAOException("Error during findAllBy() by student: " + student.getFirstName());
 		}
-		return result;
 	}
 
 	@Override
