@@ -59,8 +59,7 @@ public class StudentsDAOImpl implements StudentDAO {
 				student.setLastName(lstName);
 				student.setGroupId(groupId);
 			}
-			if (student.getLastName() == null
-					|| student.getFirstName() == null) {
+			if (student.getLastName() == null || student.getFirstName() == null) {
 				return Optional.empty();
 			} else {
 				return Optional.of(student);
@@ -169,11 +168,11 @@ public class StudentsDAOImpl implements StudentDAO {
 
 				result.add(student);
 			}
+			return result;
 		} catch (SQLException e) {
 			log.error("Error during findAllBy() course name: " + courseName);
 			throw new DAOException("Error during findAllBy() course name: " + courseName);
 		}
-		return result;
 	}
 
 	@Override

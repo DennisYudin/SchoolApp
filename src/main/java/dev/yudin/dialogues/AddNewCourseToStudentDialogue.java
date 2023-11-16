@@ -56,14 +56,14 @@ public class AddNewCourseToStudentDialogue implements Dialogue {
 
 		List<Student> actualStudentsInTable = studentsService.findAll();
 		int studentId = 0;
-		if (!actualStudentsInTable.contains(enteredStudent)) {
-			System.out.println(ERROR_MESSAGE + enteredStudent.getFirstName() + " " + enteredStudent.getLastName() + "]");
-		} else {
+		if (actualStudentsInTable.contains(enteredStudent)) {
 			studentId = studentsService.findAll().stream()
 					.filter(enteredStudent::equals)
 					.mapToInt(Student::getId)
 					.findAny()
 					.orElseThrow(DialogueException::new);
+		} else {
+			System.out.println(ERROR_MESSAGE + enteredStudent.getFirstName() + " " + enteredStudent.getLastName() + "]");
 		}
 		System.out.println("Available courses for this student: ");
 		List<Course> courses = coursesService.findAll();
