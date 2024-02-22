@@ -38,8 +38,8 @@ public class InitDialogue implements Dialogue {
             + "'d' if you want to DELETE STUDENT by STUDENT_ID\n"
             + "'e' if you want to ADD NEW COURSE TO THE STUDENT (from a list)\n"
             + "'f' if you want to REMOVE COURSE FROM StUDENT\n "
-            + "----------------------------------------------------------------------\n"
-            + "Your choice: ";
+            + "----------------------------------------------------------------------\n";
+
     private static final String USER_INPUT_MESSAGE = "Enter letter from a to f: ";
     private static final String REPEAT_MESSAGE = "Enter [yes] if you want to try again";
     private static final String USER_ANSWER = "Answer: ";
