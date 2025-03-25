@@ -27,7 +27,6 @@ public class ConnectionManager implements Manager {
 
 		Connection conn;
 		try {
-			DriverManager.registerDriver(new org.h2.Driver());
 			conn = DriverManager.getConnection(url);
 			return conn;
 		} catch (SQLException e) {

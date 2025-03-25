@@ -22,7 +22,6 @@ public class ConnectionManagerTesting implements Manager {
 
 		Connection conn;
 		try {
-			DriverManager.registerDriver(new org.h2.Driver());
 			conn = DriverManager.getConnection(url);
 		} catch (SQLException e) {
 			throw new ConnectionException("Could not establish connection with database", e);
