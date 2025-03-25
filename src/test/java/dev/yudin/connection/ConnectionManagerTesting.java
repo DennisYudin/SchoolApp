@@ -18,15 +18,12 @@ public class ConnectionManagerTesting implements Manager {
 
 	@Override
 	public Connection getConnection() {
-		String driver = reader.getPropValue("test.db.driver", PROPERTIES_TEST_FILE);
 		String url = reader.getPropValue("test.db.url", PROPERTIES_TEST_FILE);
 
 		Connection conn;
 		try {
-			Class.forName(driver);
+			DriverManager.registerDriver(new org.h2.Driver());
 			conn = DriverManager.getConnection(url);
-		} catch (ClassNotFoundException e) {
-			throw new ConnectionException("Problem with jdbcDriver", e);
 		} catch (SQLException e) {
 			throw new ConnectionException("Could not establish connection with database", e);
 		}

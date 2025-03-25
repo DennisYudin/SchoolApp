@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class FileReaderTest {
-	public static final String PROPERTIES_TEST_FILE = "test-application.properties";
 	private final Reader reader = new FileReader();
 
 	@Test
@@ -22,14 +21,5 @@ class FileReaderTest {
 		String actualSurname = surnames.get(surnames.size() - 1);
 
 		assertEquals(expectedSurname, actualSurname);
-	}
-
-	@Test
-	void getValue_ShouldReadValueFromApplicationFile_WhenInputIsValueName() {
-
-		var actual = reader.getPropValue("test.db.driver", PROPERTIES_TEST_FILE);
-		String expected = "org.h2.Driver";
-
-		assertEquals(expected, actual);
 	}
 }
