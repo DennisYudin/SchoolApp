@@ -59,7 +59,7 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 			for (var studentCourseDTO : studentCourseDTOS) {
 				statement.setInt(1, studentCourseDTO.getStudentId());
 				statement.setInt(2, studentCourseDTO.getCourseId());
-				statement.execute();
+				statement.executeUpdate();
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save()");
@@ -75,7 +75,7 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 
 			statement.setInt(1, studentCourseDTO.getStudentId());
 			statement.setInt(2, studentCourseDTO.getCourseId());
-			statement.execute();
+			statement.executeUpdate();
 
 		} catch (SQLException ex) {
 			log.error("Error during save()");
@@ -90,7 +90,7 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 
 			statement.setInt(1, studentId);
 			statement.setInt(2, courseId);
-			statement.execute();
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error during delete()");
 			throw new DAOException("Error during delete()", e);

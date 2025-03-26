@@ -116,7 +116,7 @@ public class StudentsDAOImpl implements StudentDAO {
 				} else {
 					statement.setInt(3, groupId);
 				}
-				statement.execute();
+				statement.executeUpdate();
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save list of students");
@@ -140,7 +140,7 @@ public class StudentsDAOImpl implements StudentDAO {
 			} else {
 				statement.setInt(3, groupId);
 			}
-			statement.execute();
+			statement.executeUpdate();
 		} catch (SQLException ex) {
 			log.error("Error during save single student");
 			throw new DAOException("Error during save single student", ex);
@@ -179,10 +179,8 @@ public class StudentsDAOImpl implements StudentDAO {
 	public void deleteById(int id) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_BY_ID_SQL)) {
-
 			statement.setInt(1, id);
-			statement.execute();
-
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error during delete by id: " + id);
 			throw new DAOException("Error during delete by id: " + id, e);

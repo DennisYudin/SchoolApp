@@ -90,7 +90,7 @@ public class CoursesDAOImpl implements CourseDAO {
 
 				statement.setString(1, name);
 				statement.setString(2, description);
-				statement.execute();
+				statement.executeUpdate();
 			}
 		} catch (SQLException ex) {
 			log.error("Error during save() call");
