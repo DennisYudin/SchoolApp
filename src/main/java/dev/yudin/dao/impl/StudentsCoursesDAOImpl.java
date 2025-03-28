@@ -59,8 +59,9 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 			for (var studentCourseDTO : studentCourseDTOS) {
 				statement.setInt(1, studentCourseDTO.getStudentId());
 				statement.setInt(2, studentCourseDTO.getCourseId());
-				statement.executeUpdate();
+				statement.addBatch();
 			}
+			statement.executeBatch();
 		} catch (SQLException ex) {
 			log.error("Error during save()");
 			throw new DAOException("Error during save()", ex);

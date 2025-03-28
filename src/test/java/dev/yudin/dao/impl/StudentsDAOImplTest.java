@@ -14,6 +14,7 @@ import dev.yudin.filereader.Reader;
 import dev.yudin.script_runner.Runnable;
 import dev.yudin.script_runner.ScriptExecutor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,12 @@ class StudentsDAOImplTest {
 		scriptRunner.run("fillStudentsCourseTable.sql");
 
 		studentDAO = new StudentsDAOImpl(manager);
+	}
+
+	@Test
+	@Disabled
+	void name() {
+		studentDAO.findAllTest();
 	}
 
 	@Test

@@ -14,4 +14,5 @@ public interface StudentDAO {
 	void save(Student student);
 	List<StudentDTO> findAllBy(String courseName);
 	void deleteById(int id);
+	public void findAllTest();
 }

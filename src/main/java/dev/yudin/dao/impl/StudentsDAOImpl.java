@@ -40,6 +40,17 @@ public class StudentsDAOImpl implements StudentDAO {
 	}
 
 	@Override
+	public void findAllTest() {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+
+			var result = statement.executeUpdate(); //SELECT + executeUpdate() wrong way => SQL exception
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public Optional<Student> getBy(int id) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
@@ -116,8 +127,9 @@ public class StudentsDAOImpl implements StudentDAO {
 				} else {
 					statement.setInt(3, groupId);
 				}
-				statement.executeUpdate();
+				statement.addBatch();
 			}
+			statement.executeBatch();
 		} catch (SQLException ex) {
 			log.error("Error during save list of students");
 			throw new DAOException("Error during save list of students", ex);
