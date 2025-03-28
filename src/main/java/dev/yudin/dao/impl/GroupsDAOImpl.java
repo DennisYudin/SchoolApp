@@ -66,8 +66,9 @@ public class GroupsDAOImpl implements GroupDAO {
 					 INSERT_INTO_GROUPS_TABLES_SQL, Statement.RETURN_GENERATED_KEYS)) {
 			for (String name : groups) {
 				statement.setString(1, name);
-				statement.execute();
+				statement.addBatch();
 			}
+			statement.executeBatch();
 		} catch (SQLException ex) {
 			log.error("Error during save()");
 			throw new DAOException("Error during save()", ex);

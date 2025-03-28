@@ -80,8 +80,8 @@ public class CoursesDAOImpl implements CourseDAO {
 
 	@Override
 	public void save(List<Course> courses) {
-		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement statement = connection.prepareStatement(
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(
 					 INSERT_INTO_COURSES_TABLE_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
 			for (Course course : courses) {
@@ -90,8 +90,10 @@ public class CoursesDAOImpl implements CourseDAO {
 
 				statement.setString(1, name);
 				statement.setString(2, description);
-				statement.execute();
+
+				statement.addBatch();
 			}
+			statement.executeBatch();
 		} catch (SQLException ex) {
 			log.error("Error during save() call");
 			throw new DAOException("Error during save() call", ex);

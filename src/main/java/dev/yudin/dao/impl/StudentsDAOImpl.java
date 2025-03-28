@@ -40,6 +40,17 @@ public class StudentsDAOImpl implements StudentDAO {
 	}
 
 	@Override
+	public void findAllTest() {
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+
+			var result = statement.executeUpdate(); //SELECT + executeUpdate() wrong way => SQL exception
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public Optional<Student> getBy(int id) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
@@ -116,8 +127,9 @@ public class StudentsDAOImpl implements StudentDAO {
 				} else {
 					statement.setInt(3, groupId);
 				}
-				statement.execute();
+				statement.addBatch();
 			}
+			statement.executeBatch();
 		} catch (SQLException ex) {
 			log.error("Error during save list of students");
 			throw new DAOException("Error during save list of students", ex);
@@ -140,7 +152,7 @@ public class StudentsDAOImpl implements StudentDAO {
 			} else {
 				statement.setInt(3, groupId);
 			}
-			statement.execute();
+			statement.executeUpdate();
 		} catch (SQLException ex) {
 			log.error("Error during save single student");
 			throw new DAOException("Error during save single student", ex);
@@ -179,10 +191,8 @@ public class StudentsDAOImpl implements StudentDAO {
 	public void deleteById(int id) {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_BY_ID_SQL)) {
-
 			statement.setInt(1, id);
-			statement.execute();
-
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error during delete by id: " + id);
 			throw new DAOException("Error during delete by id: " + id, e);

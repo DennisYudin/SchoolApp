@@ -6,6 +6,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -22,17 +23,12 @@ public class ConnectionManager implements Manager {
 
 	@Override
 	public Connection getConnection() {
-		var driver = reader.getPropValue(DB_DRIVER, PROPERTIES_FILE);
 		var url = reader.getPropValue(DB_URL, PROPERTIES_FILE);
 
 		Connection conn;
 		try {
-			Class.forName(driver);
 			conn = DriverManager.getConnection(url);
 			return conn;
-		} catch (ClassNotFoundException e) {
-			log.error("Problem with jdbcDriver");
-			throw new ConnectionException("Problem with jdbcDriver", e);
 		} catch (SQLException e) {
 			log.error("Could not establish connection with database");
 			throw new ConnectionException("Could not establish connection with database", e);
