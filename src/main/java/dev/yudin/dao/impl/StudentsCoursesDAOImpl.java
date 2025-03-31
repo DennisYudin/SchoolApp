@@ -16,10 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
+	public static final String STUDENT_ID_COLUMN = "student_id";
+	public static final String COURSE_ID_COLUMN = "course_id";
 	private final Logger log = LogManager.getLogger(StudentsCoursesDAOImpl.class);
-	public static final String FIND_ALL_SQL = "SELECT * FROM students_courses";
+
+	public static final String FIND_ALL_SQL = "SELECT student_id, course_id FROM students_courses";
 	public static final String INSERT_INTO_TABLES_SQL = "INSERT INTO students_courses (student_id, course_id) VALUES(?,?)";
 	public static final String DELETE_RECORD_FROM_TABLE_SQL = "DELETE FROM students_courses WHERE student_id = ? AND course_id = ?";
+
 	private final Manager dataSource;
 
 	public StudentsCoursesDAOImpl(Manager dataSource) {
@@ -30,14 +34,14 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 	public List<StudentCourseDTO> findAll() {
 		List<StudentCourseDTO> dtos = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection();
-			 Statement statement = connection.createStatement();
-			 ResultSet resultSet = statement.executeQuery(FIND_ALL_SQL)) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_SQL);
+			 ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
 				StudentCourseDTO dto = new StudentCourseDTO();
 
-				int studentId = resultSet.getInt("student_id");
-				int courseId = resultSet.getInt("course_id");
+				int studentId = resultSet.getInt(STUDENT_ID_COLUMN);
+				int courseId = resultSet.getInt(COURSE_ID_COLUMN);
 
 				dto.setStudentId(studentId);
 				dto.setCourseId(courseId);

@@ -19,13 +19,10 @@ public class ConnectionManagerTesting implements Manager {
 	@Override
 	public Connection getConnection() {
 		String url = reader.getPropValue("test.db.url", PROPERTIES_TEST_FILE);
-
-		Connection conn;
 		try {
-			conn = DriverManager.getConnection(url);
+			return DriverManager.getConnection(url);
 		} catch (SQLException e) {
 			throw new ConnectionException("Could not establish connection with database", e);
 		}
-		return conn;
 	}
 }

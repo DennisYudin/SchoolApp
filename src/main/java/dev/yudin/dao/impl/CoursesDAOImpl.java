@@ -4,7 +4,6 @@ import dev.yudin.connection.Manager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
-import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -18,8 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoursesDAOImpl implements CourseDAO {
+	public static final String NAME_COLUMN = "name";
+	public static final String ID_COLUMN = "id";
+	public static final String DESC_COLUMN = "description";
 	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
-	public static final String FIND_ALL_SQL = "SELECT * FROM courses";
+	public static final String FIND_ALL_SQL = "SELECT id, name, description FROM courses";
 	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
 	private static final String FIND_ALL_BY_STUDENT_SQL =
 			"SELECT courses_table.name FROM courses AS courses_table\n" +
@@ -36,15 +38,15 @@ public class CoursesDAOImpl implements CourseDAO {
 	public List<Course> findAll() {
 		List <Course> courses = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection();
-			 Statement statement = connection.createStatement();
-			 ResultSet resultSet = statement.executeQuery(FIND_ALL_SQL)) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_SQL);
+			 ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
 				Course course = new Course();
 
-				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
-				String desc = resultSet.getString("description");
+				int id = resultSet.getInt(ID_COLUMN);
+				String name = resultSet.getString(NAME_COLUMN);
+				String desc = resultSet.getString(DESC_COLUMN);
 
 				course.setId(id);
 				course.setName(name);
@@ -54,8 +56,8 @@ public class CoursesDAOImpl implements CourseDAO {
 			}
 			return courses;
 		} catch (SQLException e) {
-			log.error("Error during findAll() call");
-			throw new DAOException("Error during findAll() call", e);
+			log.error("Error during getting all courses");
+			throw new DAOException("Error during getting all courses", e);
 		}
 	}
 
@@ -63,18 +65,19 @@ public class CoursesDAOImpl implements CourseDAO {
 	public List<String> findAllBy(Student student) {
 		List<String> result = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_STUDENT_SQL)) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_STUDENT_SQL)) {
 			statement.setString(1, student.getFirstName());
 			statement.setString(2, student.getLastName());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				result.add(resultSet.getString("name"));
+				String name = resultSet.getString(NAME_COLUMN);
+				result.add(name);
 			}
 			return result;
 		} catch (SQLException e) {
-			log.error("Error during findAllBy() by student: " + student.getFirstName());
-			throw new DAOException("Error during findAllBy() by student: " + student.getFirstName());
+			log.error("Error during getting all courses by student: " + student);
+			throw new DAOException("Error during getting all courses by student: " + student);
 		}
 	}
 
@@ -95,8 +98,8 @@ public class CoursesDAOImpl implements CourseDAO {
 			}
 			statement.executeBatch();
 		} catch (SQLException ex) {
-			log.error("Error during save() call");
-			throw new DAOException("Error during save() call", ex);
+			log.error("Error during saving...");
+			throw new DAOException("Error during saving...", ex);
 		}
 	}
 }
