@@ -18,9 +18,13 @@ import java.util.List;
 
 public class GroupsDAOImpl implements GroupDAO {
 	private final Logger log = LogManager.getLogger(GroupsDAOImpl.class);
+
+	public static final String ID_COLUMN = "id";
+	public static final String NAME_COLUMN = "name";
+
 	public static final String INSERT_INTO_GROUPS_TABLES_SQL = "INSERT INTO groups (name) VALUES(?)";
-	public static final String FIND_ALL_SQL = "SELECT * FROM groups";
-	public static final String FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENTS_COUNT_SQL =
+	public static final String FIND_ALL_SQL = "SELECT id, name FROM groups";
+	public static final String FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENTS_SQL =
 			"SELECT name,\n" +
 					"    COUNT(*)\n" +
 					"FROM groups\n" +
@@ -28,6 +32,7 @@ public class GroupsDAOImpl implements GroupDAO {
 					"GROUP BY name\n" +
 					"HAVING COUNT(*) <= ?\n" +
 					"ORDER BY name";
+
 	private final Manager dataSource;
 
 	public GroupsDAOImpl(Manager dataSource) {
@@ -38,14 +43,14 @@ public class GroupsDAOImpl implements GroupDAO {
 	public List<Group> findAll() {
 		List<Group> groups = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection();
-			 Statement statement = connection.createStatement();
-			 ResultSet resultSet = statement.executeQuery(FIND_ALL_SQL)) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_SQL);
+			 ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
 				Group group = new Group();
 
-				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
+				int id = resultSet.getInt(ID_COLUMN);
+				String name = resultSet.getString(NAME_COLUMN);
 
 				group.setId(id);
 				group.setName(name);
@@ -54,8 +59,8 @@ public class GroupsDAOImpl implements GroupDAO {
 			}
 			return groups;
 		} catch (SQLException e) {
-			log.error("Error during findAll() call");
-			throw new DAOException("Error during findAll() call", e);
+			log.error("Error during getting all groups");
+			throw new DAOException("Error during getting all groups", e);
 		}
 	}
 
@@ -70,8 +75,8 @@ public class GroupsDAOImpl implements GroupDAO {
 			}
 			statement.executeBatch();
 		} catch (SQLException ex) {
-			log.error("Error during save()");
-			throw new DAOException("Error during save()", ex);
+			log.error("Error during saving...");
+			throw new DAOException("Error during saving...", ex);
 		}
 	}
 
@@ -81,7 +86,7 @@ public class GroupsDAOImpl implements GroupDAO {
 
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(
-					 FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENTS_COUNT_SQL)) {
+					 FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENTS_SQL)) {
 
 			statement.setInt(1, amountStudents);
 
@@ -99,8 +104,8 @@ public class GroupsDAOImpl implements GroupDAO {
 			}
 			return result;
 		} catch (SQLException e) {
-			log.error("Error during findAll() for amount of students: " + amountStudents);
-			throw new DAOException("Error during findAll() for amount of students: " + amountStudents, e);
+			log.error("Error during getting all groups for amount of students: " + amountStudents);
+			throw new DAOException("Error during getting all groups for amount of students: " + amountStudents, e);
 		}
 	}
 }

@@ -4,7 +4,6 @@ import dev.yudin.connection.Manager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
-import dev.yudin.entities.StudentDTO;
 import dev.yudin.exceptions.DAOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -22,7 +21,7 @@ public class CoursesDAOImpl implements CourseDAO {
 	public static final String ID_COLUMN = "id";
 	public static final String DESC_COLUMN = "description";
 	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
-	public static final String FIND_ALL_SQL = "SELECT * FROM courses";
+	public static final String FIND_ALL_SQL = "SELECT id, name, description FROM courses";
 	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
 	private static final String FIND_ALL_BY_STUDENT_SQL =
 			"SELECT courses_table.name FROM courses AS courses_table\n" +
@@ -39,9 +38,9 @@ public class CoursesDAOImpl implements CourseDAO {
 	public List<Course> findAll() {
 		List <Course> courses = new ArrayList<>();
 
-		try (Connection connection = dataSource.getConnection();
-			 Statement statement = connection.createStatement();
-			 ResultSet resultSet = statement.executeQuery(FIND_ALL_SQL)) {
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_SQL);
+			 ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
 				Course course = new Course();
 
@@ -72,7 +71,8 @@ public class CoursesDAOImpl implements CourseDAO {
 			statement.setString(2, student.getLastName());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				result.add(resultSet.getString(NAME_COLUMN));
+				String name = resultSet.getString(NAME_COLUMN);
+				result.add(name);
 			}
 			return result;
 		} catch (SQLException e) {

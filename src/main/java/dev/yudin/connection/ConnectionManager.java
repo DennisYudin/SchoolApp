@@ -23,12 +23,9 @@ public class ConnectionManager implements Manager {
 
 	@Override
 	public Connection getConnection() {
-		var url = reader.getPropValue(DB_URL, PROPERTIES_FILE);
-
-		Connection conn;
+		String url = reader.getPropValue(DB_URL, PROPERTIES_FILE);
 		try {
-			conn = DriverManager.getConnection(url);
-			return conn;
+			return DriverManager.getConnection(url);
 		} catch (SQLException e) {
 			log.error("Could not establish connection with database");
 			throw new ConnectionException("Could not establish connection with database", e);
