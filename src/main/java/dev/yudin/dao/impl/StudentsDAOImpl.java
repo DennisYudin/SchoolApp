@@ -20,9 +20,15 @@ import java.util.Optional;
 
 public class StudentsDAOImpl implements StudentDAO {
 	private final Logger log = LogManager.getLogger(StudentsDAOImpl.class);
+
+	public static final String ID_COLUMN = "id";
+	public static final String FIRST_NAME_COLUMN = "first_name";
+	public static final String LAST_NAME_COLUMN = "last_name";
+	public static final String GROUP_ID_COLUMN = "group_id";
+
 	private static final String INSERT_INTO_STUDENTS_TABLE_SQL = "INSERT INTO students (first_name, last_name, group_id) VALUES(?,?,?)";
-	private static final String FIND_ALL_SQL = "SELECT * FROM students";
-	private static final String GET_STUDENT_BY_ID_SQL = "SELECT * FROM students WHERE id = ?";
+	private static final String FIND_ALL_SQL = "SELECT id, first_name, last_name, group_id FROM students";
+	private static final String GET_STUDENT_BY_ID_SQL = "SELECT id, first_name, last_name, group_id FROM students WHERE id = ?";
 	private static final String DELETE_STUDENT_BY_ID_SQL = "DELETE FROM students WHERE id = ?";
 	private static final String FIND_ALL_BY_COURSE_NAME_SQL =
 			"SELECT students_table.id,\n" +
@@ -33,6 +39,7 @@ public class StudentsDAOImpl implements StudentDAO {
 					"JOIN students_courses AS students_courses_table ON students_table.id = students_courses_table.student_id\n" +
 					"JOIN courses AS courses_table ON courses_table.id = students_courses_table.course_id\n" +
 					"WHERE courses_table.name = ?";
+
 	private final Manager dataSource;
 
 	public StudentsDAOImpl(Manager dataSource) {
@@ -40,7 +47,7 @@ public class StudentsDAOImpl implements StudentDAO {
 	}
 
 	@Override
-	public void findAllTest() {
+	public void findAllTest() { // test purpose
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
 
@@ -52,28 +59,28 @@ public class StudentsDAOImpl implements StudentDAO {
 
 	@Override
 	public Optional<Student> getBy(int id) {
-		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement statement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
+		try (Connection con = dataSource.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
+			stmt.setInt(1, id);
 
-			statement.setInt(1, id);
-			ResultSet resultSet = statement.executeQuery();
+			try(ResultSet resultSet = stmt.executeQuery()) {
+				Student student = new Student();
+				while (resultSet.next()) {
+					int idFromTable = resultSet.getInt(ID_COLUMN);
+					String firstName = resultSet.getString(FIRST_NAME_COLUMN);
+					String lstName = resultSet.getString(LAST_NAME_COLUMN);
+					int groupId = resultSet.getInt(GROUP_ID_COLUMN);
 
-			Student student = new Student();
-			while (resultSet.next()) {
-				int idFromTable = resultSet.getInt("id");
-				String firstName = resultSet.getString("first_name");
-				String lstName = resultSet.getString("last_name");
-				int groupId = resultSet.getInt("group_id");
-
-				student.setId(idFromTable);
-				student.setFirstName(firstName);
-				student.setLastName(lstName);
-				student.setGroupId(groupId);
-			}
-			if (student.getLastName() == null || student.getFirstName() == null) {
-				return Optional.empty();
-			} else {
-				return Optional.of(student);
+					student.setId(idFromTable);
+					student.setFirstName(firstName);
+					student.setLastName(lstName);
+					student.setGroupId(groupId);
+				}
+				if (student.getLastName() == null || student.getFirstName() == null) {
+					return Optional.empty();
+				} else {
+					return Optional.of(student);
+				}
 			}
 		} catch (SQLException e) {
 			log.error("Error during getBy()");
@@ -91,10 +98,10 @@ public class StudentsDAOImpl implements StudentDAO {
 			while (resultSet.next()) {
 				Student student = new Student();
 
-				int id = resultSet.getInt("id");
-				String firstName = resultSet.getString("first_name");
-				String lstName = resultSet.getString("last_name");
-				int groupId = resultSet.getInt("group_id");
+				int id = resultSet.getInt(ID_COLUMN);
+				String firstName = resultSet.getString(FIRST_NAME_COLUMN);
+				String lstName = resultSet.getString(LAST_NAME_COLUMN);
+				int groupId = resultSet.getInt(GROUP_ID_COLUMN);
 
 				student.setId(id);
 				student.setFirstName(firstName);
@@ -170,9 +177,9 @@ public class StudentsDAOImpl implements StudentDAO {
 			while (resultSet.next()) {
 				StudentDTO student = new StudentDTO();
 
-				int studentId = resultSet.getInt("id");
-				String studentName = resultSet.getString("first_name");
-				String studentLastName = resultSet.getString("last_name");
+				int studentId = resultSet.getInt(ID_COLUMN);
+				String studentName = resultSet.getString(FIRST_NAME_COLUMN);
+				String studentLastName = resultSet.getString(LAST_NAME_COLUMN);
 
 				student.setId(studentId);
 				student.setFirstName(studentName);
