@@ -5,8 +5,9 @@ import dev.yudin.entities.Student;
 
 import java.util.List;
 
-public interface CourseDAO extends GenericDAO {
-	List<Course> findAll();
+public interface CourseDAO extends GenericDAO<Course> {
+
 	List<String> findAllBy(Student student);
+
 	void save(List<Course> courses);
 }

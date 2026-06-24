@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.yudin.connection.ConnectionManagerTesting;
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.dao.impl.CoursesDAOImpl;
 import dev.yudin.entities.Course;
@@ -24,7 +24,7 @@ class CourseServiceImplTest {
 	@BeforeEach
 	public void setUp() {
 		Reader reader = new FileReader();
-		Manager dataSource = new ConnectionManagerTesting(reader);
+		ConnectionManager dataSource = new ConnectionManagerTesting(reader);
 		Runnable scriptRunner = new ScriptExecutor(dataSource);
 
 		scriptRunner.run("test-databaseStructure.sql");

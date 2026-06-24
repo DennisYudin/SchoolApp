@@ -1,6 +1,6 @@
 package dev.yudin.dao.impl;
 
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.StudentsCoursesDAO;
 import dev.yudin.entities.StudentCourseDTO;
 import dev.yudin.exceptions.DAOException;
@@ -24,9 +24,9 @@ public class StudentsCoursesDAOImpl implements StudentsCoursesDAO {
 	public static final String INSERT_INTO_TABLES_SQL = "INSERT INTO students_courses (student_id, course_id) VALUES(?,?)";
 	public static final String DELETE_RECORD_FROM_TABLE_SQL = "DELETE FROM students_courses WHERE student_id = ? AND course_id = ?";
 
-	private final Manager dataSource;
+	private final ConnectionManager dataSource;
 
-	public StudentsCoursesDAOImpl(Manager dataSource) {
+	public StudentsCoursesDAOImpl(ConnectionManager dataSource) {
 		this.dataSource = dataSource;
 	}
 

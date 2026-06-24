@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.yudin.connection.ConnectionManagerTesting;
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
 import dev.yudin.entities.GroupsAmountStudentDTO;
@@ -28,14 +28,14 @@ class GroupsDAOImplTest {
 	@BeforeEach
 	public void setUp() {
 		Reader reader = new FileReader();
-		Manager manager = new ConnectionManagerTesting(reader);
-		Runnable scriptRunner = new ScriptExecutor(manager);
+		ConnectionManager connectionManager = new ConnectionManagerTesting(reader);
+		Runnable scriptRunner = new ScriptExecutor(connectionManager);
 
 		scriptRunner.run("test-databaseStructure.sql");
 		scriptRunner.run("fillGroupTable.sql");
 		scriptRunner.run("fillStudentTable.sql");
 
-		groupsDAO = new GroupsDAOImpl(manager);
+		groupsDAO = new GroupsDAOImpl(connectionManager);
 	}
 
 	@Test

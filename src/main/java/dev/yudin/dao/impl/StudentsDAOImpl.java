@@ -1,6 +1,6 @@
 package dev.yudin.dao.impl;
 
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.StudentDAO;
 import dev.yudin.entities.Student;
 import dev.yudin.entities.StudentDTO;
@@ -40,9 +40,9 @@ public class StudentsDAOImpl implements StudentDAO {
 					"JOIN courses AS courses_table ON courses_table.id = students_courses_table.course_id\n" +
 					"WHERE courses_table.name = ?";
 
-	private final Manager dataSource;
+	private final ConnectionManager dataSource;
 
-	public StudentsDAOImpl(Manager dataSource) {
+	public StudentsDAOImpl(ConnectionManager dataSource) {
 		this.dataSource = dataSource;
 	}
 
@@ -51,7 +51,7 @@ public class StudentsDAOImpl implements StudentDAO {
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
 
-			var result = statement.executeUpdate(); //SELECT + executeUpdate() wrong way => SQL exception
+			int result = statement.executeUpdate(); //SELECT SQL + executeUpdate() => SQLException
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -63,25 +63,22 @@ public class StudentsDAOImpl implements StudentDAO {
 			 PreparedStatement stmt = con.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
 			stmt.setInt(1, id);
 
-			try(ResultSet resultSet = stmt.executeQuery()) {
-				Student student = new Student();
-				while (resultSet.next()) {
-					int idFromTable = resultSet.getInt(ID_COLUMN);
-					String firstName = resultSet.getString(FIRST_NAME_COLUMN);
-					String lstName = resultSet.getString(LAST_NAME_COLUMN);
-					int groupId = resultSet.getInt(GROUP_ID_COLUMN);
+			ResultSet resultSet = stmt.executeQuery();
+			Student student = null;
+			if (resultSet.next()) {
+				student = new Student();
 
-					student.setId(idFromTable);
-					student.setFirstName(firstName);
-					student.setLastName(lstName);
-					student.setGroupId(groupId);
-				}
-				if (student.getLastName() == null || student.getFirstName() == null) {
-					return Optional.empty();
-				} else {
-					return Optional.of(student);
-				}
+				int idFromTable = resultSet.getInt(ID_COLUMN);
+				String firstName = resultSet.getString(FIRST_NAME_COLUMN);
+				String lstName = resultSet.getString(LAST_NAME_COLUMN);
+				int groupId = resultSet.getInt(GROUP_ID_COLUMN);
+
+				student.setId(idFromTable);
+				student.setFirstName(firstName);
+				student.setLastName(lstName);
+				student.setGroupId(groupId);
 			}
+			return Optional.ofNullable(student);
 		} catch (SQLException e) {
 			log.error("Error during getBy()");
 			throw new DAOException("Error during getBy()", e);

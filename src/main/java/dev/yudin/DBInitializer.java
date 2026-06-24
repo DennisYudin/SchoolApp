@@ -1,7 +1,7 @@
 package dev.yudin;
 
+import dev.yudin.connection.ConnectionManagerImpl;
 import dev.yudin.connection.ConnectionManager;
-import dev.yudin.connection.Manager;
 import dev.yudin.core.DataDistributor;
 import dev.yudin.core.DataGenerator;
 import dev.yudin.dao.CourseDAO;
@@ -37,8 +37,9 @@ public class DBInitializer {
 	private static final String DATABASE_STRUCTURE_FILE = "databaseStructure.sql";
 	private static final int AMOUNT_STUDENTS = 200;
 	private static final int AMOUNT_GROUPS = 10;
+
 	private Reader reader = new FileReader();
-	private Manager dataSource = new ConnectionManager(reader);
+	private ConnectionManager dataSource = new ConnectionManagerImpl(reader);
 	private Runnable scriptRunner = new ScriptExecutor(dataSource);
 	private DataGenerator dataGenerator = new DataGenerator(new Random(), new FileReader());
 	private DataDistributor dataDistributor = new DataDistributor(new Random());

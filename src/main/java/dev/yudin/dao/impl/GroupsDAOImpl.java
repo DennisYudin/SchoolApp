@@ -1,6 +1,6 @@
 package dev.yudin.dao.impl;
 
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.GroupDAO;
 import dev.yudin.entities.Group;
 import dev.yudin.entities.GroupsAmountStudentDTO;
@@ -33,9 +33,9 @@ public class GroupsDAOImpl implements GroupDAO {
 					"HAVING COUNT(*) <= ?\n" +
 					"ORDER BY name";
 
-	private final Manager dataSource;
+	private final ConnectionManager dataSource;
 
-	public GroupsDAOImpl(Manager dataSource) {
+	public GroupsDAOImpl(ConnectionManager dataSource) {
 		this.dataSource = dataSource;
 	}
 

@@ -1,7 +1,6 @@
 package dev.yudin.script_runner;
 
 import dev.yudin.connection.ConnectionManager;
-import dev.yudin.connection.Manager;
 import dev.yudin.exceptions.AppConfigurationException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.log4j.LogManager;
@@ -18,9 +17,9 @@ public class ScriptExecutor implements Runnable {
 	private final Logger log = LogManager.getLogger(ScriptExecutor.class);
 	public static final String ERROR_MESSAGE_CONNECTION = "Could not get connection";
 	public static final String FILE_NOT_FOUND_ERROR_MESSAGE = "file not found! ";
-	private Manager datasource;
+	private ConnectionManager datasource;
 
-	public ScriptExecutor(Manager datasource) {
+	public ScriptExecutor(ConnectionManager datasource) {
 		this.datasource = datasource;
 	}
 
@@ -38,12 +37,11 @@ public class ScriptExecutor implements Runnable {
 
 	private InputStream getFileFromResourceFolder(String fileName) {
 		ClassLoader classLoader = getClass().getClassLoader();
-		InputStream inputStream = classLoader.getResourceAsStream(fileName);
-		if (inputStream == null) {
+		InputStream is = classLoader.getResourceAsStream(fileName);
+		if (is == null) {
 			log.error(FILE_NOT_FOUND_ERROR_MESSAGE + fileName);
 			throw new AppConfigurationException(FILE_NOT_FOUND_ERROR_MESSAGE + fileName);
-		} else {
-			return inputStream;
 		}
+		return is;
 	}
 }
