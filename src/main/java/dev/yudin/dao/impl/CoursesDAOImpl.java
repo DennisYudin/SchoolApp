@@ -1,6 +1,6 @@
 package dev.yudin.dao.impl;
 
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.CourseDAO;
 import dev.yudin.entities.Course;
 import dev.yudin.entities.Student;
@@ -17,26 +17,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoursesDAOImpl implements CourseDAO {
-	public static final String NAME_COLUMN = "name";
-	public static final String ID_COLUMN = "id";
-	public static final String DESC_COLUMN = "description";
 	private final Logger log = LogManager.getLogger(CoursesDAOImpl.class);
-	public static final String FIND_ALL_SQL = "SELECT id, name, description FROM courses";
-	public static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
+
+	private static final String NAME_COLUMN = "name";
+	private static final String ID_COLUMN = "id";
+	private static final String DESC_COLUMN = "description";
+
+	private static final String FIND_ALL_SQL = "SELECT id, name, description FROM courses";
+	private static final String INSERT_INTO_COURSES_TABLE_SQL = "INSERT INTO courses (name, description) VALUES(?,?)";
 	private static final String FIND_ALL_BY_STUDENT_SQL =
 			"SELECT courses_table.name FROM courses AS courses_table\n" +
 					"JOIN students_courses AS students_courses_table ON courses_table.id = students_courses_table.course_id\n" +
 					"JOIN students AS students_table ON students_table.id = students_courses_table.student_id\n" +
 					"WHERE students_table.first_name = ? AND students_table.last_name = ?";
-	private final Manager dataSource;
 
-	public CoursesDAOImpl(Manager dataSource) {
+	private final ConnectionManager dataSource;
+
+	public CoursesDAOImpl(ConnectionManager dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
 	public List<Course> findAll() {
-		List <Course> courses = new ArrayList<>();
+		List<Course> courses = new ArrayList<>();
 
 		try (Connection conn = dataSource.getConnection();
 			 PreparedStatement statement = conn.prepareStatement(FIND_ALL_SQL);
@@ -56,8 +59,9 @@ public class CoursesDAOImpl implements CourseDAO {
 			}
 			return courses;
 		} catch (SQLException e) {
-			log.error("Error during getting all courses");
-			throw new DAOException("Error during getting all courses", e);
+			String errorMsg = "Error during getting all courses";
+			log.error(errorMsg);
+			throw new DAOException(errorMsg, e);
 		}
 	}
 
@@ -76,8 +80,9 @@ public class CoursesDAOImpl implements CourseDAO {
 			}
 			return result;
 		} catch (SQLException e) {
-			log.error("Error during getting all courses by student: " + student);
-			throw new DAOException("Error during getting all courses by student: " + student);
+			String errorMsg = String.format("Error during getting all courses by [student=%s]", student);
+			log.error(errorMsg);
+			throw new DAOException(errorMsg);
 		}
 	}
 
@@ -98,8 +103,9 @@ public class CoursesDAOImpl implements CourseDAO {
 			}
 			statement.executeBatch();
 		} catch (SQLException ex) {
-			log.error("Error during saving...");
-			throw new DAOException("Error during saving...", ex);
+			String errorMsg = String.format("Error during saving courses=%s", courses);
+			log.error(errorMsg);
+			throw new DAOException(errorMsg, ex);
 		}
 	}
 }

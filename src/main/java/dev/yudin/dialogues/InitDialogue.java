@@ -1,7 +1,7 @@
 package dev.yudin.dialogues;
 
+import dev.yudin.connection.ConnectionManagerImpl;
 import dev.yudin.connection.ConnectionManager;
-import dev.yudin.connection.Manager;
 import dev.yudin.console.Console;
 import dev.yudin.console.InputHandler;
 import dev.yudin.dao.CourseDAO;
@@ -47,7 +47,7 @@ public class InitDialogue implements Dialogue {
     private static final String ERROR_MESSAGE = "Unfortunately the number of attempts exceeded";
     public static final String CONTINUE_ANSWER = "yes";
     private Reader reader = new FileReader();
-    private Manager dataSource = new ConnectionManager(reader);
+    private ConnectionManager dataSource = new ConnectionManagerImpl(reader);
     private GroupDAO groupDAO = new GroupsDAOImpl(dataSource);
     private GroupsService groupsService = new GroupsServiceImpl(groupDAO);
     private Console inputHandler = new InputHandler();

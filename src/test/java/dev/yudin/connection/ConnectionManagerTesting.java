@@ -2,14 +2,12 @@ package dev.yudin.connection;
 
 import dev.yudin.exceptions.ConnectionException;
 import dev.yudin.filereader.Reader;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionManagerTesting implements Manager {
+public class ConnectionManagerTesting implements ConnectionManager {
 	private static final String PROPERTIES_TEST_FILE = "test-application.properties";
 	private Reader reader;
 	public ConnectionManagerTesting(Reader reader) {

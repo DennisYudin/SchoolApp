@@ -1,4 +1,11 @@
 package dev.yudin.dao;
 
-public interface GenericDAO {
+
+import java.util.List;
+
+public interface GenericDAO<T> {
+
+	List<T> findAll();
+
+//	void save(List<T> courses);
 }

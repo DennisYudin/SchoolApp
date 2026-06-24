@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import dev.yudin.connection.ConnectionManagerTesting;
-import dev.yudin.connection.Manager;
+import dev.yudin.connection.ConnectionManager;
 import dev.yudin.dao.StudentsCoursesDAO;
 import dev.yudin.entities.StudentCourseDTO;
 import dev.yudin.filereader.FileReader;
@@ -27,7 +27,7 @@ class StudentsCoursesDAOImplTest {
 	@BeforeEach
 	public void setUp() {
 		Reader reader = new FileReader();
-		Manager dataSource = new ConnectionManagerTesting(reader);
+		ConnectionManager dataSource = new ConnectionManagerTesting(reader);
 		Runnable scriptRunner = new ScriptExecutor(dataSource);
 
 		scriptRunner.run("test-databaseStructure.sql");
